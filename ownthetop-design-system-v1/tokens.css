@@ -1,0 +1,88 @@
+:root {
+  --ott-color-brand-navy: #0D1B3D;
+  --ott-color-brand-blue: #1677E8;
+  --ott-color-brand-sky: #3FA9F5;
+  --ott-color-brand-light-blue: #8ACBFF;
+  --ott-color-brand-gold: #FFC43D;
+  --ott-color-brand-teal: #35C7A4;
+  --ott-color-brand-lavender: #AFA2F5;
+  --ott-color-brand-peach: #FFB084;
+  --ott-color-brand-coral: #FF6B5A;
+  --ott-color-soft-white: #F8FAFD;
+  --ott-color-white: #FFFFFF;
+  --ott-color-cream: #FFF9F0;
+  --ott-color-dark: #091326;
+  --ott-color-muted: #5B6680;
+  --ott-color-hairline: #E7EBF2;
+  --ott-color-success: #22C55E;
+  --ott-color-warning: #F59E0B;
+  --ott-color-error: #EF4444;
+
+  --ott-surface-canvas: var(--ott-color-cream);
+  --ott-surface-card: var(--ott-color-white);
+  --ott-surface-soft: var(--ott-color-soft-white);
+  --ott-text-primary: var(--ott-color-brand-navy);
+  --ott-text-secondary: var(--ott-color-muted);
+  --ott-border-default: var(--ott-color-hairline);
+  --ott-accent-top: var(--ott-color-brand-gold);
+  --ott-accent-world: var(--ott-color-brand-blue);
+
+  --ott-font-display: "Instrument Sans", "Geist", sans-serif;
+  --ott-font-ui: "Geist", "Inter", sans-serif;
+  --ott-font-mono: "Geist Mono", ui-monospace, monospace;
+
+  --ott-space-1: 4px;
+  --ott-space-2: 8px;
+  --ott-space-3: 12px;
+  --ott-space-4: 16px;
+  --ott-space-6: 24px;
+  --ott-space-8: 32px;
+  --ott-space-12: 48px;
+  --ott-space-16: 64px;
+  --ott-space-20: 80px;
+  --ott-space-24: 96px;
+  --ott-space-32: 128px;
+
+  --ott-radius-xs: 6px;
+  --ott-radius-sm: 8px;
+  --ott-radius-md: 12px;
+  --ott-radius-lg: 16px;
+  --ott-radius-xl: 24px;
+  --ott-radius-2xl: 32px;
+  --ott-radius-pill: 9999px;
+
+  --ott-shadow-subtle: 0 1px 2px rgb(13 27 61 / .05);
+  --ott-shadow-card: 0 6px 18px rgb(13 27 61 / .07);
+  --ott-shadow-floating: 0 14px 34px rgb(13 27 61 / .10);
+  --ott-shadow-modal: 0 24px 64px rgb(13 27 61 / .16);
+
+  --ott-motion-fast: 80ms;
+  --ott-motion-standard: 160ms;
+  --ott-motion-emphasis: 240ms;
+  --ott-motion-world: 420ms;
+  --ott-motion-celebration: 720ms;
+  --ott-ease-standard: cubic-bezier(.2,.8,.2,1);
+  --ott-ease-emphasis: cubic-bezier(.16,1,.3,1);
+
+  --ott-max-content: 1280px;
+  --ott-touch-target: 44px;
+}
+
+[data-theme="dark"] {
+  --ott-surface-canvas: var(--ott-color-dark);
+  --ott-surface-card: var(--ott-color-brand-navy);
+  --ott-surface-soft: #0B1931;
+  --ott-text-primary: var(--ott-color-white);
+  --ott-text-secondary: #A9B4C8;
+  --ott-border-default: #28405E;
+}
+
+/* World-state tokens are intended for JS/R3F interpolation, not hard CSS switches. */
+:root {
+  --ott-world-day-sky: #83CBFF;
+  --ott-world-sunset-sky: #F49A72;
+  --ott-world-night-sky: #081529;
+  --ott-world-day-water: #46B8EA;
+  --ott-world-sunset-water: #C98787;
+  --ott-world-night-water: #0F4266;
+}
