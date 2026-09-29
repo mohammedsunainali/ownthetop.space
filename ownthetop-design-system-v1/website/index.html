@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="OwnTheTop Design System V1 — the visual system for the climb." />
+  <title>OwnTheTop — Design System V1</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="OwnTheTop design system home">
+      <img src="../assets/svg/brand/ownthetop-favicon.svg" alt="" width="36" height="36" />
+      <strong>OwnTheTop</strong>
+    </a>
+    <nav aria-label="Design system sections">
+      <a href="#brand">Brand</a><a href="#components">Components</a><a href="#world">3D World</a><a href="#handoff">Handoff</a>
+    </nav>
+    <a class="button button-primary" href="https://www.figma.com/design/ye3qSatvvE02DXDr1pAr3d">Open Figma <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main id="main">
+    <section id="top" class="hero section-shell">
+      <div class="hero-copy">
+        <p class="eyebrow">OWNTHETOP · DESIGN SYSTEM V1</p>
+        <h1>Designing<br />the climb.</h1>
+        <p class="lede">A visual system for the live 3D marketplace where brands compete for visibility, climb the skyline, and own the top.</p>
+        <div class="hero-actions"><a class="button button-primary" href="#components">Explore the system</a><a class="button button-secondary" href="#world">See the world</a></div>
+        <p class="meta">Warm canvas · Blue skyline · Navy UI · Summit gold · 3D mascot</p>
+      </div>
+      <div class="hero-art" aria-label="OwnTheTop skyline mascot illustration">
+        <div class="city" aria-hidden="true">
+          <span class="building b1"></span><span class="building b2"></span><span class="building b3"></span><span class="building b4"></span><span class="building b5"></span>
+          <span class="spire"></span>
+        </div>
+        <img class="hero-mascot" src="../assets/svg/brand/ownthetop-mascot.svg" alt="OwnTheTop Skyline Summit mascot" />
+      </div>
+    </section>
+
+    <section id="brand" class="section-shell section-white">
+      <p class="eyebrow">01 — BRAND OVERVIEW</p>
+      <h2>A digital skyline built around ambition.</h2>
+      <p class="section-intro">OwnTheTop turns ranking into architecture. Payment changes rank, rank changes altitude, and altitude changes visibility.</p>
+      <div class="loop" aria-label="OwnTheTop product loop">
+        <span>Enter</span><span>Choose</span><span>Pay</span><span>Climb</span><span>Rise</span><span>Be seen</span><strong>Own the top</strong>
+      </div>
+      <div class="grid grid-3 principle-grid">
+        <article class="info-card"><h3>Quiet UI</h3><p>The interface explains system state with restraint.</p></article>
+        <article class="info-card sky-card"><h3>Loud world</h3><p>3D carries personality, delight, scale and discovery.</p></article>
+        <article class="info-card gold-card"><h3>Gold = the top</h3><p>Summit Gold is reserved for #1 and achievement.</p></article>
+      </div>
+    </section>
+
+    <section id="logo" class="section-shell">
+      <p class="eyebrow">02 — LOGO / MASCOT</p>
+      <h2>One character people remember once.</h2>
+      <div class="grid grid-2 mascot-layout">
+        <article class="artifact-card mascot-stage"><img src="../assets/svg/brand/ownthetop-mascot.svg" alt="Primary OwnTheTop mascot" /></article>
+        <article class="artifact-card logo-list">
+          <h3>Skyline / Summit Mascot</h3>
+          <p>The approved identity combines a rounded character, blue architectural peaks and one highest gold summit.</p>
+          <ul><li>Rounded light body</li><li>Deep navy visor</li><li>Minimal eyes</li><li>Blue skyline rhythm</li><li>Central gold summit</li></ul>
+          <p class="callout">Locked: no rocket, eagle, falcon, crown or alternate mascot.</p>
+        </article>
+      </div>
+      <div class="logo-strip">
+        <div><span>Primary</span><img src="../assets/svg/brand/ownthetop-logo-horizontal.svg" alt="Horizontal OwnTheTop logo" /></div>
+        <div><span>Stacked</span><img src="../assets/svg/brand/ownthetop-logo-stacked.svg" alt="Stacked OwnTheTop logo" /></div>
+        <div><span>App icon</span><img src="../assets/svg/brand/ownthetop-app-icon.svg" alt="OwnTheTop app icon" /></div>
+        <div><span>Favicon</span><img src="../assets/svg/brand/ownthetop-favicon.svg" alt="OwnTheTop favicon" /></div>
+      </div>
+    </section>
+
+    <section id="color" class="section-shell section-white">
+      <p class="eyebrow">03 — COLOR SYSTEM</p>
+      <h2>Blue builds the world. Gold marks the top.</h2>
+      <div class="swatch-grid">
+        <article style="--swatch:#0D1B3D"><i></i><b>Deep Navy</b><code>#0D1B3D</code><small>Authority / rank</small></article>
+        <article style="--swatch:#1677E8"><i></i><b>Primary Blue</b><code>#1677E8</code><small>World / climb</small></article>
+        <article style="--swatch:#3FA9F5"><i></i><b>Sky Blue</b><code>#3FA9F5</code><small>Atmosphere</small></article>
+        <article style="--swatch:#8ACBFF"><i></i><b>Light Blue</b><code>#8ACBFF</code><small>Depth</small></article>
+        <article style="--swatch:#FFC43D"><i></i><b>Summit Gold</b><code>#FFC43D</code><small>#1 / achievement</small></article>
+        <article style="--swatch:#35C7A4"><i></i><b>Teal</b><code>#35C7A4</code><small>Realtime / live</small></article>
+        <article style="--swatch:#AFA2F5"><i></i><b>Lavender</b><code>#AFA2F5</code><small>Discovery</small></article>
+        <article style="--swatch:#FFB084"><i></i><b>Peach</b><code>#FFB084</code><small>People</small></article>
+        <article style="--swatch:#FF6B5A"><i></i><b>Coral</b><code>#FF6B5A</code><small>Outbid / attention</small></article>
+        <article style="--swatch:#FFF9F0"><i></i><b>Cream</b><code>#FFF9F0</code><small>Editorial canvas</small></article>
+      </div>
+    </section>
+
+    <section id="type" class="section-shell">
+      <p class="eyebrow">04 — TYPOGRAPHY</p>
+      <h2>Friendly editorial voice. Quiet product voice.</h2>
+      <div class="type-specimens">
+        <div><span>Display XL · Instrument Sans</span><p class="display-xl">Own the top.</p></div>
+        <div><span>Display Medium</span><p class="display-md">Climb the skyline.</p></div>
+        <div><span>Title</span><p class="title-lg">Your floor. Your rank.</p></div>
+        <div><span>Body · Geist</span><p>Payment changes rank. Rank changes altitude. Altitude creates visibility.</p></div>
+        <div><span>Metric · Geist Mono</span><p class="metric">#1 &nbsp; $100 &nbsp; +12</p></div>
+      </div>
+    </section>
+
+    <section id="layout" class="section-shell section-white">
+      <p class="eyebrow">05 — SPACING / GRID / LAYOUT</p><h2>Editorial rhythm built on a 4px base.</h2>
+      <div class="grid grid-3">
+        <article class="info-card"><h3>Spacing</h3><p>4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 80 · 96 · 128</p></article>
+        <article class="info-card"><h3>Grid</h3><p>12 columns · 1280px max content · 96px major section rhythm.</p></article>
+        <article class="info-card"><h3>Radius</h3><p>6 · 8 · 12 · 16 · 24 · 32 · pill.</p></article>
+      </div>
+    </section>
+
+    <section id="components" class="section-shell">
+      <p class="eyebrow">06 — BUTTONS / INPUTS / NAVIGATION</p><h2>Product controls stay restrained.</h2>
+      <div class="component-board">
+        <div class="demo-card"><h3>Buttons</h3><div class="demo-row"><button class="button button-primary">Claim your floor</button><button class="button button-secondary">Explore skyline</button><button class="button button-gold">Take #1</button></div></div>
+        <div class="demo-card"><h3>Website input</h3><label class="field"><span>Website</span><input value="yourcompany.com" aria-label="Website example" /></label></div>
+        <div class="demo-card"><h3>Badges</h3><div class="demo-row"><span class="badge badge-gold">#1</span><span class="badge badge-live">Live</span><span class="badge badge-blue">Climbing</span><span class="badge badge-coral">Outbid</span><span class="badge badge-outline">Claimed</span></div></div>
+      </div>
+    </section>
+
+    <section id="cards" class="section-shell section-white">
+      <p class="eyebrow">07 — FEATURE CARDS</p><h2>Color carries meaning, not decoration.</h2>
+      <div class="feature-grid">
+        <article class="feature blue"><small>VISIBILITY</small><h3>See who owns the top.</h3><div class="mini-rank"><b>#1</b><span>Acme Labs</span><strong>$100</strong></div></article>
+        <article class="feature teal"><small>REALTIME</small><h3>Watch rankings move live.</h3><div class="mini-event">↑ You climbed 12 floors</div></article>
+        <article class="feature lavender"><small>DISCOVERY</small><h3>Get discovered above the noise.</h3><div class="mini-event">Rank · category · profile</div></article>
+        <article class="feature peach"><small>COMMUNITY</small><h3>Build your place in the skyline.</h3><div class="mini-event">People · products · companies</div></article>
+        <article class="feature gold"><small>ACHIEVEMENT</small><h3>Take #1.</h3><div class="mini-event">YOU OWN THE TOP.</div></article>
+        <article class="feature cream"><small>VISIBILITY</small><h3>Stay visible.</h3><div class="mini-event">Upgrade only the difference</div></article>
+      </div>
+    </section>
+
+    <section id="ranking" class="section-shell">
+      <p class="eyebrow">08 — RANKING / FLOORS</p><h2>Rank becomes physical altitude.</h2>
+      <div class="grid grid-2">
+        <div class="demo-card"><h3>Live ranking</h3><div class="rank-row top"><b>#1</b><span><strong>Acme Labs</strong><small>No change</small></span><em>$100</em></div><div class="rank-row"><b>#2</b><span><strong>Northstar</strong><small class="up">+4 floors</small></span><em>$72</em></div><div class="rank-row"><b>#3</b><span><strong>Orbit</strong><small>NEW</small></span><em>$64</em></div><div class="rank-row outbid"><b>#12</b><span><strong>Signal</strong><small>OUTBID</small></span><em>$48</em></div></div>
+        <div class="demo-card"><h3>Floor anatomy</h3><div class="floor-card"><span class="fake-logo"></span><div><strong>Acme Labs</strong><p>Building the next thing people notice.</p><span class="badge badge-outline">Verified</span></div><div class="floor-metric"><b>#12</b><em>$48</em></div></div></div>
+      </div>
+    </section>
+
+    <section id="claim" class="section-shell section-white">
+      <p class="eyebrow">09 — CLAIM / PAYMENT</p><h2>Make the transaction visually meaningful.</h2>
+      <div class="claim-card"><h3>Who owns the top?</h3><div class="claim-fields"><input value="yourcompany.com" aria-label="Website" /><div class="amount">$100</div><button class="button button-primary">Claim your floor</button></div><p>Current top: <b>$99</b> · You need <b>$100</b> to take #1.</p><strong>Expected position: #1</strong></div>
+      <div class="sequence"><span>Payment</span><span>Construction</span><span>Floor appears</span><span>Floor rises</span><span>Ranks reorder</span><span>Tower updates</span><strong>Celebrate</strong></div>
+    </section>
+
+    <section id="profile" class="section-shell">
+      <p class="eyebrow">10 — PROFILE / LISTING</p><h2>Rank first. Identity second. Metadata third.</h2>
+      <article class="profile-card"><span class="fake-logo"></span><div class="profile-head"><h3>Acme Labs</h3><p>#12 · $48</p></div><dl><dt>Category</dt><dd>Developer Tools</dd><dt>Location</dt><dd>India</dd><dt>Status</dt><dd>Hiring</dd></dl><a class="button button-primary" href="#">Visit website</a></article>
+    </section>
+
+    <section id="world" class="section-shell world-section">
+      <p class="eyebrow">11 — 3D WORLD</p><h2>A premium architectural toy world.</h2><p class="section-intro">Tapered verticality, setbacks and a strong spire create scale. Geometry is original; the supplied landmark reference informs architectural principles only.</p>
+      <div class="world-stage"><div class="tower-demo" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b></b></div><img src="../assets/svg/brand/ownthetop-mascot.svg" alt="OwnTheTop mascot floating near a stylized tower" /></div>
+      <div class="asset-chips"><span>TowerBase</span><span>Podium</span><span>Core</span><span>FloorStack</span><span>Setback</span><span>Crown</span><span>Spire</span><span>Helipad</span><span>Billboard</span><span>Facade</span></div>
+    </section>
+
+    <section id="time" class="section-shell section-white">
+      <p class="eyebrow">12 — DAY / SUNSET / NIGHT</p><h2>Same geometry. One living world.</h2>
+      <div class="world-modes"><article class="day"><b>DAY</b><img src="../assets/svg/brand/ownthetop-mascot.svg" alt="" /></article><article class="sunset"><b>SUNSET</b><img src="../assets/svg/brand/ownthetop-mascot.svg" alt="" /></article><article class="night"><b>NIGHT</b><img src="../assets/svg/brand/ownthetop-mascot.svg" alt="" /></article></div>
+      <p class="callout">Interpolate sky, ambient/directional light, water, windows, clouds, aircraft lights, signage and mascot highlight. Never hard-cut the whole world.</p>
+    </section>
+
+    <section id="motion" class="section-shell">
+      <p class="eyebrow">13 — MOTION</p><h2>State first. Delight second.</h2>
+      <div class="token-row"><span><b>80ms</b> fast</span><span><b>160ms</b> standard</span><span><b>240ms</b> emphasis</span><span><b>420ms</b> world</span><span><b>720ms</b> celebration</span></div>
+    </section>
+
+    <section id="responsive" class="section-shell section-white">
+      <p class="eyebrow">14 — RESPONSIVE</p><h2>The skyline adapts. The climb stays clear.</h2>
+      <div class="grid grid-4"><article class="info-card"><h3>Mobile</h3><p>&lt;768 · single column · simpler 3D · bottom controls.</p></article><article class="info-card"><h3>Tablet</h3><p>768–1024 · balanced scene + controls.</p></article><article class="info-card"><h3>Desktop</h3><p>1024–1440 · full world + drawers.</p></article><article class="info-card"><h3>Wide</h3><p>&gt;1440 · cinematic world · 1280 content cap.</p></article></div>
+    </section>
+
+    <section id="accessibility" class="section-shell">
+      <p class="eyebrow">15 — ACCESSIBILITY</p><h2>The world enhances the product. It never blocks it.</h2>
+      <div class="access-list"><span>44px touch targets</span><span>Keyboard navigation</span><span>Visible focus</span><span>Reduced motion</span><span>Non-color rank states</span><span>Semantic labels</span><span>Contrast</span><span>2D WebGL fallback</span></div>
+    </section>
+
+    <section id="handoff" class="section-shell section-white">
+      <p class="eyebrow">16 — TOKENS / FIGMA / DEVELOPER HANDOFF</p><h2>One source of truth, bridged to implementation.</h2>
+      <div class="grid grid-3"><article class="info-card"><h3>Figma</h3><p>Variables, text styles, components, product UI, responsive and world boards.</p></article><article class="info-card"><h3>Code</h3><p><code>tokens.json</code>, <code>tokens.css</code>, <code>ownthetop_tokens.ts</code>.</p></article><article class="info-card"><h3>3D</h3><p><code>3d-spec.md</code> defines world modules, LOD, materials, camera and environment.</p></article></div>
+      <pre class="tree">ownthetop-design-system-v1/
+├── design.md
+├── 3d-spec.md
+├── tokens.json
+├── tokens.css
+├── ownthetop_tokens.ts
+├── website/
+├── assets/
+└── 3d/</pre>
+    </section>
+
+    <section id="assets" class="section-shell">
+      <p class="eyebrow">17 — ASSET LIBRARY</p><h2>No fake assets.</h2>
+      <div class="status-grid"><article><b class="status ready">READY</b><p>Real editable Figma assets, SVGs, token files and website source.</p></article><article><b class="status proposed">PROPOSED</b><p>Implementation-ready specifications such as production tower geometry.</p></article><article><b class="status source">SOURCE REQUIRED</b><p>GLB/audio/Blender internals not produced or inspected in this runtime.</p></article></div>
+    </section>
+
+    <section id="dont" class="section-shell section-white">
+      <p class="eyebrow">18 — DO / DON'T</p><h2>Always return to the climb.</h2>
+      <div class="grid grid-2"><article class="info-card"><h3>Do</h3><p>Preserve mascot silhouette, summit gold semantics, quiet UI, readable rank and architectural world-building.</p></article><article class="info-card danger"><h3>Don’t</h3><p>Drift into generic SaaS, crypto, cyberpunk, gaming, rainbow branding, copied TopFloor assets or copied Clay identity.</p></article></div>
+    </section>
+
+    <section class="final-cta section-shell">
+      <div><p class="eyebrow">THE DESIGN SYSTEM FOR THE CLIMB</p><h2>See you at the top.</h2><p>Claim your space. Own the top.</p><a class="button button-primary" href="#top">Back to top ↑</a></div>
+      <img src="../assets/svg/brand/ownthetop-mascot.svg" alt="OwnTheTop mascot" />
+    </section>
+  </main>
+
+  <footer><strong>OwnTheTop</strong><span>Design System V1</span><span>Source-of-truth package</span></footer>
+</body>
+</html>
