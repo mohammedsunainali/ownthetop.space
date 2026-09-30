@@ -9,7 +9,7 @@ export function WorldControls() {
   const floorsExploded = useWorldStore((state) => state.floorsExploded);
   const toggleFloorsExploded = useWorldStore((state) => state.toggleFloorsExploded);
   const worldTime = useWorldStore((state) => state.worldTime);
-  const toggleWorldTime = useWorldStore((state) => state.toggleWorldTime);
+  const setWorldTime = useWorldStore((state) => state.setWorldTime);
 
   return (
     <nav className="world-controls" aria-label="Scene controls">
@@ -18,7 +18,7 @@ export function WorldControls() {
       <button type="button" onClick={() => zoomBy(0.14)} aria-label="Zoom out">−</button>
       <button type="button" onClick={rotateWorld}>Rotate</button>
       <button type="button" aria-pressed={floorsExploded} onClick={toggleFloorsExploded}>Floors</button>
-      <button type="button" aria-pressed={worldTime === "night"} onClick={toggleWorldTime}>{worldTime === "day" ? "Night" : "Day"}</button>
+      <label className="time-control">Sky <select aria-label="Sky time" value={worldTime} onChange={(event) => setWorldTime(event.target.value as "day" | "sunset" | "night")}><option value="day">Day</option><option value="sunset">Sunset</option><option value="night">Night</option></select></label>
     </nav>
   );
 }

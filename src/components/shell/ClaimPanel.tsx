@@ -55,11 +55,12 @@ export function ClaimPanel() {
 
       <div className="claim-stats">
         <span>Current top <strong>{currentTop?.name}</strong></span>
+        <span>Required amount <strong>{formatMinorUnits((currentTop?.totalPaidMinor ?? 0) + 1)}</strong></span>
         <span>Estimated position <strong>#{estimatedPosition}</strong></span>
       </div>
 
       <button className="primary-button" type="button" onClick={() => selectTower(towerId)}>Claim the top</button>
-      <p className="phase-note">Preview only — payments arrive in a later phase.</p>
+      <p className="phase-note">Preview only. Position is an estimate, not a guarantee. Payments arrive later.</p>
     </section>
   );
 }

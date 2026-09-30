@@ -1,0 +1,10 @@
+# Phase 2 performance review
+
+- Canvas DPR is capped at 1.75 desktop and 1.25 mobile; mobile disables shadows and reduces companion buildings (34→18), trees (28→12), clouds (8→4), and visible aircraft (5→3). The required five aircraft exist on desktop; mobile deliberately hides two drones.
+- Two app-authored `useFrame` callbacks remain: camera interpolation and one shared aircraft path controller. No per-frame React state updates. Reduced motion ends camera interpolation immediately and freezes decorative aircraft.
+- At most two Drei `Html` callouts (focused tower leader and selected floor) plus three leader chips; no `Html` node per unselected floor. Forty listings are 40 `Floor` components and 120 shared-geometry wing meshes, rather than a component per window.
+- Floor geometry is shared. Semantic floor, podium, frame, crown, selected, road, leaf, and cloud materials are created once from canonical tokens. Repeated companion buildings, trees, and clouds use instancing.
+- The scene uses one cached canonical SVG logo texture for billboard/rooftop signs, no GLBs, postprocessing, WebGPU, or third-party scripts. Runtime GLB load is zero. Two canonical SVG mirrors are the only runtime assets introduced. Day/sunset/night adjust shared materials and lighting without replacing geometry.
+- WebGL capability is checked before mounting Canvas. `?fallback2d` exercises the same accessible 40-row fallback path in browser QA; Canvas creation errors are handled by the world error boundary.
+- Browser QA confirmed three towers and floor interaction in WebGL on desktop. Exact FPS, renderer.info draw calls/triangles, and mainstream-device mobile GPU timings were not measured; these remain QA debt. The browser environment exposes no reliable device-performance baseline, so no 60/30 fps claim is made.
+- Potential future concern: three clickable meshes per paid floor and three bands per tower create a moderate draw-call count. Instancing paid floors is deferred because it complicates per-floor picking and the present 40-floor count is small.

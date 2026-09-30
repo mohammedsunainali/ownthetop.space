@@ -10,7 +10,7 @@ interface WorldState {
   selectedListingId: string | null;
   cameraMode: CameraMode;
   soundEnabled: boolean;
-  worldTime: "day" | "night";
+  worldTime: "day" | "sunset" | "night";
   floorsExploded: boolean;
   cameraDistance: number;
   cameraOrbitStep: number;
@@ -21,6 +21,7 @@ interface WorldState {
   rotateWorld: () => void;
   toggleSound: () => void;
   toggleWorldTime: () => void;
+  setWorldTime: (time: WorldState["worldTime"]) => void;
   toggleFloorsExploded: () => void;
 }
 
@@ -55,6 +56,7 @@ export const useWorldStore = create<WorldState>((set) => ({
   zoomBy: (delta) => set((state) => ({ cameraDistance: Math.min(1.45, Math.max(0.62, state.cameraDistance + delta)) })),
   rotateWorld: () => set((state) => ({ cameraOrbitStep: state.cameraOrbitStep + 1 })),
   toggleSound: () => set((state) => ({ soundEnabled: !state.soundEnabled })),
-  toggleWorldTime: () => set((state) => ({ worldTime: state.worldTime === "day" ? "night" : "day" })),
+  toggleWorldTime: () => set((state) => ({ worldTime: state.worldTime === "day" ? "sunset" : state.worldTime === "sunset" ? "night" : "day" })),
+  setWorldTime: (worldTime) => set({ worldTime }),
   toggleFloorsExploded: () => set((state) => ({ floorsExploded: !state.floorsExploded })),
 }));
