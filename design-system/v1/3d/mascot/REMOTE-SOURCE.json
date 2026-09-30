@@ -1,0 +1,10 @@
+{
+  "status": "READY",
+  "locationClass": "REMOTE_3D_ARTIFACT",
+  "gitTrackedBinary": false,
+  "projectId": "d106d253-ecae-43de-933d-946c322d6c53",
+  "revision": 3,
+  "blendBytes": 1706777,
+  "glbBytes": 469212,
+  "note": "Canonical Blender and GLB binaries exist in 3D Jutsu. Git stores this provenance pointer rather than the remote binary bytes."
+}
