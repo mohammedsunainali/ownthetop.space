@@ -1,8 +1,8 @@
 {
   "fileKey": "ye3qSatvvE02DXDr1pAr3d",
   "url": "https://www.figma.com/design/ye3qSatvvE02DXDr1pAr3d/OwnTheTop-%E2%80%94-Design-System-V1?node-id=0-1",
-  "verifiedPageCount": 18,
-  "pageNames": [
+  "recordedPageCount": 18,
+  "recordedPageNames": [
     "01 — COVER",
     "02 — BRAND",
     "03 — LOGO",
@@ -39,6 +39,14 @@
     "day": "101:2",
     "sunset": "102:2",
     "night": "102:4"
+  },
+  "currentReleaseAudit": {
+    "date": "2026-09-30",
+    "linkAccessible": true,
+    "topLevelPagesObserved": 1,
+    "observedPageNames": ["01 — COVER"],
+    "figmaModifiedDuringAudit": false,
+    "note": "The visual system was explicitly pre-approved by the user. Read-only Figma metadata in this release audit exposed one top-level page, so the historical 18-page handoff is recorded rather than represented as a fresh 18-page verification."
   },
   "note": "Canonical 3D mascot PNGs exist remotely but were not imported into Figma because the active sandbox could not mirror Higgsfield signed binary URLs. Vector production mascot and logo systems are editable in Figma."
 }
