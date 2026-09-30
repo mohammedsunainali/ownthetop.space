@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="OwnTheTop social avatar">
-  <circle cx="256" cy="256" r="256" fill="#3FA9F5"/>
-  <g transform="translate(38 45) scale(.85)">
-    <path d="M118 224 166 126l38 105Z" fill="#1677E8"/><path d="M161 218 220 86l42 144Z" fill="#8ACBFF"/><path d="m218 205 49-164 49 168Z" fill="#FFC43D"/><path d="m278 220 64-123 43 135Z" fill="#1677E8"/><path d="m344 232 48-91 34 104Z" fill="#BFE4FF"/>
-    <ellipse cx="256" cy="340" rx="166" ry="118" fill="#F8FAFD"/><ellipse cx="82" cy="341" rx="49" ry="66" transform="rotate(17 82 341)" fill="#1677E8"/><ellipse cx="430" cy="341" rx="49" ry="66" transform="rotate(-17 430 341)" fill="#1677E8"/>
-    <rect x="145" y="281" width="222" height="118" rx="59" fill="#0D1B3D"/><path d="M195 348q18-30 36 0" fill="none" stroke="#FFF" stroke-width="16" stroke-linecap="round"/><path d="M281 348q18-30 36 0" fill="none" stroke="#FFF" stroke-width="16" stroke-linecap="round"/>
-  </g>
-</svg>

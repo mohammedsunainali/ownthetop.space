@@ -1,0 +1,190 @@
+export const ownTheTopTokens = {
+  "meta": {
+    "name": "OwnTheTop Design System V1",
+    "version": "1.0.0",
+    "baseUnit": 4
+  },
+  "color": {
+    "brand": {
+      "navy": "#0D1B3D",
+      "blue": "#1677E8",
+      "sky": "#3FA9F5",
+      "lightBlue": "#8ACBFF",
+      "summitGold": "#FFC43D",
+      "softWhite": "#F8FAFD",
+      "white": "#FFFFFF",
+      "cream": "#FFF9F0",
+      "teal": "#35C7A4",
+      "lavender": "#AFA2F5",
+      "peach": "#FFB084",
+      "coral": "#FF6B5A"
+    },
+    "text": {
+      "primary": "#0D1B3D",
+      "secondary": "#667085",
+      "inverse": "#FFFFFF",
+      "accent": "#1677E8"
+    },
+    "surface": {
+      "canvas": "#FFF9F0",
+      "base": "#FFFFFF",
+      "soft": "#F8FAFD",
+      "navy": "#0D1B3D",
+      "blue": "#1677E8"
+    },
+    "semantic": {
+      "success": "#22C55E",
+      "warning": "#F59E0B",
+      "error": "#EF4444",
+      "info": "#1677E8"
+    },
+    "sky": {
+      "deep": "#6DBCEB",
+      "mid": "#9EDCF7",
+      "light": "#D8F1FC",
+      "horizon": "#F2F9FC",
+      "cloud": "#FFFFFF",
+      "water": "#8DD4F2"
+    }
+  },
+  "typography": {
+    "font": {
+      "display": "Inter Display, Inter, sans-serif",
+      "ui": "Inter, sans-serif"
+    },
+    "size": {
+      "displayXL": 72,
+      "displayLG": 56,
+      "displayMD": 40,
+      "displaySM": 32,
+      "titleLG": 24,
+      "titleMD": 18,
+      "titleSM": 16,
+      "body": 16,
+      "bodySmall": 14,
+      "caption": 13,
+      "micro": 12
+    },
+    "weight": {
+      "display": 500,
+      "medium": 500,
+      "semibold": 600,
+      "regular": 400
+    },
+    "lineHeight": {
+      "displayXL": 1,
+      "displayLG": 1.05,
+      "displayMD": 1.1,
+      "displaySM": 1.15,
+      "body": 1.55
+    },
+    "letterSpacing": {
+      "displayXL": -2.5,
+      "displayLG": -2,
+      "displayMD": -1,
+      "displaySM": -0.5
+    }
+  },
+  "spacing": {
+    "0": 0,
+    "1": 4,
+    "2": 8,
+    "3": 12,
+    "4": 16,
+    "6": 24,
+    "8": 32,
+    "12": 48,
+    "16": 64,
+    "24": 96,
+    "32": 128
+  },
+  "radius": {
+    "xs": 6,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "pill": 9999
+  },
+  "grid": {
+    "columns": 12,
+    "maxWidth": 1280,
+    "gutter": 24,
+    "marginDesktop": 64,
+    "marginTablet": 32,
+    "marginMobile": 20
+  },
+  "breakpoint": {
+    "mobile": 0,
+    "tablet": 768,
+    "desktop": 1024,
+    "wide": 1440
+  },
+  "elevation": {
+    "hairline": "0 0 0 1px rgba(13,27,61,.08)",
+    "soft": "0 12px 36px rgba(13,27,61,.10)",
+    "floating": "0 20px 60px rgba(13,27,61,.14)"
+  },
+  "motion": {
+    "fast": 120,
+    "base": 220,
+    "slow": 420,
+    "rankMove": 480,
+    "floorRise": 650,
+    "celebrate": 900,
+    "dayNight": 1200,
+    "easing": "cubic-bezier(.2,.8,.2,1)"
+  },
+  "material3d": {
+    "body": {
+      "color": "#F8FAFD",
+      "roughness": 0.46,
+      "metalness": 0
+    },
+    "visor": {
+      "color": "#0D1B3D",
+      "roughness": 0.28,
+      "metalness": 0
+    },
+    "blue": {
+      "color": "#1677E8",
+      "roughness": 0.38,
+      "metalness": 0
+    },
+    "gold": {
+      "color": "#FFC43D",
+      "roughness": 0.38,
+      "metalness": 0
+    }
+  },
+  "environment": {
+    "day": {
+      "skyDeep": "#6DBCEB",
+      "skyMid": "#9EDCF7",
+      "horizon": "#F2F9FC",
+      "water": "#8DD4F2"
+    },
+    "sunset": {
+      "skyDeep": "#6D92D9",
+      "skyMid": "#F6B7A7",
+      "horizon": "#FFE7B0",
+      "water": "#D8A6B9"
+    },
+    "night": {
+      "skyDeep": "#08152F",
+      "skyMid": "#13264E",
+      "horizon": "#243E6B",
+      "water": "#0E2D4D"
+    }
+  },
+  "zIndex": {
+    "world": 0,
+    "hud": 10,
+    "floatingControls": 20,
+    "drawer": 40,
+    "modal": 60,
+    "toast": 80
+  }
+} as const;
+export type OwnTheTopTokens = typeof ownTheTopTokens;

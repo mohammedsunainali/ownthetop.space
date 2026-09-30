@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="OwnTheTop monochrome mascot">
-  <g fill="#0D1B3D">
-    <path d="M118 224 166 126l38 105Z"/><path d="M161 218 220 86l42 144Z"/><path d="m218 205 49-164 49 168Z"/><path d="m278 220 64-123 43 135Z"/><path d="m344 232 48-91 34 104Z"/>
-    <ellipse cx="256" cy="340" rx="166" ry="118"/><ellipse cx="82" cy="341" rx="49" ry="66" transform="rotate(17 82 341)"/><ellipse cx="430" cy="341" rx="49" ry="66" transform="rotate(-17 430 341)"/><ellipse cx="190" cy="445" rx="34" ry="41"/><ellipse cx="322" cy="445" rx="34" ry="41"/>
-  </g>
-  <rect x="145" y="281" width="222" height="118" rx="59" fill="#FFF"/>
-  <path d="M195 348q18-30 36 0M281 348q18-30 36 0" fill="none" stroke="#0D1B3D" stroke-width="16" stroke-linecap="round"/>
-</svg>

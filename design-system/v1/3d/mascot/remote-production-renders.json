@@ -1,0 +1,46 @@
+{
+  "projectId": "d106d253-ecae-43de-933d-946c322d6c53",
+  "revision": 3,
+  "projectUrl": "https://higgsfield.ai/3d-jutsu/d106d253-ecae-43de-933d-946c322d6c53",
+  "canonicalSource": {
+    "blend": {
+      "status": "READY",
+      "bytes": 1706777,
+      "remoteName": "scene.blend",
+      "deliverAs": "mascot-source.blend"
+    },
+    "glb": {
+      "status": "READY",
+      "bytes": 469212,
+      "remoteName": "preview.glb",
+      "deliverAs": "mascot.glb"
+    }
+  },
+  "renders": [
+    {"name":"ownthetop-mascot-3d-primary.png","operationId":"render-primary-exact-names-r3","artifactId":"7bdd22e5d02a616490d9cf2e31f28bb3","w":1024,"h":1024,"bytes":1164875},
+    {"name":"ownthetop-mascot-3d-transparent.png","operationId":"render-primary-exact-names-r3","artifactId":"8ff6305250d77a02f0f23a451afe3a12","w":1024,"h":1024,"bytes":727322,"transparent":true},
+    {"name":"ownthetop-mascot-3d-primary-512.png","operationId":"render-primary-sizes-r3","artifactId":"7354391a18751f36b4637e2d9af0dc62","w":512,"h":512,"bytes":307568},
+    {"name":"ownthetop-mascot-3d-primary-1024.png","operationId":"render-primary-transparent-1024-r3","artifactId":"3ff218433c604f10ec02f37a9a434d38","w":1024,"h":1024,"bytes":1092089},
+    {"name":"ownthetop-mascot-3d-primary-2048.png","operationId":"render-primary-sizes-r3","artifactId":"1fbcfad97ee29355d357102eafc771e2","w":2048,"h":2048,"bytes":4497393},
+    {"name":"ownthetop-mascot-front.png","operationId":"render-turn-front-left-r3","artifactId":"fab1b7ea997a0118ac74dd21f4109487","w":768,"h":768,"bytes":403845},
+    {"name":"ownthetop-mascot-3q-left.png","operationId":"render-turn-front-left-r3","artifactId":"69d8021833ae8bc81dee9cd7647256f7","w":768,"h":768,"bytes":399732},
+    {"name":"ownthetop-mascot-3q-right.png","operationId":"render-turn-right-side-r3","artifactId":"7c2f094b665dda7e6d020d5d3ebb12d9","w":768,"h":768,"bytes":403245},
+    {"name":"ownthetop-mascot-side.png","operationId":"render-turn-right-side-r3","artifactId":"5268bf7549cd3c80088fe8358c6ad7b3","w":768,"h":768,"bytes":319393},
+    {"name":"ownthetop-mascot-rear.png","operationId":"render-turn-rear-top-r3","artifactId":"273c71e15e88eaf0dcbb960e4b8cc3a7","w":768,"h":768,"bytes":383473},
+    {"name":"ownthetop-mascot-top.png","operationId":"render-turn-rear-top-r3","artifactId":"395a7141de54bd3c6a603f592a401b44","w":768,"h":768,"bytes":408572},
+    {"name":"ownthetop-mascot-bottom.png","operationId":"render-bottom-variants-r3","artifactId":"d6269901e40c7378410f269afd051be9","w":512,"h":512,"bytes":207983},
+    {"name":"ownthetop-mascot-dark.png","operationId":"render-bottom-variants-r3","artifactId":"87561acfd9c61b4cbc4bc78e09b09d59","w":512,"h":512,"bytes":208934},
+    {"name":"ownthetop-mascot-white.png","operationId":"render-bottom-variants-r3","artifactId":"c5971ff0fc96685a7c2d6304ee3216ee","w":512,"h":512,"bytes":192110},
+    {"name":"ownthetop-mascot-monochrome.png","operationId":"render-bottom-variants-r3","artifactId":"b0d15942ed8aebf6cdbdc5391b0d0b3e","w":512,"h":512,"bytes":204834},
+    {"name":"ownthetop-mascot-default.png","operationId":"render-poses-a-r3","artifactId":"a1526a627c4afbd4e8ab766cbeeda7b2","w":512,"h":512,"bytes":200767},
+    {"name":"ownthetop-mascot-flying.png","operationId":"render-poses-a-r3","artifactId":"a0f124a9da5f3b35c61e31b58b2dd7b4","w":512,"h":512,"bytes":193809},
+    {"name":"ownthetop-mascot-celebration.png","operationId":"render-poses-a-r3","artifactId":"4694ce9380fa0fea0786b69045aa7a97","w":512,"h":512,"bytes":200661},
+    {"name":"ownthetop-mascot-waving.png","operationId":"render-poses-a-r3","artifactId":"e72bc8d89b48fdf0a050c45c91a7ac04","w":512,"h":512,"bytes":200691},
+    {"name":"ownthetop-mascot-happy.png","operationId":"render-poses-a-r3","artifactId":"090c87787d26e1a915ba5413b8f0d31c","w":512,"h":512,"bytes":200761},
+    {"name":"ownthetop-mascot-sitting.png","operationId":"render-poses-b-r3","artifactId":"8350fe2af4fa70b2ea522adce1b91112","w":512,"h":512,"bytes":204950},
+    {"name":"ownthetop-mascot-thinking.png","operationId":"render-poses-b-r3","artifactId":"5500c2387291ab8b79cc9f3864b04575","w":512,"h":512,"bytes":198940},
+    {"name":"ownthetop-mascot-surprised.png","operationId":"render-poses-b-r3","artifactId":"b98550a2c569cbe97f0c0d983233b3f9","w":512,"h":512,"bytes":200464},
+    {"name":"ownthetop-mascot-outbid.png","operationId":"render-poses-b-r3","artifactId":"d73e6d05fba60b4afd2694ef1013a518","w":512,"h":512,"bytes":202093},
+    {"name":"ownthetop-mascot-victory.png","operationId":"render-poses-b-r3","artifactId":"d967c30e5312f66af98a4edeb117b9d0","w":512,"h":512,"bytes":201019}
+  ]
+}

@@ -1,0 +1,1 @@
+document.querySelectorAll('.world-tab').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.world-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const scene=document.getElementById('world-image');scene.className='world-scene '+btn.dataset.state;}));

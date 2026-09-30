@@ -1,0 +1,22 @@
+{
+  "brand": {
+    "logo": "svg/logo/",
+    "wordmark": "svg/wordmark/ownthetop-wordmark.svg",
+    "mascotFlat": "svg/mascot/ownthetop-mascot-flat.svg",
+    "icons": "svg/icons/"
+  },
+  "mascot3d": {
+    "sourceRegistry": "3d/mascot/REMOTE-SOURCE.json",
+    "renderRegistry": "3d/mascot/remote-production-renders.json",
+    "gitTransfer": "remote provenance only in this connector push"
+  },
+  "world3d": {
+    "localBuildLocation": "downloadable complete build ZIP / 3d/",
+    "repositoryStatus": "transfer-limited binary family"
+  },
+  "figma": "figma/figma-handoff.json",
+  "tokens": "tokens/",
+  "website": "website/",
+  "documentation": "documentation/",
+  "manifest": "asset-manifest.json"
+}
