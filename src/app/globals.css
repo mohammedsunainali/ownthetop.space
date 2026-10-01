@@ -82,7 +82,7 @@ button { cursor: pointer; }
 .world-section { position: relative; min-height: min(850px, 88vh); border-top: 1px solid var(--line); background: var(--sky); overflow: hidden; }
 .world-canvas { position: absolute; inset: 0; }
 .world-canvas canvas { touch-action: none; }
-.webgl-fallback { height: 100%; overflow: auto; padding: 24px 18px 110px; color: var(--ink); background: var(--color-surface-soft); }
+.webgl-fallback { height: 100%; overflow: auto; padding: 290px 18px 110px; color: var(--ink); background: var(--color-surface-soft); }
 .webgl-fallback span { color: var(--muted); }
 .world-section:has(.webgl-fallback) .metrics-panel,
 .world-section:has(.webgl-fallback) .world-controls,
@@ -155,7 +155,7 @@ button { cursor: pointer; }
   .profile-drawer--empty img { grid-row: span 2; }
   .profile-drawer--empty p { display: none; }
   .fallback-grid { grid-template-columns: 1fr; }
-  .webgl-fallback { padding: 20px 12px 130px; }
+  .webgl-fallback { padding: 370px 12px 130px; }
   .floor-callout { display: none; }
   .world-controls button { padding: 0 9px; }
 }
@@ -163,4 +163,123 @@ button { cursor: pointer; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* Phase 2 world-first composition. Canonical V1 CSS tokens remain the visual source. */
+.app-shell { height: 100dvh; min-height: 650px; }
+.world-section { height: 100%; min-height: 0; border: 0; }
+.site-header { position: absolute; inset: 0 0 auto; z-index: 4; min-height: 66px; background: transparent; border: 0; pointer-events: none; }
+.site-header > * { pointer-events: auto; }
+.site-header p { color: var(--color-brand-navy); }
+.phase-badge { background: color-mix(in srgb, var(--color-brand-white) 76%, transparent); backdrop-filter: blur(12px); }
+.world-hero { position: absolute; z-index: 4; top: 64px; left: 50%; width: min(760px, calc(100% - 340px)); transform: translateX(-50%); }
+.claim-panel { padding: 11px 16px 9px; border-radius: var(--radius-xl, 20px); background: color-mix(in srgb, var(--color-brand-white) 79%, transparent); box-shadow: 0 16px 48px color-mix(in srgb, var(--color-brand-navy) 12%, transparent); backdrop-filter: blur(22px); }
+.claim-headline { display: flex; align-items: end; justify-content: center; gap: 12px; }
+.claim-panel__intro { text-align: center; }
+.claim-panel__intro h1 { display: inline; margin: 0; font-size: clamp(1.25rem, 2.2vw, 2.1rem); line-height: 1.1; letter-spacing: -.05em; font-weight: 750; }
+.claim-panel__intro .eyebrow { margin-bottom: 7px; font-weight: 650; }
+.amount-control { display: grid; grid-template-columns: 44px minmax(105px, auto) 44px; gap: 2px; margin: 0; padding: 0; border: 0; background: transparent; vertical-align: middle; }
+.amount-control button { border: 1px solid var(--line); border-radius: 50%; background: var(--color-brand-white); }
+.amount-control span { font-size: .55rem; }
+.amount-control strong { font-size: clamp(1.35rem, 2.3vw, 2rem); }
+.claim-fields { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, .78fr) minmax(0, .85fr) auto; gap: 7px; margin-top: 7px; }
+.claim-fields .field-label { margin: 0; }
+.claim-fields .field-label > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+.claim-fields .primary-button { min-width: 128px; align-self: end; font-size: .72rem; letter-spacing: .05em; }
+.claim-error { margin: 5px 0 0; color: var(--color-brand-navy); font-size: .7rem; font-weight: 700; }
+.claim-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 7px 0 0; padding: 6px 10px 0; border-top: 1px solid var(--line); text-align: center; }
+.claim-stats strong { font-size: .78rem; }
+.phase-note { margin-top: 5px; font-size: .62rem; }
+.metrics-panel { top: 110px; left: 18px; }
+.metric-chip { width: 130px; min-width: 0; padding: 6px 9px; grid-template-columns: 35px 1fr; }
+.world-controls { top: 110px; right: 18px; bottom: auto; left: auto; transform: none; display: grid; width: 124px; max-width: none; padding: 4px; }
+.world-controls button, .world-controls select { width: 100%; }
+.time-control { padding: 0 4px; }
+.top-leaders { top: auto; bottom: 22px; left: 50%; }
+.profile-drawer { right: 158px; bottom: 18px; }
+.profile-drawer--empty { display: none; }
+.world-caption { bottom: 6px; }
+.pavilion-sign, .cafe-sign, .helipad-mark, .height-label { color: var(--color-brand-navy); background: color-mix(in srgb, var(--color-brand-white) 88%, transparent); border: 1px solid var(--line); border-radius: 4px; padding: 3px 6px; font: 750 10px/1.1 Inter, sans-serif; white-space: nowrap; letter-spacing: .07em; }
+.helipad-mark { font-size: 18px; border: 0; background: transparent; }
+.height-label { color: var(--color-brand-blue); }
+.mascot-easter-egg button { min-height: 44px; border: 1px solid var(--line); border-radius: 10px; color: var(--color-brand-navy); background: var(--color-brand-white); padding: 4px 9px; white-space: nowrap; font-size: 11px; }
+.cat-easter-egg button { min-height: 44px; border: 1px solid var(--line); border-radius: var(--radius-md, 12px); color: var(--color-brand-navy); background: var(--color-brand-white); padding: 4px 9px; white-space: nowrap; font-size: 11px; }
+.plane-banner { min-width: 150px; padding: 7px 9px; border: 2px solid var(--color-brand-navy); color: var(--color-brand-navy); background: var(--color-brand-soft-white); text-align: center; font: 800 10px/1.2 Inter, sans-serif; letter-spacing: .07em; white-space: nowrap; box-shadow: 0 4px 12px color-mix(in srgb, var(--color-brand-navy) 20%, transparent); }
+.floor-callout { min-width: 220px; padding: 9px 12px; border: 1px solid var(--color-brand-light-blue); border-radius: 7px; background: color-mix(in srgb, var(--color-brand-navy) 90%, transparent); color: var(--color-brand-white); text-align: center; font: 700 13px/1.25 Inter, sans-serif; letter-spacing: -.01em; box-shadow: 0 8px 24px color-mix(in srgb, var(--color-brand-navy) 25%, transparent); }
+.floor-callout--top { border-color: var(--color-brand-summit-gold); }
+.world-hero, .metrics-panel, .top-leaders { transition: opacity .24s ease, transform .24s ease, visibility .24s ease; }
+.app-shell--focus .world-hero { opacity: 0; visibility: hidden; pointer-events: none; transform: translate(-50%, -16px); }
+.app-shell--focus .metrics-panel, .app-shell--focus .top-leaders { opacity: 0; visibility: hidden; pointer-events: none; }
+.hud-reveal { position: absolute; z-index: 5; top: 70px; left: 50%; transform: translateX(-50%); min-height: 38px; padding: 0 14px; border: 1px solid var(--line); border-radius: var(--radius-md, 12px); background: color-mix(in srgb, var(--color-brand-white) 82%, transparent); color: var(--color-brand-navy); font-size: .72rem; font-weight: 750; backdrop-filter: blur(12px); }
+.stress-badge { position: absolute; z-index: 5; left: 50%; bottom: 60px; transform: translateX(-50%); padding: 6px 10px; border-radius: 10px; background: var(--color-brand-navy); color: var(--color-brand-white); font-size: .7rem; pointer-events: none; }
+.claim-fields select { appearance: none; padding-right: 30px; background-image: linear-gradient(45deg, transparent 50%, var(--color-brand-navy) 50%), linear-gradient(135deg, var(--color-brand-navy) 50%, transparent 50%); background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size: 5px 5px; background-repeat: no-repeat; }
+.claim-fields input, .claim-fields select, .claim-fields .primary-button { min-height: 46px; }
+.mock-reaction { margin: 3px 0 0; color: var(--color-brand-blue); text-align: center; font-size: .7rem; font-weight: 750; }
+.floor-travel-button { display: none; }
+@media (max-width: 900px) {
+  .app-shell { min-height: 100dvh; }
+  .world-section { min-height: 100dvh; }
+  .world-hero { top: 65px; width: min(610px, calc(100% - 24px)); }
+  .site-header { min-height: 56px; }
+  .brand-logo { width: 150px; }
+  .claim-panel { padding: 11px 12px; }
+  .metrics-panel { top: 292px; left: 10px; right: auto; display: grid; grid-template-columns: 1fr; overflow: visible; }
+  .metric-chip { min-width: 88px; max-width: 88px; grid-template-columns: 1fr; gap: 0; padding: 5px 6px; }
+  .metric-chip strong { font-size: .8rem; }
+  .metric-chip span { font-size: .5rem; }
+  .world-controls { top: 292px; right: 10px; bottom: auto; left: auto; transform: none; width: 92px; overflow: visible; }
+  .world-controls button, .world-controls select { padding: 0 4px; }
+  .profile-drawer { right: 10px; bottom: 68px; }
+  .top-leaders { top: auto; bottom: 8px; justify-content: center; }
+}
+@media (max-width: 600px) {
+  .site-header { padding: 0 12px; }
+  .phase-badge { display: none; }
+  .claim-panel__intro h1 { font-size: 1.18rem; }
+  .claim-headline { display: block; }
+  .claim-panel__intro .eyebrow { font-size: .55rem; }
+  .amount-control { display: grid; grid-template-columns: 44px 1fr 44px; width: 100%; margin: 2px 0 0; }
+  .amount-control strong { font-size: 1.35rem; }
+  .claim-fields { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr) minmax(0, .8fr); gap: 4px; margin-top: 4px; }
+  .claim-fields .field-label:first-child { grid-column: auto; }
+  .claim-fields .primary-button { grid-column: 1 / -1; min-height: 44px; }
+  .field-label input, .field-label select { min-height: 44px; font-size: .78rem; }
+  .claim-stats { gap: 3px; padding: 6px 0 0; }
+  .claim-stats span { font-size: .59rem; }
+  .claim-stats strong { font-size: .67rem; }
+  .phase-note { font-size: .57rem; }
+  .metrics-panel { top: 335px; }
+  .world-controls { top: 335px; }
+  .world-controls button { font-size: .6rem; }
+  .top-leaders { width: calc(100% - 20px); bottom: 6px; overflow-x: auto; justify-content: flex-start; }
+  .scene-label { font-size: .55rem; padding: 4px 7px; }
+  .profile-drawer { left: 6px; right: 6px; bottom: 54px; width: auto; max-height: 42dvh; overflow-y: auto; padding: 13px; }
+  .world-hero { top: 52px; }
+  .claim-panel { padding: 8px; }
+  .claim-panel__intro .eyebrow { display: none; }
+  .amount-control span { display: none; }
+  .amount-control button { width: 44px; height: 44px; }
+  .claim-fields .field-label input, .claim-fields .field-label select { padding: 0 5px; font-size: .65rem; }
+  .claim-fields .primary-button { min-height: 44px; }
+  .claim-stats { margin-top: 5px; }
+  .claim-stats strong { margin-top: 1px; }
+  .phase-note { margin-top: 2px; line-height: 1.2; }
+  .metrics-panel { top: 305px; left: 7px; right: 7px; display: flex; gap: 4px; overflow-x: auto; }
+  .metric-chip { width: 87px; min-width: 87px; padding: 4px 5px; }
+  .world-controls { top: auto; left: 7px; right: 7px; bottom: 7px; width: auto; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; padding: 3px; transform: none; }
+  .world-controls button, .world-controls select { min-height: 44px; font-size: .57rem; }
+  .time-control { font-size: .57rem; }
+  .top-leaders { display: none; }
+  .profile-drawer { bottom: 106px; }
+}
+
+@media (max-width: 600px) {
+  .claim-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .claim-fields .field-label:first-child { grid-column: 1 / -1; }
+  .claim-fields .primary-button { grid-column: 1 / -1; }
+  .claim-fields .field-label input, .claim-fields .field-label select { padding-left: 12px; padding-right: 28px; font-size: .75rem; }
+  .world-controls { display: flex; flex-wrap: nowrap; width: calc(100% - 14px); height: 52px; overflow-x: auto; }
+  .world-controls button, .world-controls select { flex: 0 0 auto; width: auto; min-width: 44px; white-space: nowrap; }
+  .world-controls .time-control { flex: 0 0 auto; }
+  .app-shell--focus .floor-travel-button { display: block; }
 }

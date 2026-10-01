@@ -1,14 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { aircraftConfigurations } from "@/world/aircraft/AircraftSystem";
-import { MascotSlot } from "@/world/mascot/MascotSlot";
+import { helicopterPose } from "@/world/aircraft/AircraftSystem";
+import { getHelipadWorldPosition } from "@/world/tower/tower-layout";
 
-describe("Phase 2 scene asset boundaries", () => {
-  it("configures exactly two planes, one helicopter and two drones", () => {
-    expect(aircraftConfigurations.filter((item) => item.kind === "plane")).toHaveLength(2);
-    expect(aircraftConfigurations.filter((item) => item.kind === "helicopter")).toHaveLength(1);
-    expect(aircraftConfigurations.filter((item) => item.kind === "drone")).toHaveLength(2);
-  });
-  it("does not substitute a 3D mascot when the approved GLB is unavailable", () => {
-    expect(MascotSlot({ position: [0, 0, 0] })).toBeNull();
+describe("deterministic helicopter loop", () => {
+  it("approaches, lands on the connected pad, and departs", () => {
+    expect(helicopterPose(5).phase).toBe("APPROACH");
+    expect(helicopterPose(12).phase).toBe("HOVER");
+    expect(helicopterPose(15).phase).toBe("DESCEND");
+    const landed = helicopterPose(18);
+    const [, padY, padZ] = getHelipadWorldPosition(20);
+    expect(landed.phase).toBe("IDLE");
+    expect(landed.position.y).toBeCloseTo(padY + 0.24);
+    expect(landed.position.z).toBeCloseTo(padZ);
+    expect(helicopterPose(26).phase).toBe("DEPART");
   });
 });

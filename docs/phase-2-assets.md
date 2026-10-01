@@ -4,7 +4,7 @@ The Git-tracked `design-system/v1` is the canonical visual source. The only runt
 
 ## Canonical mascot
 
-**MASCOT GLB — SOURCE_REQUIRED.** `design-system/v1/3d/mascot/REMOTE-SOURCE.json` and the asset manifest describe an approved remote GLB, but the binary was not physically available in Git or the supplied local packages. `MascotSlot` is the intentional no-model integration boundary. The approved flat SVG is used in the hero and profile empty state. No substitute 3D mascot was made.
+**MASCOT GLB — SOURCE_REQUIRED.** `design-system/v1/3d/mascot/REMOTE-SOURCE.json` and the asset manifest describe an approved remote GLB, but the binary was not physically available in Git or the supplied local packages. `MascotSlot` is the intentional no-model integration boundary. The approved flat SVG remains in the profile empty state only; it is not represented as a 3D character. The tiny procedural sky-lounge cat is an original environment easter egg, not a canonical mascot replacement.
 
 ## Local binary inventory
 
@@ -32,6 +32,10 @@ The supplied `BUrj khalifa.blend` exists (about 46 MB) and was not imported, cop
 | Name | Source / provenance | Destination | Size / format | Optimization | Consumer |
 |---|---|---|---|---|---|
 | Primary logo | `design-system/v1/svg/logo/ownthetop-logo-primary.svg`, approved V1 | `public/brand/ownthetop-logo-primary.svg` | 4,029 B SVG | None; byte-identical | Header, in-world billboard, rooftop signs |
-| Flat mascot | `design-system/v1/svg/mascot/ownthetop-mascot-flat.svg`, approved V1 | `public/brand/ownthetop-mascot-flat.svg` | 1,774 B SVG | None; byte-identical | Hero, empty profile |
+| Flat mascot | `design-system/v1/svg/mascot/ownthetop-mascot-flat.svg`, approved V1 | `public/brand/ownthetop-mascot-flat.svg` | 1,774 B SVG | None; byte-identical | Empty profile state |
 
 No remote signed URLs, third-party textures, downloaded models, or unlicensed binaries are used at runtime.
+
+## Remediation procedural asset ledger
+
+All items below are original code, stored as TS/TSX rather than binary assets; there is no third-party license or runtime binary transfer. `TopPavilion.tsx` supplies the asymmetric three-wing glass crown, interior lounge cues, connected helipad, narrow pennant and cat. `CityLife.tsx` supplies instanced generic vehicle silhouettes, pedestrians, reflective pool and fountain. `CompanionSkyline.tsx` supplies instanced windowed buildings and roof caps. `AircraftSystem.tsx` supplies generic planes, original ad banners, helicopter landing sequence and drones. `Floor.tsx` plus `floor-signs.ts` supplies instanced curtain walls and an LRU-bounded CanvasTexture facade-media cache. No external audio file is used: ambience and mock-amount reactions are synthesized with Web Audio only after explicit user input.

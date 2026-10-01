@@ -1,15 +1,22 @@
 import type { TowerId } from "@/domain/tower";
 import type { TowerVisualConfig } from "@/world/types";
 
-export const FLOOR_HEIGHT = 0.34;
-export const FLOOR_GAP = 0.09;
+export const FLOOR_HEIGHT = 0.4;
+export const FLOOR_GAP = 0.08;
 export const FLOOR_PITCH = FLOOR_HEIGHT + FLOOR_GAP;
 export const PODIUM_HEIGHT = 0.7;
 export const FLOOR_BASE_Y = PODIUM_HEIGHT + FLOOR_HEIGHT / 2 + 0.16;
+export const CROWN_UNSCALED_HEIGHT = 6.48;
+export const HELIPAD_LEVEL_OFFSET = 0.9;
+export function getCrownVerticalScale(floorCount: number): number { return Math.max(0.67, Math.min(1.25, 0.67 + floorCount * 0.0165)); }
+export function getCrownHeight(floorCount: number): number { return 0.18 + CROWN_UNSCALED_HEIGHT * getCrownVerticalScale(floorCount); }
+export function getHelipadWorldPosition(floorCount: number): [number, number, number] {
+  return [towerVisuals.companies.position[0], getTowerHeight(floorCount) + 0.18 + HELIPAD_LEVEL_OFFSET * getCrownVerticalScale(floorCount), towerVisuals.companies.position[2] + 1.58];
+}
 
 export const towerVisuals: Record<TowerId, TowerVisualConfig> = {
-  companies: { id: "companies", position: [-6.2, 0, 0.4], accent: "blue", scale: 1 },
-  products: { id: "products", position: [0, 0, -1.1], accent: "lavender", scale: 0.96 },
+  companies: { id: "companies", position: [0, 0, 0.4], accent: "blue", scale: 1 },
+  products: { id: "products", position: [-6.2, 0, -1.1], accent: "lavender", scale: 0.96 },
   people: { id: "people", position: [6.2, 0, 0.6], accent: "teal", scale: 0.92 },
 };
 
@@ -24,7 +31,15 @@ export function getFloorFootprint(rank: number, floorCount: number): number {
 export function getFloorY(rank: number, floorCount: number): number {
   return FLOOR_BASE_Y + (floorCount - rank) * FLOOR_PITCH;
 }
+export function getNearestFloorRank(y: number, floorCount: number): number {
+  return Math.max(1, Math.min(floorCount, floorCount - Math.round((y - FLOOR_BASE_Y) / FLOOR_PITCH)));
+}
 
 export function getTowerHeight(floorCount: number): number {
   return FLOOR_BASE_Y + floorCount * FLOOR_PITCH;
+}
+
+/** Total architectural height through the spire tip; 30 feet per world unit. */
+export function getArchitecturalHeightFeet(floorCount: number): number {
+  return Math.round((getTowerHeight(floorCount) + getCrownHeight(floorCount)) * 30);
 }

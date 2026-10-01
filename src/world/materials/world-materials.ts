@@ -12,6 +12,9 @@ const glassByAccent = {
 export const worldMaterials = {
   podium: new MeshStandardMaterial({ color: tokens.material3d.body.color, roughness: tokens.material3d.body.roughness }),
   frame: new MeshStandardMaterial({ color: brand.navy, metalness: 0.55, roughness: 0.3 }),
+  facade: new MeshStandardMaterial({ color: brand.white, metalness: 0.48, roughness: 0.23 }),
+  glazing: new MeshStandardMaterial({ color: brand.white, metalness: 0.62, roughness: 0.15, emissive: brand.blue, emissiveIntensity: 0.03 }),
+  sideGlazing: new MeshStandardMaterial({ color: brand.blue, metalness: 0.58, roughness: 0.16, emissive: brand.blue, emissiveIntensity: 0.04 }),
   crown: new MeshStandardMaterial({ color: brand.blue, metalness: 0.55, roughness: 0.28 }),
   summit: new MeshStandardMaterial({ color: tokens.material3d.gold.color, metalness: 0.45, roughness: tokens.material3d.gold.roughness }),
   selected: new MeshStandardMaterial({ color: brand.white, emissive: brand.blue, emissiveIntensity: 0.36, metalness: 0.24, roughness: 0.28 }),
@@ -31,5 +34,7 @@ export function applyTimeToWorldMaterials(time: "day" | "sunset" | "night") {
     material.needsUpdate = true;
   }
   worldMaterials.sign.emissiveIntensity = time === "night" ? 0.62 : time === "sunset" ? 0.2 : 0.08;
+  worldMaterials.glazing.emissiveIntensity = time === "night" ? 0.25 : time === "sunset" ? 0.08 : 0.03;
+  worldMaterials.sideGlazing.emissiveIntensity = time === "night" ? 0.3 : time === "sunset" ? 0.09 : 0.04;
   worldMaterials.aircraftLight.emissiveIntensity = time === "night" ? 1.2 : 0;
 }
