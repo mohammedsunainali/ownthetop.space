@@ -1,9 +1,10 @@
 import type { Listing } from "@/domain/listing";
 import type { Tower as TowerData } from "@/domain/tower";
 import { useWorldStore } from "@/state/world-store";
-import { Floor } from "@/world/tower/Floor";
+import { RankedFloors } from "@/world/tower/Floor";
 import { TowerShell } from "@/world/tower/TowerShell";
-import { getFloorY, getTowerHeight, towerVisuals } from "@/world/tower/tower-layout";
+import { HeightRuler } from "@/world/tower/HeightRuler";
+import { getNearestFloorRank, getTowerHeight, towerVisuals } from "@/world/tower/tower-layout";
 
 interface TowerProps {
   tower: TowerData;
@@ -12,7 +13,11 @@ interface TowerProps {
 
 export function Tower({ tower, listings }: TowerProps) {
   const selectedListingId = useWorldStore((state) => state.selectedListingId);
+  const selectedTowerId = useWorldStore((state) => state.selectedTowerId);
+  const cameraMode = useWorldStore((state) => state.cameraMode);
   const floorsExploded = useWorldStore((state) => state.floorsExploded);
+  const rulerVisible = useWorldStore((state) => state.rulerVisible);
+  const towerTravelY = useWorldStore((state) => state.towerTravelY);
   const selectListing = useWorldStore((state) => state.selectListing);
   const selectTower = useWorldStore((state) => state.selectTower);
   const visual = towerVisuals[tower.id];
@@ -20,18 +25,9 @@ export function Tower({ tower, listings }: TowerProps) {
 
   return (
     <group position={visual.position} scale={visual.scale}>
-      <TowerShell height={height} accent={visual.accent} glass={visual.glass} onSelect={() => selectTower(tower.id)} />
-      {listings.map((listing) => (
-        <Floor
-          key={listing.id}
-          listing={listing}
-          y={getFloorY(listing.rank, listings.length)}
-          accent={visual.accent}
-          selected={listing.id === selectedListingId}
-          exploded={floorsExploded}
-          onSelect={(selected) => selectListing(selected.id, selected.towerId)}
-        />
-      ))}
+      <TowerShell height={height} floorCount={listings.length} focused={selectedTowerId === tower.id && cameraMode !== "overview"} onSelect={() => selectTower(tower.id)} />
+      <RankedFloors listings={listings} accent={visual.accent} selectedListingId={selectedListingId} focused={selectedTowerId === tower.id && cameraMode !== "overview"} focusedRank={selectedTowerId === tower.id && towerTravelY !== null ? getNearestFloorRank(towerTravelY, listings.length) : undefined} exploded={floorsExploded} onSelect={(selected) => selectListing(selected.id, selected.towerId)} />
+      {rulerVisible && (selectedTowerId ?? "companies") === tower.id ? <HeightRuler floorCount={listings.length} /> : null}
     </group>
   );
 }

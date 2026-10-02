@@ -1,24 +1,36 @@
+import { tokens } from "@/design/tokens";
 import { useWorldStore } from "@/state/world-store";
+import { useEffect } from "react";
+import { useWorldQuality } from "@/hooks/use-world-quality";
+import { CompanionSkyline } from "@/world/environment/CompanionSkyline";
+import { WorldProps } from "@/world/environment/WorldProps";
+import { CityLife } from "@/world/environment/CityLife";
+import { AircraftSystem } from "@/world/aircraft/AircraftSystem";
+import { applyTimeToWorldMaterials } from "@/world/materials/world-materials";
 
-export function BasicEnvironment() {
-  const worldTime = useWorldStore((state) => state.worldTime);
-  const night = worldTime === "night";
-
-  return (
-    <>
-      <color attach="background" args={[night ? "#0d1930" : "#dff1ff"]} />
-      <fog attach="fog" args={[night ? "#0d1930" : "#dff1ff", 24, 58]} />
-      <ambientLight intensity={night ? 0.46 : 0.9} />
-      <directionalLight position={[10, 18, 12]} intensity={night ? 1.2 : 2.3} color={night ? "#8eb8ff" : "#fff8e8"} castShadow />
-      <hemisphereLight args={[night ? "#273e75" : "#d8efff", night ? "#08101f" : "#afc9cf", night ? 0.42 : 1.15]} />
-      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow position={[0, -0.02, 0]}>
-        <circleGeometry args={[25, 64]} />
-        <meshStandardMaterial color={night ? "#15253b" : "#ecf4f5"} roughness={0.92} />
-      </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.06, 0]}>
-        <circleGeometry args={[45, 64]} />
-        <meshStandardMaterial color={night ? "#071b29" : "#9ed9ed"} roughness={0.28} metalness={0.16} />
-      </mesh>
-    </>
-  );
+export function BasicEnvironment({ tallestFloorCount = 20 }: { tallestFloorCount?: number }) {
+  const time = useWorldStore((state) => state.worldTime);
+  const mobile = useWorldQuality();
+  const palette = tokens.environment[time];
+  const night = time === "night";
+  useEffect(() => { applyTimeToWorldMaterials(time); }, [time]);
+  return <>
+    <color attach="background" args={[palette.skyDeep]} />
+    <fog attach="fog" args={[palette.horizon, tallestFloorCount > 40 ? 240 : 27, tallestFloorCount > 40 ? 470 : 74]} />
+    <ambientLight intensity={night ? 0.42 : 0.82} />
+    <hemisphereLight args={[palette.skyMid, tokens.color.brand.navy, night ? 0.45 : 1.1]} />
+    <directionalLight position={time === "sunset" ? [-12, 11, 6] : [11, 18, 12]} intensity={night ? 0.85 : time === "sunset" ? 1.7 : 2.2} color={time === "sunset" ? tokens.color.brand.peach : tokens.color.brand.white} castShadow={!mobile} shadow-mapSize={mobile ? [512, 512] : [1024, 1024]} />
+    <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow position={[0, -0.08, 0]}>
+      <circleGeometry args={[23, 64]} />
+      <meshStandardMaterial color={tokens.color.brand.softWhite} roughness={0.88} />
+    </mesh>
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.13, 0]}>
+      <circleGeometry args={[65, 64]} />
+      <meshStandardMaterial color={palette.water} metalness={0.22} roughness={0.3} />
+    </mesh>
+    <CompanionSkyline mobile={mobile} night={night} />
+    <WorldProps mobile={mobile} night={night} />
+    <CityLife mobile={mobile} />
+    <AircraftSystem mobile={mobile} />
+  </>;
 }

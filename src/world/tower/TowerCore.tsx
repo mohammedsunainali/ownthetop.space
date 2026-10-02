@@ -1,13 +1,9 @@
-interface TowerCoreProps {
-  height: number;
-  glass: string;
-}
+import { worldMaterials } from "@/world/materials/world-materials";
 
-export function TowerCore({ height, glass }: TowerCoreProps) {
+export function TowerCore({ height }: { height: number }) {
   return (
-    <mesh position={[0, height / 2 + 0.45, 0]} castShadow receiveShadow>
-      <cylinderGeometry args={[0.72, 1.05, height, 6]} />
-      <meshStandardMaterial color={glass} roughness={0.27} metalness={0.18} transparent opacity={0.58} />
+    <mesh position={[0, height / 2 + 0.38, 0]} material={worldMaterials.frame} castShadow receiveShadow>
+      <cylinderGeometry args={[0.48, 0.83, height, 6]} />
     </mesh>
   );
 }
