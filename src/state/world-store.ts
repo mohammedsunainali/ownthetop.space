@@ -2,10 +2,17 @@
 
 import { create } from "zustand";
 import type { TowerId } from "@/domain/tower";
+import type { FloorMediaContent } from "@/world/tower/floor-signs";
 
 export type CameraMode = "overview" | "companiesTower" | "productsTower" | "peopleTower" | "selectedFloor" | "topFloor" | "rooftop";
 export type WorldTime = "day" | "sunset" | "night";
 export type WorldTimeMode = "auto" | WorldTime;
+export interface FloorPreview {
+  towerId: TowerId;
+  category: string;
+  url: string;
+  media: FloorMediaContent;
+}
 export function scheduledWorldTime(hour: number, minute = 0): WorldTime {
   const localMinutes = hour * 60 + minute;
   if (localMinutes >= 6 * 60 && localMinutes < 16 * 60) return "day";
@@ -25,6 +32,12 @@ interface WorldState {
   cameraOrbitStep: number;
   towerTravelY: number | null;
   hudRevealed: boolean;
+  claimDraft: { url: string; towerId: TowerId; category: string; amountMinor: number; estimatedRank: number } | null;
+  floorPreview: FloorPreview | null;
+  openClaimDraft: (draft: NonNullable<WorldState["claimDraft"]>) => void;
+  closeClaimDraft: () => void;
+  showFloorPreview: (preview: FloorPreview) => void;
+  clearFloorPreview: () => void;
   selectTower: (towerId: TowerId) => void;
   selectListing: (listingId: string, towerId: TowerId) => void;
   resetWorld: () => void;
@@ -59,10 +72,16 @@ export const useWorldStore = create<WorldState>((set) => ({
   cameraOrbitStep: 0,
   towerTravelY: null,
   hudRevealed: false,
+  claimDraft: null,
+  floorPreview: null,
+  openClaimDraft: (claimDraft) => set({ claimDraft, floorPreview: null }),
+  closeClaimDraft: () => set({ claimDraft: null }),
+  showFloorPreview: (floorPreview) => set({ floorPreview, claimDraft: null, selectedListingId: null, selectedTowerId: floorPreview.towerId, cameraMode: "selectedFloor", towerTravelY: null, hudRevealed: false }),
+  clearFloorPreview: () => set({ floorPreview: null, selectedTowerId: null, selectedListingId: null, cameraMode: "overview", towerTravelY: null }),
   selectTower: (towerId) =>
-    set({ selectedTowerId: towerId, selectedListingId: null, cameraMode: cameraModeByTower[towerId], towerTravelY: null, hudRevealed: false }),
+    set({ selectedTowerId: towerId, selectedListingId: null, floorPreview: null, cameraMode: cameraModeByTower[towerId], towerTravelY: null, hudRevealed: false }),
   selectListing: (listingId, towerId) =>
-    set({ selectedListingId: listingId, selectedTowerId: towerId, cameraMode: "selectedFloor", towerTravelY: null, hudRevealed: false }),
+    set({ selectedListingId: listingId, selectedTowerId: towerId, floorPreview: null, cameraMode: "selectedFloor", towerTravelY: null, hudRevealed: false }),
   resetWorld: () =>
     set({
       selectedTowerId: null,
@@ -73,6 +92,8 @@ export const useWorldStore = create<WorldState>((set) => ({
       floorsExploded: false,
       towerTravelY: null,
       hudRevealed: false,
+      floorPreview: null,
+      claimDraft: null,
     }),
   zoomBy: (delta) => set((state) => ({ cameraDistance: Math.min(1.45, Math.max(0.62, state.cameraDistance + delta)) })),
   rotateWorld: () => set((state) => ({ cameraOrbitStep: state.cameraOrbitStep + 1 })),

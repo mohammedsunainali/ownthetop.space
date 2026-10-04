@@ -1,12 +1,13 @@
 import type { ThreeEvent } from "@react-three/fiber";
-import { useLayoutEffect, useMemo, useRef } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { BoxGeometry, Color, InstancedMesh, Matrix4, Quaternion, Vector3 } from "three";
 import type { Listing } from "@/domain/listing";
+import { useWorldStore } from "@/state/world-store";
 import { tokens } from "@/design/tokens";
 import { FLOOR_HEIGHT, getFloorFootprint, getFloorY } from "@/world/tower/tower-layout";
 import { worldMaterials } from "@/world/materials/world-materials";
 import type { TowerVisualConfig } from "@/world/types";
-import { createFloorSignTexture, visibleFloorSigns } from "@/world/tower/floor-signs";
+import { createFloorSignTexture, releaseFloorSignTexture, visibleFloorSigns, type FloorMediaContent } from "@/world/tower/floor-signs";
 
 const geometry = new BoxGeometry(1.42, FLOOR_HEIGHT, 2.28);
 const glazingGeometry = new BoxGeometry(1.31, FLOOR_HEIGHT * 0.84, 0.035);
@@ -37,7 +38,9 @@ export function RankedFloors({ listings, accent, selectedListingId, focused, foc
   const sideGlass = useRef<InstancedMesh>(null);
   const sideBars = useRef<InstancedMesh>(null);
   const count = listings.length * 3;
-  const signs = useMemo(() => visibleFloorSigns(listings, selectedListingId, focused, focusedRank), [focused, focusedRank, listings, selectedListingId]);
+  const preview = useWorldStore((state) => state.floorPreview);
+  const activePreview = focused && preview?.towerId === listings[0]?.towerId ? preview.media : null;
+  const signs = useMemo(() => visibleFloorSigns(listings, selectedListingId, focused, focusedRank).filter((item) => item.rank !== activePreview?.rank), [activePreview?.rank, focused, focusedRank, listings, selectedListingId]);
 
   useLayoutEffect(() => {
     const instance = mesh.current;
@@ -121,23 +124,26 @@ export function RankedFloors({ listings, accent, selectedListingId, focused, foc
     <instancedMesh ref={mullions} args={[mullionGeometry, worldMaterials.frame, count * 3]} frustumCulled />
     <instancedMesh ref={sideGlass} args={[sideGlassGeometry, worldMaterials.sideGlazing, count * 2]} frustumCulled />
     <instancedMesh ref={sideBars} args={[sideBarGeometry, worldMaterials.frame, count * 6]} frustumCulled />
-    {signs.map((listing) => <FloorSign key={listing.id} listing={listing} floorCount={listings.length} selected={listing.id === selectedListingId} onSelect={onSelect} />)}
+    {signs.map((listing) => <FloorSign key={listing.id} listing={listing} floorCount={listings.length} selected={listing.id === selectedListingId} onSelect={() => onSelect(listing)} />)}
+    {activePreview ? <FloorSign key={activePreview.id} listing={activePreview} floorCount={listings.length} selected preview /> : null}
   </>;
 }
 
-function FloorSign({ listing, floorCount, selected, onSelect }: { listing: Listing; floorCount: number; selected: boolean; onSelect: (listing: Listing) => void }) {
-  const texture = useMemo(() => createFloorSignTexture(listing), [listing]);
+function FloorSign({ listing, floorCount, selected, preview = false, onSelect }: { listing: FloorMediaContent; floorCount: number; selected: boolean; preview?: boolean; onSelect?: () => void }) {
   const footprint = getFloorFootprint(listing.rank, floorCount);
+  const wideTexture = useMemo(() => createFloorSignTexture(listing, "wide", footprint), [listing, footprint]);
+  const compactTexture = useMemo(() => createFloorSignTexture(listing, "compact", footprint), [listing, footprint]);
+  useEffect(() => () => { if (preview) releaseFloorSignTexture(listing.id); }, [listing.id, preview]);
   const y = getFloorY(listing.rank, floorCount);
   return <group position={[0, y, 0]}>
     {[0, 1, 2].map((wing) => <group key={wing} rotation={[0, wing * Math.PI * 2 / 3, 0]}>
-      <mesh position={[0, 0, 2.53 * footprint]} onClick={(event) => { event.stopPropagation(); onSelect(listing); }}>
+      <mesh position={[0, 0, 2.53 * footprint]} onClick={(event) => { event.stopPropagation(); onSelect?.(); }}>
         <planeGeometry args={[1.31 * footprint * (selected ? 1.04 : 1), FLOOR_HEIGHT * 0.84]} />
-        <meshBasicMaterial map={texture} toneMapped={false} />
+        <meshBasicMaterial map={compactTexture} toneMapped={false} />
       </mesh>
-      {[-1, 1].map((side) => <mesh key={side} position={[side * 0.75 * footprint, 0, 1.27 * footprint]} rotation={[0, side * Math.PI / 2, 0]} onClick={(event) => { event.stopPropagation(); onSelect(listing); }}>
+      {[-1, 1].map((side) => <mesh key={side} position={[side * 0.75 * footprint, 0, 1.27 * footprint]} rotation={[0, side * Math.PI / 2, 0]} onClick={(event) => { event.stopPropagation(); onSelect?.(); }}>
         <planeGeometry args={[2.08 * footprint, FLOOR_HEIGHT * 0.84]} />
-        <meshBasicMaterial map={texture} toneMapped={false} />
+        <meshBasicMaterial map={wideTexture} toneMapped={false} />
       </mesh>)}
     </group>)}
   </group>;

@@ -18,6 +18,7 @@ export function Tower({ tower, listings }: TowerProps) {
   const floorsExploded = useWorldStore((state) => state.floorsExploded);
   const rulerVisible = useWorldStore((state) => state.rulerVisible);
   const towerTravelY = useWorldStore((state) => state.towerTravelY);
+  const floorPreview = useWorldStore((state) => state.floorPreview);
   const selectListing = useWorldStore((state) => state.selectListing);
   const selectTower = useWorldStore((state) => state.selectTower);
   const visual = towerVisuals[tower.id];
@@ -26,7 +27,7 @@ export function Tower({ tower, listings }: TowerProps) {
   return (
     <group position={visual.position} scale={visual.scale}>
       <TowerShell height={height} floorCount={listings.length} focused={selectedTowerId === tower.id && cameraMode !== "overview"} onSelect={() => selectTower(tower.id)} />
-      <RankedFloors listings={listings} accent={visual.accent} selectedListingId={selectedListingId} focused={selectedTowerId === tower.id && cameraMode !== "overview"} focusedRank={selectedTowerId === tower.id && towerTravelY !== null ? getNearestFloorRank(towerTravelY, listings.length) : undefined} exploded={floorsExploded} onSelect={(selected) => selectListing(selected.id, selected.towerId)} />
+      <RankedFloors listings={listings} accent={visual.accent} selectedListingId={selectedListingId} focused={selectedTowerId === tower.id && cameraMode !== "overview"} focusedRank={selectedTowerId === tower.id ? towerTravelY !== null ? getNearestFloorRank(towerTravelY, listings.length) : floorPreview?.towerId === tower.id ? floorPreview.media.rank : undefined : undefined} exploded={floorsExploded} onSelect={(selected) => selectListing(selected.id, selected.towerId)} />
       {rulerVisible && (selectedTowerId ?? "companies") === tower.id ? <HeightRuler floorCount={listings.length} /> : null}
     </group>
   );

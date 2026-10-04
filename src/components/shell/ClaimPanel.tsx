@@ -12,9 +12,11 @@ export function ClaimPanel() {
   const [amountMinor, setAmountMinor] = useState(10000);
   const [towerId, setTowerId] = useState<TowerId>("companies");
   const [category, setCategory] = useState("");
+  const [website, setWebsite] = useState("");
+  const [showWebsiteError, setShowWebsiteError] = useState(false);
   const [showCategoryError, setShowCategoryError] = useState(false);
   const [reaction, setReaction] = useState<string | null>(null);
-  const selectTower = useWorldStore((state) => state.selectTower);
+  const openClaimDraft = useWorldStore((state) => state.openClaimDraft);
   const soundEnabled = useWorldStore((state) => state.soundEnabled);
 
   const estimatedPosition = useMemo(() => {
@@ -42,7 +44,7 @@ export function ClaimPanel() {
 
       <div className="claim-fields"><label className="field-label">
         <span>Website or profile</span>
-        <input type="url" placeholder="yourcompany.com" aria-label="Website URL placeholder" />
+        <input type="text" inputMode="url" placeholder="yourcompany.com" aria-label="Website URL placeholder" value={website} aria-invalid={showWebsiteError} onChange={(event) => { setWebsite(event.target.value); setShowWebsiteError(false); }} />
       </label>
       <label className="field-label">
         <span>Category / tower</span>
@@ -51,15 +53,22 @@ export function ClaimPanel() {
           onChange={(event) => {
             const nextTower = event.target.value as TowerId;
             setTowerId(nextTower);
-            selectTower(nextTower);
           }}
         >
           {towers.map((tower) => <option key={tower.id} value={tower.id}>{tower.name}</option>)}
         </select>
       </label>
       <label className="field-label"><span>Category</span><select value={category} aria-label="Category" aria-invalid={showCategoryError && !category} required onChange={(event) => { setCategory(event.target.value); setShowCategoryError(false); }}><option value="">Category</option><option value="technology">Technology</option><option value="creative">Creative</option><option value="commerce">Commerce</option><option value="other">Other</option></select></label>
-      <button className="primary-button" type="button" onClick={() => { if (!category) { setShowCategoryError(true); return; } selectTower(towerId); }}>OWN THE TOP</button></div>
+      <button className="primary-button" type="button" onClick={() => {
+        if (!category) { setShowCategoryError(true); return; }
+        const raw = website.trim();
+        let valid = false;
+        try { const parsed = new URL(/^https?:\/\//i.test(raw) ? raw : `https://${raw}`); valid = Boolean(parsed.hostname.includes(".") && !/\s/.test(raw)); } catch { valid = false; }
+        if (!valid) { setShowWebsiteError(true); return; }
+        openClaimDraft({ url: raw, towerId, category, amountMinor, estimatedRank: estimatedPosition });
+      }}>OWN THE TOP</button></div>
       {showCategoryError && !category ? <p className="claim-error" role="alert">Choose a category to preview your claim.</p> : null}
+      {showWebsiteError ? <p className="claim-error" role="alert">Enter a valid website or profile address.</p> : null}
 
       <div className="claim-stats">
         <span>Current top <strong>{currentTop?.name}</strong></span>
