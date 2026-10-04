@@ -4,7 +4,6 @@ import { Canvas } from "@react-three/fiber";
 import { Component, Suspense, useMemo, useSyncExternalStore, type ReactNode } from "react";
 import { RankingFallback } from "@/components/fallback/RankingFallback";
 import { formatMinorUnits } from "@/domain/money";
-import { listingsByTower } from "@/mock";
 import { towers } from "@/mock/towers";
 import { useWorldStore } from "@/state/world-store";
 import { useWorldQuality } from "@/hooks/use-world-quality";
@@ -23,6 +22,7 @@ class WorldErrorBoundary extends Component<{ children: ReactNode }, { failed: bo
 
 export function WorldCanvas() {
   const selectListing = useWorldStore((state) => state.selectListing);
+  const selectTower = useWorldStore((state) => state.selectTower);
   const mobile = useWorldQuality();
   const webglSupported = useSyncExternalStore(noSubscribe, canUseWebGL, () => true);
   const stressMode = useSyncExternalStore(noSubscribe, isStressMode, () => false);
@@ -45,11 +45,12 @@ export function WorldCanvas() {
       {stressMode ? <div className="stress-badge">Development fixture · 220 synthetic company floors</div> : null}
       <div className="top-leaders" aria-label="Current tower leaders">
         {towers.map((tower) => {
-          const leader = listingsByTower[tower.id].find((listing) => listing.rank === 1)!;
+          const leader = sceneListings[tower.id].find((listing) => listing.rank === 1);
+          if (!leader) return null;
           return (
-            <button key={tower.id} className="scene-label" type="button" onClick={() => selectListing(leader.id, tower.id)}>
-              <span>{tower.name} #1</span>
-              {formatMinorUnits(leader.totalPaidMinor)}
+            <button key={tower.id} className="scene-label" type="button" onClick={() => stressMode ? selectTower(tower.id) : selectListing(leader.id, tower.id)}>
+              <span>{stressMode ? `${tower.name} · ${sceneListings[tower.id].length} synthetic` : `${tower.name} #1`}</span>
+              {stressMode ? null : formatMinorUnits(leader.totalPaidMinor)}
             </button>
           );
         })}

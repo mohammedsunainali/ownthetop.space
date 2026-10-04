@@ -1,4 +1,4 @@
-import { BoxGeometry, CanvasTexture, DoubleSide, InstancedMesh, Matrix4, MeshPhysicalMaterial, MeshStandardMaterial, Quaternion, SRGBColorSpace, Vector3, type Group } from "three";
+import { BoxGeometry, CanvasTexture, DoubleSide, FrontSide, InstancedMesh, Matrix4, MeshPhysicalMaterial, MeshStandardMaterial, Quaternion, SRGBColorSpace, Vector3, type Group } from "three";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
@@ -73,7 +73,10 @@ function Pennant() {
   useFrame(({ clock }) => { if (flag.current && !reducedMotion) flag.current.rotation.y = Math.sin(clock.elapsedTime * 1.4) * 0.035; });
   return <group position={[0.13, 5.13, 0]}>
     <mesh material={worldMaterials.frame} position={[0, 0.17, 0]}><cylinderGeometry args={[0.014, 0.014, 0.52, 6]} /></mesh>
-    <group ref={flag} position={[0.7, 0.28, 0]}><mesh><planeGeometry args={[1.38, 0.35, 8, 1]} /><meshBasicMaterial map={texture} side={DoubleSide} /></mesh></group>
+    <group ref={flag} position={[0.7, 0.28, 0]}>
+      <mesh position={[0, 0, 0.003]}><planeGeometry args={[1.38, 0.35, 8, 1]} /><meshBasicMaterial map={texture} side={FrontSide} /></mesh>
+      <mesh position={[0, 0, -0.003]} rotation={[0, Math.PI, 0]}><planeGeometry args={[1.38, 0.35, 8, 1]} /><meshBasicMaterial map={texture} side={FrontSide} /></mesh>
+    </group>
   </group>;
 }
 
@@ -109,7 +112,8 @@ function PremiumSkyLounge() {
     {[0, 2.094, 4.188].map((angle) => <group key={angle} rotation={[0, angle, 0]}>
       <mesh material={loungeGlass} position={[0, 0.12, 0.55]}><boxGeometry args={[0.82, 0.72, 1.12]} /></mesh>
       <mesh material={worldMaterials.podium} position={[0, -0.25, 0.55]}><boxGeometry args={[0.9, 0.07, 1.2]} /></mesh>
-      <mesh position={[0, 0.08, 1.125]}><planeGeometry args={[0.78, 0.2]} /><meshBasicMaterial map={sign} side={DoubleSide} toneMapped={false} /></mesh>
+      <mesh position={[0, 0.08, 1.129]}><planeGeometry args={[0.78, 0.2]} /><meshBasicMaterial map={sign} side={FrontSide} toneMapped={false} /></mesh>
+      <mesh position={[0, 0.08, 1.121]} rotation={[0, Math.PI, 0]}><planeGeometry args={[0.78, 0.2]} /><meshBasicMaterial map={sign} side={FrontSide} toneMapped={false} /></mesh>
       <mesh material={worldMaterials.summit} position={[-0.2, -0.08, 0.62]}><boxGeometry args={[0.28, 0.16, 0.22]} /></mesh>
       <mesh material={worldMaterials.frame} position={[0.14, -0.1, 0.62]}><cylinderGeometry args={[0.09, 0.09, 0.12, 12]} /></mesh>
       <mesh material={worldMaterials.leaf} position={[0.27, 0.05, 0.46]}><icosahedronGeometry args={[0.11, 1]} /></mesh>

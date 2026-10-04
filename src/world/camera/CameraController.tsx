@@ -1,7 +1,7 @@
 import { OrbitControls } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, type ComponentRef } from "react";
-import { Vector3 } from "three";
+import { TOUCH, Vector3 } from "three";
 import type { Listing } from "@/domain/listing";
 import type { TowerId } from "@/domain/tower";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
@@ -15,6 +15,11 @@ export function clampTowerTravel(y: number, floorCount: number): number {
 export function shouldRunIntro(reducedMotion: boolean): boolean { return !reducedMotion; }
 export function focusedWheelAction(event: Pick<WheelEvent, "ctrlKey" | "metaKey">): "zoom" | "travel" {
   return event.ctrlKey || event.metaKey ? "zoom" : "travel";
+}
+export function yieldCameraToManualControl(intro: { interrupted: boolean }, transition: { current: number }, manual: { current: boolean }): void {
+  intro.interrupted = true;
+  transition.current = 0;
+  manual.current = true;
 }
 
 interface CameraControllerProps {
@@ -38,12 +43,22 @@ export function CameraController({ selectedListing, floorCounts }: CameraControl
   const mobile = useWorldQuality();
   const transition = useRef(1);
   const intro = useRef({ elapsed: 0, interrupted: false });
+  const manual = useRef(false);
+  const previousDestination = useRef<{ position: Vector3; target: Vector3 } | null>(null);
+  const previousAnchor = useRef<string | null>(null);
+  const previousDistance = useRef(cameraDistance);
+  const previousOrbitStep = useRef(cameraOrbitStep);
+
+  const cancelScriptedMotion = () => {
+    yieldCameraToManualControl(intro.current, transition, manual);
+  };
 
   useEffect(() => {
-    const interrupt = () => { intro.current.interrupted = true; transition.current = 1; };
+    const interrupt = () => { yieldCameraToManualControl(intro.current, transition, manual); };
     gl.domElement.addEventListener("pointerdown", interrupt);
-    gl.domElement.addEventListener("wheel", interrupt);
-    return () => { gl.domElement.removeEventListener("pointerdown", interrupt); gl.domElement.removeEventListener("wheel", interrupt); };
+    gl.domElement.addEventListener("touchstart", interrupt, { passive: true });
+    gl.domElement.addEventListener("wheel", interrupt, { passive: true });
+    return () => { gl.domElement.removeEventListener("pointerdown", interrupt); gl.domElement.removeEventListener("touchstart", interrupt); gl.domElement.removeEventListener("wheel", interrupt); };
   }, [gl]);
 
   useEffect(() => {
@@ -51,6 +66,8 @@ export function CameraController({ selectedListing, floorCounts }: CameraControl
     const onWheel = (event: WheelEvent) => {
       const state = useWorldStore.getState();
       if (state.cameraMode === "overview") return;
+      yieldCameraToManualControl(intro.current, transition, manual);
+      event.stopImmediatePropagation();
       if (focusedWheelAction(event) === "zoom") {
         event.preventDefault();
         zoomBy(event.deltaY * 0.0018);
@@ -62,8 +79,8 @@ export function CameraController({ selectedListing, floorCounts }: CameraControl
       const start = state.cameraMode === "rooftop" ? getTowerHeight(count) + 2 : state.selectedListingId && selectedListing ? getFloorY(selectedListing.rank, count) + 0.2 : getFloorY(1, count);
       travelTowerBy(-event.deltaY * 0.007, 1.1, getTowerHeight(count) + getCrownHeight(count) - 0.7, start);
     };
-    element.addEventListener("wheel", onWheel, { passive: false });
-    return () => element.removeEventListener("wheel", onWheel);
+    element.addEventListener("wheel", onWheel, { passive: false, capture: true });
+    return () => element.removeEventListener("wheel", onWheel, true);
   }, [floorCounts, gl, selectedListing, travelTowerBy, zoomBy]);
 
   const destination = useMemo(() => {
@@ -89,9 +106,31 @@ export function CameraController({ selectedListing, floorCounts }: CameraControl
     return { position: target.clone().add(offset), target };
   }, [cameraDistance, cameraMode, cameraOrbitStep, floorCounts, floorPreview, mobile, selectedListing, selectedTowerId, towerTravelY]);
 
+  const anchor = `${cameraMode}|${selectedTowerId}|${selectedListing?.id ?? ""}|${floorPreview?.media.id ?? ""}`;
   useEffect(() => {
-    transition.current = 1;
-  }, [destination]);
+    const prior = previousDestination.current;
+    const anchorChanged = previousAnchor.current !== anchor;
+    if (anchorChanged) {
+      manual.current = false;
+      transition.current = 1;
+    } else if (manual.current && prior && controls.current) {
+      // Travel and toolbar zoom/rotate operate on the user's current orbit, not a stale scripted view.
+      const control = controls.current;
+      const offset = camera.position.clone().sub(control.target);
+      offset.multiplyScalar(cameraDistance / previousDistance.current);
+      offset.applyAxisAngle(new Vector3(0, 1, 0), (cameraOrbitStep - previousOrbitStep.current) * Math.PI / 5);
+      control.target.add(destination.target.clone().sub(prior.target));
+      camera.position.copy(control.target).add(offset);
+      control.update();
+      transition.current = 0;
+    } else {
+      transition.current = 1;
+    }
+    previousDestination.current = destination;
+    previousAnchor.current = anchor;
+    previousDistance.current = cameraDistance;
+    previousOrbitStep.current = cameraOrbitStep;
+  }, [anchor, camera, cameraDistance, cameraOrbitStep, destination]);
 
   useFrame((_, delta) => {
     if (cameraMode !== "overview") intro.current.interrupted = true;
@@ -107,7 +146,7 @@ export function CameraController({ selectedListing, floorCounts }: CameraControl
       if (t === 1) transition.current = 0;
       return;
     }
-    if (transition.current <= 0.001) return;
+    if (manual.current || transition.current <= 0.001) return;
 
     const alpha = reducedMotion ? 1 : 1 - Math.exp(-delta * 5.5);
     camera.position.lerp(destination.position, alpha);
@@ -119,13 +158,17 @@ export function CameraController({ selectedListing, floorCounts }: CameraControl
   return (
     <OrbitControls
       ref={controls}
+      onStart={cancelScriptedMotion}
       makeDefault
       enableDamping={!reducedMotion}
       dampingFactor={0.08}
       minDistance={4}
       maxDistance={240}
       enableZoom
+      enableRotate
       zoomSpeed={0.8}
+      rotateSpeed={0.7}
+      touches={{ ONE: TOUCH.ROTATE, TWO: TOUCH.DOLLY_ROTATE }}
       maxPolarAngle={Math.PI / 2.05}
       target={[0, 4.4, 0]}
     />

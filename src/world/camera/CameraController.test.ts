@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clampTowerTravel, focusedWheelAction, shouldRunIntro } from "@/world/camera/CameraController";
+import { clampTowerTravel, focusedWheelAction, shouldRunIntro, yieldCameraToManualControl } from "@/world/camera/CameraController";
 import { getCrownHeight, getTowerHeight } from "@/world/tower/tower-layout";
 
 describe("tower camera travel", () => {
@@ -17,5 +17,14 @@ describe("tower camera travel", () => {
     expect(focusedWheelAction({ ctrlKey: false, metaKey: false })).toBe("travel");
     expect(focusedWheelAction({ ctrlKey: true, metaKey: false })).toBe("zoom");
     expect(focusedWheelAction({ ctrlKey: false, metaKey: true })).toBe("zoom");
+  });
+  it("cancels scripted interpolation when OrbitControls takes manual authority", () => {
+    const intro = { interrupted: false };
+    const transition = { current: 1 };
+    const manual = { current: false };
+    yieldCameraToManualControl(intro, transition, manual);
+    expect(intro.interrupted).toBe(true);
+    expect(transition.current).toBe(0);
+    expect(manual.current).toBe(true);
   });
 });

@@ -2,11 +2,21 @@ import { CanvasTexture, SRGBColorSpace } from "three";
 import type { Listing } from "@/domain/listing";
 import { formatMinorUnits } from "@/domain/money";
 import { tokens } from "@/design/tokens";
+import { FLOOR_HEIGHT } from "@/world/tower/tower-layout";
 
 export type FloorMediaLayout = "wide" | "compact";
 export type FloorMediaContent = Pick<Listing, "id" | "name" | "description" | "logoUrl" | "rank" | "totalPaidMinor" | "hiring">;
 export const MAX_CACHED_SIGNS = 24;
 export const MAX_FOCUSED_SIGNS = 9;
+/** Inset media bays stop before each wing corner and the central core. */
+export const FACADE_BAYS = {
+  compact: { width: 1.2, height: FLOOR_HEIGHT * 0.8, outward: 2.43 },
+  wide: { width: 1.52, height: FLOOR_HEIGHT * 0.8, outward: 0.73, longitudinal: 1.49 },
+} as const;
+export function floorSignCanvasHeight(layout: FloorMediaLayout, footprint = 1): number {
+  const bay = FACADE_BAYS[layout];
+  return Math.round(FACADE_METRICS[layout].width * bay.height / (bay.width * footprint));
+}
 export const FACADE_METRICS = {
   wide: { width: 1536, height: 384, logoX: 38, logoY: 55, logoWidth: 218, logoHeight: 274, textX: 292, textWidth: 790, rankX: 1230, rankWidth: 270 },
   compact: { width: 1280, height: 512, logoX: 30, logoY: 110, logoWidth: 206, logoHeight: 292, textX: 266, textWidth: 676, rankX: 1000, rankWidth: 245 },
@@ -62,7 +72,7 @@ function drawLogo(context: CanvasRenderingContext2D, content: FloorMediaContent,
 
 export function drawFloorMedia(context: CanvasRenderingContext2D, content: FloorMediaContent, layout: FloorMediaLayout, footprint = 1, logo?: HTMLImageElement) {
   const base = FACADE_METRICS[layout];
-  const m = { ...base, height: Math.round(base.height / footprint) };
+  const m = { ...base, height: floorSignCanvasHeight(layout, footprint) };
   const gold = content.rank === 1;
   context.clearRect(0, 0, m.width, m.height);
   context.fillStyle = tokens.color.brand.navy; context.fillRect(0, 0, m.width, m.height);
@@ -96,12 +106,6 @@ export function drawFloorMedia(context: CanvasRenderingContext2D, content: Floor
   const amount = fitText(context, formatMinorUnits(content.totalPaidMinor), m.rankWidth, compact ? 58 : 62, 40);
   context.font = `800 ${amount.size}px Inter, system-ui, sans-serif`;
   context.fillText(amount.text, m.rankX, compact ? 286 : 205);
-  if (content.hiring) {
-    const x = m.textX, y = compact ? 340 : wideName!.lines.length === 2 ? 274 : 256;
-    context.fillStyle = tokens.color.brand.teal; context.beginPath(); context.roundRect(x, y, 205, 70, 18); context.fill();
-    context.fillStyle = tokens.color.brand.navy; context.font = "800 35px Inter, system-ui, sans-serif";
-    context.fillText("HIRING", x + 34, y + 48);
-  }
   context.restore();
 }
 
@@ -111,7 +115,7 @@ export function createFloorSignTexture(content: FloorMediaContent, layout: Floor
   const existing = cache.get(key);
   if (existing) { cache.delete(key); cache.set(key, existing); return existing; }
   const m = FACADE_METRICS[layout];
-  const canvas = document.createElement("canvas"); canvas.width = m.width; canvas.height = Math.round(m.height / footprint);
+  const canvas = document.createElement("canvas"); canvas.width = m.width; canvas.height = floorSignCanvasHeight(layout, footprint);
   const context = canvas.getContext("2d");
   const texture = new CanvasTexture(canvas); texture.colorSpace = SRGBColorSpace; texture.anisotropy = 4;
   cache.set(key, texture);

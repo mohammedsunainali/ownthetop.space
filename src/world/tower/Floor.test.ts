@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { companies } from "@/mock/companies";
-import { listingForInstance } from "@/world/tower/Floor";
-import { createFloorSignTexture, fitText, fitWideNameLines, floorSignCacheSize, FACADE_METRICS, isSafeLogoUrl, MAX_CACHED_SIGNS, MAX_FOCUSED_SIGNS, visibleFloorSigns } from "@/world/tower/floor-signs";
+import { listingForInstance, paidFloorColor } from "@/world/tower/Floor";
+import { createFloorSignTexture, fitText, fitWideNameLines, floorSignCacheSize, FACADE_BAYS, FACADE_METRICS, isSafeLogoUrl, MAX_CACHED_SIGNS, MAX_FOCUSED_SIGNS, visibleFloorSigns } from "@/world/tower/floor-signs";
+import { tokens } from "@/design/tokens";
 
 describe("instanced ranked floor picking", () => {
   it("maps every wing instance back to one listing", () => {
@@ -9,6 +10,12 @@ describe("instanced ranked floor picking", () => {
       for (let wing = 0; wing < 3; wing++) expect(listingForInstance(companies, index * 3 + wing)?.id).toBe(companies[index].id);
     }
     expect(listingForInstance(companies, companies.length * 3)).toBeUndefined();
+  });
+  it("never substitutes white or gray for selected paid-floor architecture", () => {
+    expect(paidFloorColor(1, "blue")).toBe(tokens.color.brand.summitGold);
+    expect(paidFloorColor(32, "blue")).toBe(tokens.color.brand.lightBlue);
+    expect(paidFloorColor(20, "lavender")).toBe(tokens.color.brand.lavender);
+    expect(paidFloorColor(20, "teal")).toBe(tokens.color.brand.teal);
   });
   it("reuses facade media for unchanged listing display state", () => {
     const canvas = vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(null as never);
@@ -36,8 +43,10 @@ describe("instanced ranked floor picking", () => {
     const canvas = vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(null as never);
     const wide = createFloorSignTexture(companies[25], "wide", 0.72);
     const compact = createFloorSignTexture(companies[25], "compact", 0.72);
-    expect(wide.image.width / wide.image.height).toBeCloseTo(4 * 0.72, 1);
-    expect(compact.image.width / compact.image.height).toBeCloseTo(2.5 * 0.72, 1);
+    expect(wide.image.width / wide.image.height).toBeCloseTo(FACADE_BAYS.wide.width * 0.72 / FACADE_BAYS.wide.height, 1);
+    expect(compact.image.width / compact.image.height).toBeCloseTo(FACADE_BAYS.compact.width * 0.72 / FACADE_BAYS.compact.height, 1);
+    expect(FACADE_BAYS.wide.longitudinal - FACADE_BAYS.wide.width / 2).toBeGreaterThan(0.7);
+    expect(FACADE_BAYS.wide.longitudinal + FACADE_BAYS.wide.width / 2).toBeLessThan(2.3);
     canvas.mockRestore();
   });
   it("shrinks a realistic long name before truncating at the minimum", () => {

@@ -1,6 +1,6 @@
 import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
-import { CanvasTexture, CatmullRomCurve3, DoubleSide, Group, SRGBColorSpace, Vector3 } from "three";
+import { CanvasTexture, CatmullRomCurve3, FrontSide, Group, SRGBColorSpace, Vector3 } from "three";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { worldMaterials } from "@/world/materials/world-materials";
 import { getHelipadWorldPosition } from "@/world/tower/tower-layout";
@@ -54,7 +54,10 @@ function TowBanner({ copy, bannerRef }: { copy: string; bannerRef?: (group: Grou
     }
     const map = new CanvasTexture(canvas); map.colorSpace = SRGBColorSpace; map.anisotropy = 4; return map;
   }, [copy]);
-  return <group ref={bannerRef} position={[0, -0.24, -3.55]}><mesh><planeGeometry args={[5.1, 1.2, 8, 1]} /><meshBasicMaterial map={texture} side={DoubleSide} toneMapped={false} /></mesh></group>;
+  return <group ref={bannerRef} position={[0, -0.24, -3.55]}>
+    <mesh position={[0, 0, 0.004]}><planeGeometry args={[5.1, 1.2, 8, 1]} /><meshBasicMaterial map={texture} side={FrontSide} toneMapped={false} /></mesh>
+    <mesh position={[0, 0, -0.004]} rotation={[0, Math.PI, 0]}><planeGeometry args={[5.1, 1.2, 8, 1]} /><meshBasicMaterial map={texture} side={FrontSide} toneMapped={false} /></mesh>
+  </group>;
 }
 
 function AircraftShape({ kind, index, rotorRef, bannerRef }: { kind: AircraftKind; index: number; rotorRef?: (group: Group | null) => void; bannerRef?: (group: Group | null) => void }) {
