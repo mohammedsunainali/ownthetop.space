@@ -8,11 +8,11 @@ import { worldMaterials } from "@/world/materials/world-materials";
 import type { TowerVisualConfig } from "@/world/types";
 import { createFloorSignTexture, visibleFloorSigns } from "@/world/tower/floor-signs";
 
-const geometry = new BoxGeometry(1.18, FLOOR_HEIGHT, 2.06);
-const glazingGeometry = new BoxGeometry(1.08, FLOOR_HEIGHT * 0.68, 0.035);
-const mullionGeometry = new BoxGeometry(0.025, FLOOR_HEIGHT * 0.7, 0.045);
-const sideGlassGeometry = new BoxGeometry(0.035, FLOOR_HEIGHT * 0.68, 1.86);
-const sideBarGeometry = new BoxGeometry(0.045, FLOOR_HEIGHT * 0.7, 0.025);
+const geometry = new BoxGeometry(1.42, FLOOR_HEIGHT, 2.28);
+const glazingGeometry = new BoxGeometry(1.31, FLOOR_HEIGHT * 0.84, 0.035);
+const mullionGeometry = new BoxGeometry(0.026, FLOOR_HEIGHT * 0.86, 0.045);
+const sideGlassGeometry = new BoxGeometry(0.035, FLOOR_HEIGHT * 0.84, 2.07);
+const sideBarGeometry = new BoxGeometry(0.045, FLOOR_HEIGHT * 0.86, 0.026);
 const yAxis = new Vector3(0, 1, 0);
 
 /** One paid listing maps to exactly three decorative wing instances. */
@@ -59,28 +59,28 @@ export function RankedFloors({ listings, accent, selectedListingId, focused, foc
       for (let wing = 0; wing < 3; wing++) {
         const angle = wing * Math.PI * 2 / 3;
         rotation.setFromAxisAngle(yAxis, angle);
-        const radius = (1.16 + (exploded ? 0.28 : 0)) * footprint;
+        const radius = (1.27 + (exploded ? 0.34 : 0)) * footprint;
         position.set(Math.sin(angle) * radius, y, Math.cos(angle) * radius);
         scale.set(footprint * (selected ? 1.07 : 1), selected ? 1.12 : 1, footprint * (selected ? 1.07 : 1));
         matrix.compose(position, rotation, scale);
         instance.setMatrixAt(index * 3 + wing, matrix);
         instance.setColorAt(index * 3 + wing, color);
-        position.set(Math.sin(angle) * 2.2 * footprint, y, Math.cos(angle) * 2.2 * footprint);
+        position.set(Math.sin(angle) * 2.43 * footprint, y, Math.cos(angle) * 2.43 * footprint);
         scale.set(footprint, 1, 1);
         matrix.compose(position, rotation, scale);
         glass.setMatrixAt(index * 3 + wing, matrix);
         glass.setColorAt(index * 3 + wing, listing.rank === 1 ? new Color(tokens.color.brand.summitGold) : new Color(tokens.color.brand.blue));
         for (let bar = 0; bar < 3; bar++) {
           const offset = (bar - 1) * 0.31 * footprint;
-          position.set(Math.sin(angle) * (2.2 * footprint) + Math.cos(angle) * offset, y, Math.cos(angle) * (2.2 * footprint) - Math.sin(angle) * offset);
+          position.set(Math.sin(angle) * (2.43 * footprint) + Math.cos(angle) * offset, y, Math.cos(angle) * (2.43 * footprint) - Math.sin(angle) * offset);
           scale.set(1, 1, 1);
           matrix.compose(position, rotation, scale);
           bars.setMatrixAt((index * 3 + wing) * 3 + bar, matrix);
         }
         for (let side = 0; side < 2; side++) {
           const sideSign = side === 0 ? -1 : 1;
-          const centerRadius = 1.16 * footprint;
-          const sideOffset = sideSign * 0.61 * footprint;
+          const centerRadius = 1.27 * footprint;
+          const sideOffset = sideSign * 0.73 * footprint;
           position.set(Math.sin(angle) * centerRadius + Math.cos(angle) * sideOffset, y, Math.cos(angle) * centerRadius - Math.sin(angle) * sideOffset);
           scale.set(1, 1, footprint);
           matrix.compose(position, rotation, scale);
@@ -131,12 +131,12 @@ function FloorSign({ listing, floorCount, selected, onSelect }: { listing: Listi
   const y = getFloorY(listing.rank, floorCount);
   return <group position={[0, y, 0]}>
     {[0, 1, 2].map((wing) => <group key={wing} rotation={[0, wing * Math.PI * 2 / 3, 0]}>
-      <mesh position={[0, 0, 2.29 * footprint]} onClick={(event) => { event.stopPropagation(); onSelect(listing); }}>
-        <planeGeometry args={[1.06 * footprint * (selected ? 1.05 : 1), FLOOR_HEIGHT * 0.63]} />
+      <mesh position={[0, 0, 2.53 * footprint]} onClick={(event) => { event.stopPropagation(); onSelect(listing); }}>
+        <planeGeometry args={[1.31 * footprint * (selected ? 1.04 : 1), FLOOR_HEIGHT * 0.84]} />
         <meshBasicMaterial map={texture} toneMapped={false} />
       </mesh>
-      {[-1, 1].map((side) => <mesh key={side} position={[side * 0.64 * footprint, 0, 1.16 * footprint]} rotation={[0, side * Math.PI / 2, 0]} onClick={(event) => { event.stopPropagation(); onSelect(listing); }}>
-        <planeGeometry args={[1.88 * footprint, FLOOR_HEIGHT * 0.63]} />
+      {[-1, 1].map((side) => <mesh key={side} position={[side * 0.75 * footprint, 0, 1.27 * footprint]} rotation={[0, side * Math.PI / 2, 0]} onClick={(event) => { event.stopPropagation(); onSelect(listing); }}>
+        <planeGeometry args={[2.08 * footprint, FLOOR_HEIGHT * 0.84]} />
         <meshBasicMaterial map={texture} toneMapped={false} />
       </mesh>)}
     </group>)}

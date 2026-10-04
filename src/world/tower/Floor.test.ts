@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { companies } from "@/mock/companies";
 import { listingForInstance } from "@/world/tower/Floor";
-import { createFloorSignTexture, floorSignCacheSize } from "@/world/tower/floor-signs";
+import { createFloorSignTexture, floorSignCacheSize, isSafeLogoUrl, MAX_CACHED_SIGNS, MAX_FOCUSED_SIGNS, visibleFloorSigns } from "@/world/tower/floor-signs";
 
 describe("instanced ranked floor picking", () => {
   it("maps every wing instance back to one listing", () => {
@@ -16,5 +16,12 @@ describe("instanced ranked floor picking", () => {
     expect(createFloorSignTexture(companies[0])).toBe(first);
     expect(floorSignCacheSize()).toBeGreaterThan(0);
     canvas.mockRestore();
+  });
+  it("bounds detailed facade media and rejects arbitrary remote logo loading", () => {
+    expect(visibleFloorSigns(companies, null, true, 25)).toHaveLength(MAX_FOCUSED_SIGNS);
+    expect(MAX_CACHED_SIGNS).toBe(24);
+    expect(isSafeLogoUrl("/brand/example.svg")).toBe(true);
+    expect(isSafeLogoUrl("data:image/svg+xml,test")).toBe(true);
+    expect(isSafeLogoUrl("https://untrusted.example/logo.png")).toBe(false);
   });
 });

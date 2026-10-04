@@ -13,6 +13,9 @@ export function clampTowerTravel(y: number, floorCount: number): number {
   return Math.max(1.1, Math.min(getTowerHeight(floorCount) + getCrownHeight(floorCount) - 0.7, y));
 }
 export function shouldRunIntro(reducedMotion: boolean): boolean { return !reducedMotion; }
+export function focusedWheelAction(event: Pick<WheelEvent, "ctrlKey" | "metaKey">): "zoom" | "travel" {
+  return event.ctrlKey || event.metaKey ? "zoom" : "travel";
+}
 
 interface CameraControllerProps {
   selectedListing: Listing | null;
@@ -28,6 +31,7 @@ export function CameraController({ selectedListing, floorCounts }: CameraControl
   const cameraOrbitStep = useWorldStore((state) => state.cameraOrbitStep);
   const towerTravelY = useWorldStore((state) => state.towerTravelY);
   const travelTowerBy = useWorldStore((state) => state.travelTowerBy);
+  const zoomBy = useWorldStore((state) => state.zoomBy);
   const gl = useThree((state) => state.gl);
   const reducedMotion = useReducedMotion();
   const mobile = useWorldQuality();
@@ -46,6 +50,11 @@ export function CameraController({ selectedListing, floorCounts }: CameraControl
     const onWheel = (event: WheelEvent) => {
       const state = useWorldStore.getState();
       if (state.cameraMode === "overview") return;
+      if (focusedWheelAction(event) === "zoom") {
+        event.preventDefault();
+        zoomBy(event.deltaY * 0.0018);
+        return;
+      }
       event.preventDefault();
       const id = state.selectedTowerId ?? "companies";
       const count = floorCounts[id];
@@ -54,7 +63,7 @@ export function CameraController({ selectedListing, floorCounts }: CameraControl
     };
     element.addEventListener("wheel", onWheel, { passive: false });
     return () => element.removeEventListener("wheel", onWheel);
-  }, [floorCounts, gl, selectedListing, travelTowerBy]);
+  }, [floorCounts, gl, selectedListing, travelTowerBy, zoomBy]);
 
   const destination = useMemo(() => {
     const referenceHeight = getTowerHeight(20);
@@ -68,9 +77,9 @@ export function CameraController({ selectedListing, floorCounts }: CameraControl
         (cameraMode === "companiesTower" ? "companies" : cameraMode === "productsTower" ? "products" : "people");
       const tower = towerVisuals[towerId];
       const count = floorCounts[towerId];
-      const y = towerTravelY ?? (cameraMode === "rooftop" ? getTowerHeight(count) + 2.2 : cameraMode === "topFloor" ? getFloorY(1, count) + 0.6 : selectedListing ? getFloorY(selectedListing.rank, count) + 0.2 : getTowerHeight(count) * 0.72);
+      const y = towerTravelY ?? (cameraMode === "rooftop" ? getTowerHeight(count) + 4.1 : cameraMode === "topFloor" ? getFloorY(1, count) + 0.6 : selectedListing ? getFloorY(selectedListing.rank, count) + 0.2 : getTowerHeight(count) * 0.72);
       target = new Vector3(tower.position[0], y, tower.position[2]);
-      offset = cameraMode === "rooftop" ? new Vector3(mobile ? 7 : 4, 1.8, mobile ? 8 : 5) : cameraMode === "topFloor" ? new Vector3(mobile ? 8 : 5.4, 1, mobile ? 10 : 7.2) : selectedListing ? new Vector3(mobile ? 7.5 : 5.8, 0.8, mobile ? 9.2 : 7.2) : new Vector3(mobile ? 10 : 7.8, 1.3, mobile ? 13 : 9.8);
+      offset = cameraMode === "rooftop" ? new Vector3(mobile ? 9 : 5.6, 1.5, mobile ? 11 : 7.5) : cameraMode === "topFloor" ? new Vector3(mobile ? 8 : 5.4, 1, mobile ? 10 : 7.2) : selectedListing ? new Vector3(mobile ? 7.5 : 5.8, 0.8, mobile ? 9.2 : 7.2) : new Vector3(mobile ? 10 : 7.8, 1.3, mobile ? 13 : 9.8);
     }
 
     const angle = cameraOrbitStep * (Math.PI / 5);
@@ -114,7 +123,8 @@ export function CameraController({ selectedListing, floorCounts }: CameraControl
       dampingFactor={0.08}
       minDistance={4}
       maxDistance={240}
-      enableZoom={cameraMode === "overview"}
+      enableZoom
+      zoomSpeed={0.8}
       maxPolarAngle={Math.PI / 2.05}
       target={[0, 4.4, 0]}
     />

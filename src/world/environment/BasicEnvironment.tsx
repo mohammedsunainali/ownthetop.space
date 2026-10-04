@@ -1,15 +1,25 @@
 import { tokens } from "@/design/tokens";
 import { useWorldStore } from "@/state/world-store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useWorldQuality } from "@/hooks/use-world-quality";
 import { CompanionSkyline } from "@/world/environment/CompanionSkyline";
 import { WorldProps } from "@/world/environment/WorldProps";
 import { CityLife } from "@/world/environment/CityLife";
 import { AircraftSystem } from "@/world/aircraft/AircraftSystem";
 import { applyTimeToWorldMaterials } from "@/world/materials/world-materials";
+import { scheduledWorldTime } from "@/state/world-store";
 
 export function BasicEnvironment({ tallestFloorCount = 20 }: { tallestFloorCount?: number }) {
-  const time = useWorldStore((state) => state.worldTime);
+  const timeMode = useWorldStore((state) => state.worldTime);
+  const [localHour, setLocalHour] = useState(() => new Date().getHours());
+  useEffect(() => {
+    if (timeMode !== "auto") return;
+    const update = () => setLocalHour(new Date().getHours());
+    const timer = window.setInterval(update, 60_000);
+    return () => window.clearInterval(timer);
+  }, [timeMode]);
+  const now = new Date();
+  const time = timeMode === "auto" ? scheduledWorldTime(localHour, now.getMinutes()) : timeMode;
   const mobile = useWorldQuality();
   const palette = tokens.environment[time];
   const night = time === "night";

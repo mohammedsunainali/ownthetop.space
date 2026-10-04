@@ -24,7 +24,9 @@ export function WorldControls() {
   const travelTowerBy = useWorldStore((state) => state.travelTowerBy);
   const travelOneFloor = (direction: number) => {
     const id = selectedTowerId ?? "companies";
-    const count = process.env.NODE_ENV === "development" && id === "companies" && typeof window !== "undefined" && new URLSearchParams(window.location.search).get("stressFloors") === "220" ? 220 : listingsByTower[id].length;
+    const stressMode = process.env.NODE_ENV === "development" && typeof window !== "undefined" && new URLSearchParams(window.location.search).get("stressFloors") === "220";
+    const count = stressMode ? (id === "companies" ? 220 : 0) : listingsByTower[id].length;
+    if (count === 0) return;
     travelTowerBy(direction * FLOOR_PITCH, 1.1, getTowerHeight(count) + getCrownHeight(count) - 0.7, getFloorY(1, count));
   };
   const audio = useRef<AudioContext | null>(null);
@@ -60,7 +62,7 @@ export function WorldControls() {
       <button type="button" aria-pressed={rulerVisible} onClick={toggleRuler}>Height</button>
       <button type="button" aria-pressed={soundEnabled} onClick={handleSound}>{soundEnabled ? "Sound on" : "Sound off"}</button>
       <button type="button" aria-pressed={floorsExploded} onClick={toggleFloorsExploded}>Floors</button>
-      <label className="time-control">Sky <select aria-label="Sky time" value={worldTime} onChange={(event) => setWorldTime(event.target.value as "day" | "sunset" | "night")}><option value="day">Day</option><option value="sunset">Sunset</option><option value="night">Night</option></select></label>
+      <label className="time-control">Sky <select aria-label="Sky time" value={worldTime} onChange={(event) => setWorldTime(event.target.value as "auto" | "day" | "sunset" | "night")}><option value="auto">Auto</option><option value="day">Day</option><option value="sunset">Sunset</option><option value="night">Night</option></select></label>
     </nav>
   );
 }

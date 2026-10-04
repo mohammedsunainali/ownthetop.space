@@ -5,8 +5,8 @@ import { getFloorY, getNearestFloorRank } from "@/world/tower/tower-layout";
 import { visibleFloorSigns } from "@/world/tower/floor-signs";
 
 describe("development floor load", () => {
-  it("keeps canonical 20/10/10 unchanged", () => {
-    expect([companies.length, products.length, people.length]).toEqual([20, 10, 10]);
+  it("keeps canonical Phase 2 demo counts unchanged", () => {
+    expect([companies.length, products.length, people.length]).toEqual([50, 20, 20]);
     expect(getSceneListings(false).companies).toBe(companies);
   });
   it("maps 220 synthetic listings to 220 ranked floors, with #1 highest", () => {
@@ -18,5 +18,7 @@ describe("development floor load", () => {
     expect(getNearestFloorRank(getFloorY(170, fixture.length), fixture.length)).toBe(170);
     expect(visibleFloorSigns(fixture, fixture[109].id, true).length).toBe(5);
     expect(visibleFloorSigns(fixture, null, false).length).toBe(1);
+    const scene = getSceneListings(true);
+    expect([...scene.companies, ...scene.products, ...scene.people]).toHaveLength(220);
   });
 });

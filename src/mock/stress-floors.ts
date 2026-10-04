@@ -26,5 +26,5 @@ export function createStressListings(count = 220): readonly Listing[] {
 }
 
 export function getSceneListings(stress: boolean) {
-  return stress ? { ...listingsByTower, companies: createStressListings() } : listingsByTower;
+  return stress ? { companies: createStressListings(), products: [], people: [] } : listingsByTower;
 }

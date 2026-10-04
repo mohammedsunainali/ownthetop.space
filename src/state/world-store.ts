@@ -4,13 +4,21 @@ import { create } from "zustand";
 import type { TowerId } from "@/domain/tower";
 
 export type CameraMode = "overview" | "companiesTower" | "productsTower" | "peopleTower" | "selectedFloor" | "topFloor" | "rooftop";
+export type WorldTime = "day" | "sunset" | "night";
+export type WorldTimeMode = "auto" | WorldTime;
+export function scheduledWorldTime(hour: number, minute = 0): WorldTime {
+  const localMinutes = hour * 60 + minute;
+  if (localMinutes >= 6 * 60 && localMinutes < 16 * 60) return "day";
+  if (localMinutes >= 16 * 60 && localMinutes < 19 * 60) return "sunset";
+  return "night";
+}
 
 interface WorldState {
   selectedTowerId: TowerId | null;
   selectedListingId: string | null;
   cameraMode: CameraMode;
   soundEnabled: boolean;
-  worldTime: "day" | "sunset" | "night";
+  worldTime: WorldTimeMode;
   floorsExploded: boolean;
   rulerVisible: boolean;
   cameraDistance: number;
@@ -24,7 +32,7 @@ interface WorldState {
   rotateWorld: () => void;
   toggleSound: () => void;
   toggleWorldTime: () => void;
-  setWorldTime: (time: WorldState["worldTime"]) => void;
+  setWorldTime: (time: WorldTimeMode) => void;
   toggleFloorsExploded: () => void;
   focusTop: () => void;
   focusRooftop: () => void;

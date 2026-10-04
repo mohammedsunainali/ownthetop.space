@@ -1,9 +1,9 @@
 import { rankListings } from "@/lib/ranking/rank-listings";
-import { createListings } from "@/mock/create-listings";
+import { createDemoSeeds, createListings } from "@/mock/create-listings";
 
 export const companies = rankListings(
   createListings("companies", "company", [
-    { name: "Northstar Foundry", totalPaidMinor: 248000, category: "Industrial AI", location: "Toronto", hiring: true, description: "Adaptive planning software for modern manufacturing teams." },
+    { name: "Northstar Foundry", totalPaidMinor: 248000, category: "Industrial AI", location: "Toronto", hiring: true, logoUrl: "/mock-logos/northstar-foundry.svg", description: "Adaptive planning software for modern manufacturing teams." },
     { name: "Blue Orbit Labs", totalPaidMinor: 214500, category: "Climate Tech", location: "Reykjavik", hiring: true, description: "Grid intelligence for resilient renewable energy systems." },
     { name: "Cedar & Signal", totalPaidMinor: 198000, category: "Communications", location: "Portland", description: "Clear collaboration tools for distributed creative teams." },
     { name: "Meridian Works", totalPaidMinor: 176400, category: "Robotics", location: "Singapore", hiring: true, description: "Small, capable robots for warehouse operations." },
@@ -23,5 +23,6 @@ export const companies = rankListings(
     { name: "Tidal Ledger", totalPaidMinor: 31200, category: "Accounting", location: "Auckland", description: "Friendly reporting tools for independent operators." },
     { name: "Kiteframe", totalPaidMinor: 23600, category: "Media", location: "Los Angeles", hiring: true, description: "Collaborative production planning for small film crews." },
     { name: "Oriel Research", totalPaidMinor: 15900, category: "Research", location: "Cambridge", description: "Open tools for reproducible scientific collaboration." },
+    ...createDemoSeeds("Skyline Venture", 30, 15100),
   ]),
 );

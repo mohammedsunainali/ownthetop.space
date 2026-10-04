@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clampTowerTravel, shouldRunIntro } from "@/world/camera/CameraController";
+import { clampTowerTravel, focusedWheelAction, shouldRunIntro } from "@/world/camera/CameraController";
 import { getCrownHeight, getTowerHeight } from "@/world/tower/tower-layout";
 
 describe("tower camera travel", () => {
@@ -12,5 +12,10 @@ describe("tower camera travel", () => {
   it("skips cinematic movement for reduced motion", () => {
     expect(shouldRunIntro(true)).toBe(false);
     expect(shouldRunIntro(false)).toBe(true);
+  });
+  it("separates focused vertical travel from trackpad pinch zoom", () => {
+    expect(focusedWheelAction({ ctrlKey: false, metaKey: false })).toBe("travel");
+    expect(focusedWheelAction({ ctrlKey: true, metaKey: false })).toBe("zoom");
+    expect(focusedWheelAction({ ctrlKey: false, metaKey: true })).toBe("zoom");
   });
 });

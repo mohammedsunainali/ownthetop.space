@@ -1,10 +1,10 @@
 import { useFrame } from "@react-three/fiber";
-import { Html } from "@react-three/drei";
 import { useMemo, useRef } from "react";
-import { CatmullRomCurve3, Group, Vector3 } from "three";
+import { CanvasTexture, CatmullRomCurve3, DoubleSide, Group, SRGBColorSpace, Vector3 } from "three";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { worldMaterials } from "@/world/materials/world-materials";
 import { getHelipadWorldPosition } from "@/world/tower/tower-layout";
+import { tokens } from "@/design/tokens";
 
 type AircraftKind = "plane" | "helicopter" | "drone";
 export const aircraftConfigurations: readonly { kind: AircraftKind; offset: number; altitude: number; radius: number }[] = [
@@ -42,11 +42,26 @@ export function helicopterPose(seconds: number, floorCount = 20): { phase: Helic
   return { phase: "CRUISE", position: new Vector3(...segments[0].from) };
 }
 
-function AircraftShape({ kind, index, rotorRef }: { kind: AircraftKind; index: number; rotorRef?: (group: Group | null) => void }) {
+function TowBanner({ copy, bannerRef }: { copy: string; bannerRef?: (group: Group | null) => void }) {
+  const texture = useMemo(() => {
+    const canvas = document.createElement("canvas"); canvas.width = 1536; canvas.height = 384;
+    const context = canvas.getContext("2d");
+    if (context) {
+      context.fillStyle = tokens.color.brand.summitGold; context.fillRect(0, 0, 1536, 384);
+      context.strokeStyle = tokens.color.brand.navy; context.lineWidth = 22; context.strokeRect(11, 11, 1514, 362);
+      context.fillStyle = tokens.color.brand.navy; context.textAlign = "center"; context.font = "800 104px Inter, system-ui, sans-serif";
+      context.fillText(copy, 768, 230, 1390);
+    }
+    const map = new CanvasTexture(canvas); map.colorSpace = SRGBColorSpace; map.anisotropy = 4; return map;
+  }, [copy]);
+  return <group ref={bannerRef} position={[0, -0.24, -3.55]}><mesh><planeGeometry args={[5.1, 1.2, 8, 1]} /><meshBasicMaterial map={texture} side={DoubleSide} toneMapped={false} /></mesh></group>;
+}
+
+function AircraftShape({ kind, index, rotorRef, bannerRef }: { kind: AircraftKind; index: number; rotorRef?: (group: Group | null) => void; bannerRef?: (group: Group | null) => void }) {
   return <group scale={kind === "drone" ? 0.42 : kind === "helicopter" ? 0.72 : 1.18}>
     <mesh material={worldMaterials.podium} scale={kind === "plane" ? [0.24, 0.18, 1.15] : [0.37, 0.24, 0.58]}><sphereGeometry args={[1, 10, 8]} /></mesh>
     <mesh material={worldMaterials.crown} position={[0, 0.02, 0.1]}><boxGeometry args={kind === "drone" ? [1.15, 0.07, 0.14] : kind === "plane" ? [2.0, 0.07, 0.31] : [1.48, 0.07, 0.16]} /></mesh>
-    {kind === "plane" ? <><mesh material={worldMaterials.frame} position={[0, 0.16, -0.82]}><boxGeometry args={[0.07, 0.32, 0.2]} /></mesh><mesh material={worldMaterials.crown} position={[0, 0.08, -0.67]}><boxGeometry args={[0.72, 0.05, 0.13]} /></mesh><mesh material={worldMaterials.frame} position={[0, -0.18, -1.4]}><boxGeometry args={[0.025, 0.025, 1.0]} /></mesh><mesh material={worldMaterials.podium} position={[0, -0.25, -2.18]}><planeGeometry args={[3.0, 0.78]} /></mesh><Html center position={[0, -0.25, -2.2]} distanceFactor={7} className="plane-banner" style={{ pointerEvents: "none" }}>{index === 0 ? "OWN THIS AIRSPACE" : "ADD YOUR DOMAIN HERE"}</Html></> : null}
+    {kind === "plane" ? <><mesh material={worldMaterials.frame} position={[0, 0.16, -0.82]}><boxGeometry args={[0.07, 0.32, 0.2]} /></mesh><mesh material={worldMaterials.crown} position={[0, 0.08, -0.67]}><boxGeometry args={[0.72, 0.05, 0.13]} /></mesh><mesh material={worldMaterials.frame} position={[0, -0.18, -1.72]}><boxGeometry args={[0.025, 0.025, 1.7]} /></mesh><TowBanner bannerRef={bannerRef} copy={index === 0 ? "OWN THIS AIRSPACE" : "ADD YOUR DOMAIN HERE"} /></> : null}
     {kind === "helicopter" ? <><group ref={rotorRef} position={[0, 0.35, 0]}><mesh material={worldMaterials.frame}><boxGeometry args={[1.55, 0.04, 0.12]} /></mesh></group><mesh material={worldMaterials.frame} position={[0, 0.06, -0.9]}><boxGeometry args={[0.08, 0.08, 1.1]} /></mesh><mesh material={worldMaterials.frame} position={[0, 0.16, -1.42]}><boxGeometry args={[0.5, 0.04, 0.07]} /></mesh><mesh material={worldMaterials.frame} position={[-0.3, -0.24, 0]}><boxGeometry args={[0.035, 0.035, 0.74]} /></mesh><mesh material={worldMaterials.frame} position={[0.3, -0.24, 0]}><boxGeometry args={[0.035, 0.035, 0.74]} /></mesh></> : null}
     <mesh material={worldMaterials.aircraftLight} position={[0.82, 0.08, 0.12]}><sphereGeometry args={[0.055, 6, 6]} /></mesh>
   </group>;
@@ -56,6 +71,7 @@ export function AircraftSystem({ mobile }: { mobile: boolean }) {
   const reducedMotion = useReducedMotion();
   const refs = useRef<(Group | null)[]>([]);
   const rotor = useRef<Group | null>(null);
+  const banners = useRef<(Group | null)[]>([]);
   const curves = useMemo(() => aircraftConfigurations.map((item, index) => new CatmullRomCurve3([
     new Vector3(item.radius, item.altitude, -3 + index),
     new Vector3(2, item.altitude + 0.4, item.radius),
@@ -65,6 +81,7 @@ export function AircraftSystem({ mobile }: { mobile: boolean }) {
   useFrame(({ clock }) => {
     if (reducedMotion) return;
     if (rotor.current) rotor.current.rotation.y = clock.elapsedTime * 13;
+    banners.current.forEach((banner, index) => { if (banner) banner.rotation.z = Math.sin(clock.elapsedTime * 1.2 + index) * 0.025; });
     refs.current.forEach((group, index) => {
       if (!group) return;
       if (index === 2) {
@@ -82,7 +99,7 @@ export function AircraftSystem({ mobile }: { mobile: boolean }) {
   });
   return <group>
     {aircraftConfigurations.map((item, index) => <group key={index} ref={(group) => { refs.current[index] = group; }} position={[item.radius, item.altitude, 0]} visible={!mobile || index < 3}>
-      <AircraftShape kind={item.kind} index={index} rotorRef={item.kind === "helicopter" ? (group) => { rotor.current = group; } : undefined} />
+      <AircraftShape kind={item.kind} index={index} rotorRef={item.kind === "helicopter" ? (group) => { rotor.current = group; } : undefined} bannerRef={item.kind === "plane" ? (group) => { banners.current[index] = group; } : undefined} />
     </group>)}
   </group>;
 }

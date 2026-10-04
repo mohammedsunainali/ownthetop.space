@@ -1,8 +1,8 @@
 import type { TowerId } from "@/domain/tower";
 import type { TowerVisualConfig } from "@/world/types";
 
-export const FLOOR_HEIGHT = 0.4;
-export const FLOOR_GAP = 0.08;
+export const FLOOR_HEIGHT = 0.62;
+export const FLOOR_GAP = 0.1;
 export const FLOOR_PITCH = FLOOR_HEIGHT + FLOOR_GAP;
 export const PODIUM_HEIGHT = 0.7;
 export const FLOOR_BASE_Y = PODIUM_HEIGHT + FLOOR_HEIGHT / 2 + 0.16;

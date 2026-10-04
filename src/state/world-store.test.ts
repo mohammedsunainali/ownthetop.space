@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { useWorldStore } from "@/state/world-store";
+import { scheduledWorldTime, useWorldStore } from "@/state/world-store";
 import { allListings } from "@/mock";
 
 describe("Phase 2 world interaction state", () => {
@@ -24,5 +24,17 @@ describe("Phase 2 world interaction state", () => {
       expect(useWorldStore.getState().worldTime).toBe(time);
       expect(allListings.map((item) => [item.id, item.rank, item.totalPaidMinor])).toEqual(snapshot);
     }
+  });
+  it("maps browser-local schedule boundaries and preserves manual overrides", () => {
+    expect(scheduledWorldTime(6, 0)).toBe("day");
+    expect(scheduledWorldTime(15, 59)).toBe("day");
+    expect(scheduledWorldTime(16, 0)).toBe("sunset");
+    expect(scheduledWorldTime(18, 59)).toBe("sunset");
+    expect(scheduledWorldTime(19, 0)).toBe("night");
+    expect(scheduledWorldTime(5, 59)).toBe("night");
+    useWorldStore.getState().setWorldTime("auto");
+    expect(useWorldStore.getState().worldTime).toBe("auto");
+    useWorldStore.getState().setWorldTime("day");
+    expect(useWorldStore.getState().worldTime).toBe("day");
   });
 });
