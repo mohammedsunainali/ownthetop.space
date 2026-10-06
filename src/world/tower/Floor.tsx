@@ -1,26 +1,26 @@
 import { type ThreeEvent } from "@react-three/fiber";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { BoxGeometry, Color, EdgesGeometry, InstancedMesh, LineBasicMaterial, Matrix4, Quaternion, Vector3 } from "three";
+import { BoxGeometry, Color, InstancedMesh, Matrix4, MeshStandardMaterial, Quaternion, Vector3 } from "three";
 import type { Listing } from "@/domain/listing";
 import { useWorldStore } from "@/state/world-store";
 import { tokens } from "@/design/tokens";
 import { FLOOR_HEIGHT, getFloorFootprint, getFloorY } from "@/world/tower/tower-layout";
 import { worldMaterials } from "@/world/materials/world-materials";
 import type { TowerVisualConfig } from "@/world/types";
-import { createFloorSignTexture, FLOOR_ADVERTISING, FLOOR_FACADE_ROLES, floorFacadeDimensions, releaseFloorSignTexture, visibleFloorSigns, type FloorMediaContent } from "@/world/tower/floor-signs";
+import { createFloorSignTexture, FLOOR_ADVERTISING, FLOOR_FACADE_ROLES, floorFacadeDimensions, releaseFloorSignTexture, visibleFloorSigns, WING_FACE, type FloorMediaContent } from "@/world/tower/floor-signs";
 
 export const floorWingGeometry = new BoxGeometry(1.42, FLOOR_HEIGHT, 2.28);
-export const floorFrontGlazingGeometry = new BoxGeometry(1.31, FLOOR_HEIGHT * 0.84, 0.035);
+export const floorFrontGlazingGeometry = new BoxGeometry(WING_FACE.frontWidth, WING_FACE.clearHeight, 0.035);
 const mullionGeometry = new BoxGeometry(0.026, FLOOR_HEIGHT * 0.86, 0.045);
-export const floorSideGlazingGeometry = new BoxGeometry(0.035, FLOOR_HEIGHT * 0.84, 2.07);
+export const floorSideGlazingGeometry = new BoxGeometry(0.035, WING_FACE.clearHeight, WING_FACE.sideWidth);
 const sideBarGeometry = new BoxGeometry(0.045, FLOOR_HEIGHT * 0.86, 0.026);
 const yAxis = new Vector3(0, 1, 0);
 const geometry = floorWingGeometry;
 const glazingGeometry = floorFrontGlazingGeometry;
 const sideGlassGeometry = floorSideGlazingGeometry;
-const floorEdgeGeometry = new EdgesGeometry(geometry);
-const selectionMaterial = new LineBasicMaterial({ color: tokens.color.brand.blue });
-const summitMaterial = new LineBasicMaterial({ color: tokens.color.brand.summitGold });
+const trimGeometry = new BoxGeometry(1, 1, 1);
+const selectionMaterial = new MeshStandardMaterial({ color: tokens.color.brand.blue, emissive: tokens.color.brand.blue, emissiveIntensity: 0.55, metalness: 0.25, roughness: 0.25 });
+const summitMaterial = new MeshStandardMaterial({ color: tokens.color.brand.summitGold, emissive: tokens.color.brand.summitGold, emissiveIntensity: 0.14, metalness: 0.45, roughness: 0.28 });
 
 /** One paid listing maps to exactly three decorative wing instances. */
 export function listingForInstance(listings: readonly Listing[], instanceId: number): Listing | undefined {
@@ -70,6 +70,7 @@ export function RankedFloors({ listings, accent, selectedListingId, focused, foc
       const y = getFloorY(listing.rank, listings.length);
       const color = new Color(paidFloorColor(listing.rank, accent));
       const detailed = detailedRanks.has(listing.rank);
+      const glassColor = detailed ? new Color("#0b3471") : color;
       for (let wing = 0; wing < 3; wing++) {
         const angle = wing * Math.PI * 2 / 3;
         rotation.setFromAxisAngle(yAxis, angle);
@@ -83,7 +84,7 @@ export function RankedFloors({ listings, accent, selectedListingId, focused, foc
         scale.set(footprint, 1, 1);
         matrix.compose(position, rotation, scale);
         glass.setMatrixAt(index * 3 + wing, matrix);
-        glass.setColorAt(index * 3 + wing, color);
+        glass.setColorAt(index * 3 + wing, glassColor);
         for (let bar = 0; bar < 3; bar++) {
           const offset = (bar - 1) * 0.31 * footprint;
           position.set(Math.sin(angle) * (2.43 * footprint) + Math.cos(angle) * offset, y, Math.cos(angle) * (2.43 * footprint) - Math.sin(angle) * offset);
@@ -99,6 +100,7 @@ export function RankedFloors({ listings, accent, selectedListingId, focused, foc
           scale.set(1, 1, footprint);
           matrix.compose(position, rotation, scale);
           sides.setMatrixAt((index * 3 + wing) * 2 + side, matrix);
+          sides.setColorAt((index * 3 + wing) * 2 + side, glassColor);
           for (let bar = 0; bar < 3; bar++) {
             const longitudinal = (bar - 1) * 0.47 * footprint;
             position.set(Math.sin(angle) * (centerRadius + longitudinal) + Math.cos(angle) * sideOffset, y, Math.cos(angle) * (centerRadius + longitudinal) - Math.sin(angle) * sideOffset);
@@ -119,6 +121,7 @@ export function RankedFloors({ listings, accent, selectedListingId, focused, foc
     bars.instanceMatrix.needsUpdate = true;
     bars.computeBoundingSphere();
     sides.instanceMatrix.needsUpdate = true;
+    if (sides.instanceColor) sides.instanceColor.needsUpdate = true;
     sides.computeBoundingSphere();
     sideFrames.instanceMatrix.needsUpdate = true;
     sideFrames.computeBoundingSphere();
@@ -136,43 +139,51 @@ export function RankedFloors({ listings, accent, selectedListingId, focused, foc
     <instancedMesh ref={mullions} args={[mullionGeometry, worldMaterials.frame, count * 3]} frustumCulled />
     <instancedMesh ref={sideGlass} args={[sideGlassGeometry, worldMaterials.sideGlazing, count * 2]} frustumCulled />
     <instancedMesh ref={sideBars} args={[sideBarGeometry, worldMaterials.frame, count * 6]} frustumCulled />
-    {signs.map((listing) => <FloorSign key={listing.id} listing={listing} floorCount={listings.length} selected={listing.id === selectedListingId} onSelect={() => onSelect(listing)} />)}
-    {activePreview ? <FloorSign key={activePreview.id} listing={activePreview} floorCount={listings.length} preview /> : null}
+    {signs.map((listing) => <FloorSign key={listing.id} listing={listing} floorCount={listings.length} detail={focused} selected={listing.id === selectedListingId} onSelect={() => onSelect(listing)} />)}
+    {activePreview ? <FloorSign key={activePreview.id} listing={activePreview} floorCount={listings.length} detail preview /> : null}
   </>;
 }
 
-function FloorSign({ listing, floorCount, selected = false, preview = false, onSelect }: { listing: FloorMediaContent; floorCount: number; selected?: boolean; preview?: boolean; onSelect?: () => void }) {
+function FloorSign({ listing, floorCount, detail, selected = false, preview = false, onSelect }: { listing: FloorMediaContent; floorCount: number; detail: boolean; selected?: boolean; preview?: boolean; onSelect?: () => void }) {
   const [hovered, setHovered] = useState(false);
   const footprint = getFloorFootprint(listing.rank, floorCount);
-  const primary = useMemo(() => createFloorSignTexture(listing, "primary", footprint), [listing, footprint]);
-  const brandFront = useMemo(() => createFloorSignTexture(listing, "brand", footprint), [listing, footprint]);
-  const brandSide = useMemo(() => createFloorSignTexture(listing, "brand", footprint, "left"), [listing, footprint]);
-  const status = useMemo(() => createFloorSignTexture(listing, "status", footprint, "right"), [listing, footprint]);
+  const nose = useMemo(() => createFloorSignTexture(listing, "nose", footprint), [listing, footprint]);
+  const left = useMemo(() => detail ? createFloorSignTexture(listing, "wing", footprint, "left") : null, [detail, listing, footprint]);
+  const right = useMemo(() => detail ? createFloorSignTexture(listing, "wing", footprint, "right") : null, [detail, listing, footprint]);
   const logo = useMemo(() => createFloorSignTexture(listing, "logo", footprint), [listing, footprint]);
   useEffect(() => () => { if (preview) releaseFloorSignTexture(listing.id); }, [listing.id, preview]);
   const y = getFloorY(listing.rank, floorCount);
   const tint = selected ? 1.12 : hovered ? 1.07 : 1;
   const color = useMemo(() => new Color(tint, tint, tint), [tint]);
   const onClick = (event: ThreeEvent<MouseEvent>) => { event.stopPropagation(); onSelect?.(); };
-  const front = floorFacadeDimensions("front", footprint);
-  const plaque = front.height * FLOOR_ADVERTISING.logoSizeRatio;
   return <group position={[0, y, 0]} onPointerOver={() => setHovered(true)} onPointerOut={() => setHovered(false)}>
-    {FLOOR_FACADE_ROLES.map(({ wing, face, role }) => {
+    {FLOOR_FACADE_ROLES.filter((face) => detail || face.role === "nose").map(({ wing, face, role }) => {
       const bay = floorFacadeDimensions(face, footprint);
       const facePosition: [number, number, number] = face === "front" ? [0, 0, bay.frontZ] : [face === "left" ? -bay.sideX : bay.sideX, 0, bay.sideZ];
       const faceRotation: [number, number, number] = [0, face === "left" ? -Math.PI / 2 : face === "right" ? Math.PI / 2 : 0, 0];
-      const texture = role === "primary" ? primary : role === "status" ? status : face === "front" ? brandFront : brandSide;
+      const texture = role === "nose" ? nose : face === "left" ? left : right;
+      const plaque = bay.height * (role === "nose" ? FLOOR_ADVERTISING.noseLogoSizeRatio : FLOOR_ADVERTISING.logoSizeRatio);
+      const plaqueX = role === "nose" ? 0 : face === "left" ? bay.width / 2 - bay.width * 0.045 - plaque / 2 : -bay.width / 2 + bay.width * 0.045 + plaque / 2;
       return <group key={`${wing}-${face}`} rotation={[0, wing * Math.PI * 2 / 3, 0]}>
         <group position={facePosition} rotation={faceRotation}>
-          <mesh onClick={onClick}><planeGeometry args={[bay.width, bay.height]} /><meshBasicMaterial map={texture} color={color} transparent depthWrite={false} toneMapped={false} /></mesh>
-          {role === "primary" ? <mesh position={[-bay.width / 2 + 48 / FLOOR_ADVERTISING.primaryTextureWidth * bay.width + plaque / 2, 0, FLOOR_ADVERTISING.logoDepth]} onClick={onClick}>
-            <planeGeometry args={[plaque, plaque]} /><meshBasicMaterial map={logo} transparent toneMapped={false} />
-          </mesh> : null}
+          <mesh onClick={onClick}><planeGeometry args={[bay.width, bay.height]} /><meshStandardMaterial map={texture} color={color} roughness={0.38} metalness={0.08} emissive="#08265a" emissiveIntensity={0.07} /></mesh>
+          <mesh position={[plaqueX, role === "nose" && listing.hiring ? -bay.height * 0.07 : 0, FLOOR_ADVERTISING.logoDepth]} onClick={onClick}>
+            <boxGeometry args={[plaque, plaque, 0.012]} /><meshStandardMaterial map={logo} roughness={0.42} metalness={0.04} /></mesh>
         </group>
       </group>;
     })}
-    {selected || listing.rank === 1 ? [0, 1, 2].map((wing) => <group key={`edge-${wing}`} rotation={[0, wing * Math.PI * 2 / 3, 0]}>
-      <lineSegments geometry={floorEdgeGeometry} material={selected ? selectionMaterial : summitMaterial} position={[0, 0, 1.27 * footprint]} scale={[footprint, 1, footprint]} />
-    </group>) : null}
+    {selected || listing.rank === 1 ? <FloorSelectionFrame footprint={footprint} selected={selected} /> : null}
   </group>;
+}
+
+function FloorSelectionFrame({ footprint, selected }: { footprint: number; selected: boolean }) {
+  const material = selected ? selectionMaterial : summitMaterial;
+  const edge = FLOOR_ADVERTISING.selectionEdge;
+  // Trim follows the exposed slab perimeter, never a media rectangle or the Y core.
+  return <>{[0, 1, 2].map((wing) => <group key={wing} rotation={[0, wing * Math.PI * 2 / 3, 0]}>
+    {[-1, 1].map((vertical) => <group key={vertical} position={[0, vertical * (FLOOR_HEIGHT / 2 - edge / 2), 0]}>
+      <mesh geometry={trimGeometry} material={material} position={[0, 0, 2.41 * footprint]} scale={[1.42 * footprint, edge, edge]} />
+      {[-1, 1].map((side) => <mesh key={side} geometry={trimGeometry} material={material} position={[side * 0.71 * footprint, 0, 1.76 * footprint]} scale={[edge, edge, 1.3 * footprint]} />)}
+    </group>)}
+  </group>)}</>;
 }

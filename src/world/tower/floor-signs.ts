@@ -4,7 +4,7 @@ import { formatMinorUnits } from "@/domain/money";
 import { tokens } from "@/design/tokens";
 import { FLOOR_HEIGHT } from "@/world/tower/tower-layout";
 
-export type FloorMediaRole = "primary" | "brand" | "status" | "logo";
+export type FloorMediaRole = "nose" | "wing" | "logo";
 export type FloorFace = "front" | "left" | "right";
 export type FloorMediaContent = Pick<Listing, "id" | "name" | "description" | "logoUrl" | "rank" | "totalPaidMinor" | "hiring">;
 export const MAX_CACHED_SIGNS = 56;
@@ -12,54 +12,53 @@ export const MAX_FOCUSED_SIGNS = 9;
 
 /** Ratios belong to advertising, never to the approved wing mesh. */
 export const FLOOR_ADVERTISING = {
-  facadeHeightRatio: 0.72,
+  facadeHeightRatio: 0.76,
   horizontalInsetRatio: 0.04,
-  surfaceOffset: 0.012,
-  logoSizeRatio: 0.46,
+  centerSeamInsetRatio: 0.08,
+  surfaceOffset: 0.010,
+  noseLogoSizeRatio: 0.55,
+  logoSizeRatio: 0.42,
   logoInternalPaddingRatio: 0.18,
-  logoDepth: 0.015,
-  selectionEdge: 0.018,
-  primaryTextureWidth: 1024,
-  compactTextureWidth: 512,
+  logoDepth: 0.014,
+  selectionEdge: 0.014,
+  wingTextureWidth: 1536,
+  noseTextureWidth: 512,
   logoTextureWidth: 256,
 } as const;
 
-// These match the existing Floor.tsx glazing instances. The inner portion of a
-// side wing joins the Y core and is not a usable media surface.
-const WING_FACE = {
+// Exact existing wing/glazing geometry. The media measures these faces; the
+// approved tower footprint, slabs, elevations and taper do not change.
+export const WING_FACE = {
   frontWidth: 1.31,
   frontRadius: 2.43,
   sideWidth: 2.07,
   sideX: 0.73,
-  sideStart: 1.12,
-  sideEnd: 2.25,
+  sideCenter: 1.27,
   clearHeight: FLOOR_HEIGHT * 0.84,
 } as const;
 
 export interface FloorFacadeRole { wing: 0 | 1 | 2; face: FloorFace; role: Exclude<FloorMediaRole, "logo"> }
-/** One full identity; adjacent faces continue brand or show performance only. */
-export const FLOOR_FACADE_ROLES: readonly FloorFacadeRole[] = [
-  { wing: 0, face: "front", role: "primary" },
-  { wing: 0, face: "left", role: "brand" },
-  { wing: 0, face: "right", role: "status" },
-  { wing: 1, face: "front", role: "brand" },
-  { wing: 1, face: "left", role: "status" },
-  { wing: 1, face: "right", role: "brand" },
-  { wing: 2, face: "front", role: "brand" },
-  { wing: 2, face: "left", role: "status" },
-  { wing: 2, face: "right", role: "brand" },
-] as const;
+/** One nose brand anchor and two independent complete V-wing advertisements. */
+export const FLOOR_FACADE_ROLES: readonly FloorFacadeRole[] = ([0, 1, 2] as const).flatMap((wing) => [
+  { wing, face: "front" as const, role: "nose" as const },
+  { wing, face: "left" as const, role: "wing" as const },
+  { wing, face: "right" as const, role: "wing" as const },
+]);
 
 export function floorFacadeDimensions(face: FloorFace, footprint: number) {
-  const usableWidth = face === "front" ? WING_FACE.frontWidth : WING_FACE.sideEnd - WING_FACE.sideStart;
+  const sideInner = WING_FACE.sideCenter - WING_FACE.sideWidth / 2;
+  const sideOuter = WING_FACE.sideCenter + WING_FACE.sideWidth / 2;
+  const sideStart = sideInner + WING_FACE.sideWidth * FLOOR_ADVERTISING.centerSeamInsetRatio;
+  const sideEnd = sideOuter - WING_FACE.sideWidth * FLOOR_ADVERTISING.horizontalInsetRatio;
+  const usableWidth = face === "front" ? WING_FACE.frontWidth : sideEnd - sideStart;
   return {
-    width: usableWidth * footprint * (1 - 2 * FLOOR_ADVERTISING.horizontalInsetRatio),
+    width: usableWidth * footprint * (face === "front" ? 1 - 2 * FLOOR_ADVERTISING.horizontalInsetRatio : 1),
     height: WING_FACE.clearHeight * FLOOR_ADVERTISING.facadeHeightRatio,
     frontZ: WING_FACE.frontRadius * footprint + 0.0175 + FLOOR_ADVERTISING.surfaceOffset,
     sideX: WING_FACE.sideX * footprint + 0.0175 + FLOOR_ADVERTISING.surfaceOffset,
-    sideZ: (WING_FACE.sideStart + WING_FACE.sideEnd) / 2 * footprint,
-    innerEnd: WING_FACE.sideStart * footprint,
-    outerEnd: WING_FACE.sideEnd * footprint,
+    sideZ: (sideStart + sideEnd) / 2 * footprint,
+    innerEnd: sideStart * footprint,
+    outerEnd: sideEnd * footprint,
   };
 }
 
@@ -69,7 +68,7 @@ export function floorFaceListingId(listing: Pick<FloorMediaContent, "id">, face:
 }
 
 function textureWidth(role: FloorMediaRole): number {
-  return role === "primary" ? FLOOR_ADVERTISING.primaryTextureWidth : role === "logo" ? FLOOR_ADVERTISING.logoTextureWidth : FLOOR_ADVERTISING.compactTextureWidth;
+  return role === "wing" ? FLOOR_ADVERTISING.wingTextureWidth : role === "logo" ? FLOOR_ADVERTISING.logoTextureWidth : FLOOR_ADVERTISING.noseTextureWidth;
 }
 export function floorSignCanvasHeight(role: FloorMediaRole, footprint = 1, face: FloorFace = "front"): number {
   if (role === "logo") return FLOOR_ADVERTISING.logoTextureWidth;
@@ -134,47 +133,54 @@ export function drawFloorMedia(context: CanvasRenderingContext2D, content: Floor
   const width = textureWidth(role), height = floorSignCanvasHeight(role, footprint, face), center = height / 2;
   context.clearRect(0, 0, width, height);
   if (role === "logo") { drawLogo(context, content, logo); return; }
+  context.fillStyle = "#082b60";
+  context.fillRect(0, 0, width, height);
+  context.fillStyle = "rgba(37, 112, 210, 0.13)";
+  context.fillRect(0, 0, width, height * 0.16);
+  context.fillStyle = content.rank === 1 ? tokens.color.brand.summitGold : "#368ef2";
+  context.fillRect(width * 0.04, height - Math.max(3, height * 0.008), width * 0.92, Math.max(3, height * 0.008));
   context.textBaseline = "middle";
   const gold = content.rank === 1;
-  if (role === "primary") {
-    // The short wing face keeps identity legible; its side bay owns statistics.
-    const logoSpace = height * FLOOR_ADVERTISING.logoSizeRatio;
-    const textX = 48 + logoSpace + 36;
-    const textWidth = width - textX - 48;
-    const name = fitPrimaryName(context, content.name, textWidth);
-    context.fillStyle = tokens.color.brand.white;
-    name.lines.forEach((line, index) => {
-      context.font = `800 ${line.size}px Inter, system-ui, sans-serif`;
-      context.fillText(line.text, textX, name.multiline ? center - 66 + index * 70 : center - 38);
-    });
-    if (content.description) {
-      const detail = fitText(context, content.description, textWidth, 48, 28, 500);
-      context.fillStyle = tokens.color.brand.lightBlue; context.font = `500 ${detail.size}px Inter, system-ui, sans-serif`;
-      context.fillText(detail.text, textX, center + (name.multiline ? 74 : 35));
-    }
-    if (content.hiring) drawHiring(context, textX, center + (name.multiline ? 118 : 86));
+  if (role === "nose") {
+    if (content.hiring) drawHiring(context, width / 2 - 66, center + height * 0.32, 132, Math.max(29, height * 0.10));
     return;
   }
-  if (role === "brand") {
-    const name = fitText(context, content.name, width - 72, 64, 38);
-    context.fillStyle = tokens.color.brand.white; context.font = `800 ${name.size}px Inter, system-ui, sans-serif`;
-    context.fillText(name.text, 36, center);
-    return;
+  // Both V-wing textures are generated independently. The left wing reverses
+  // column placement, never glyphs/UVs, so text reads normally on either side.
+  const pad = width * 0.045;
+  const logoWidth = height * FLOOR_ADVERTISING.logoSizeRatio;
+  const gap = width * 0.034;
+  const statsWidth = width * 0.19;
+  const contentX = face === "left" ? pad + statsWidth + gap : pad + logoWidth + gap;
+  const contentRight = face === "left" ? width - pad - logoWidth - gap : width - pad - statsWidth - gap;
+  const contentWidth = Math.max(1, contentRight - contentX);
+  const name = fitText(context, content.name, contentWidth, height * 0.19, height * 0.115);
+  context.fillStyle = tokens.color.brand.white;
+  context.textAlign = "left";
+  context.font = `800 ${name.size}px Inter, system-ui, sans-serif`;
+  context.fillText(name.text, contentX, center - height * (content.hiring ? 0.14 : 0.10));
+  if (content.description) {
+    const detail = fitText(context, content.description, contentWidth, height * 0.085, height * 0.055, 500);
+    context.fillStyle = "#b9d6f4";
+    context.font = `500 ${detail.size}px Inter, system-ui, sans-serif`;
+    context.fillText(detail.text, contentX, center + height * (content.hiring ? 0.085 : 0.15));
   }
+  if (content.hiring) drawHiring(context, contentX, center + height * 0.31, Math.min(130, contentWidth * 0.26), height * 0.10);
+  const statsRight = face === "left" ? pad + statsWidth : width - pad;
   context.fillStyle = gold ? tokens.color.brand.summitGold : tokens.color.brand.white;
   context.textAlign = "right";
-  context.font = "800 56px Inter, system-ui, sans-serif";
-  context.fillText(`#${content.rank}`, width - 36, center - 34);
-  const amount = fitText(context, formatMinorUnits(content.totalPaidMinor), width - 72, 62, 46);
+  context.font = `800 ${height * 0.18}px Inter, system-ui, sans-serif`;
+  context.fillText(`#${content.rank}`, statsRight, center - height * 0.14);
+  const amount = fitText(context, formatMinorUnits(content.totalPaidMinor), statsWidth, height * 0.195, height * 0.125);
   context.font = `800 ${amount.size}px Inter, system-ui, sans-serif`;
-  context.fillText(amount.text, width - 36, center + 38);
+  context.fillText(amount.text, statsRight, center + height * 0.14);
 }
 
-function drawHiring(context: CanvasRenderingContext2D, x: number, y: number) {
+function drawHiring(context: CanvasRenderingContext2D, x: number, y: number, width: number, height: number) {
   context.textAlign = "left"; context.fillStyle = tokens.color.brand.teal;
-  context.beginPath(); context.roundRect(x, y - 18, 142, 37, 8); context.fill();
-  context.fillStyle = tokens.color.brand.navy; context.font = "800 21px Inter, system-ui, sans-serif";
-  context.fillText("HIRING", x + 20, y + 1);
+  context.beginPath(); context.roundRect(x, y - height / 2, width, height, height * 0.22); context.fill();
+  context.fillStyle = tokens.color.brand.navy; context.font = `800 ${height * 0.55}px Inter, system-ui, sans-serif`;
+  context.fillText("HIRING", x + width * 0.12, y + 1, width * 0.76);
 }
 
 export function createFloorSignTexture(content: FloorMediaContent, role: FloorMediaRole, footprint = 1, face: FloorFace = "front"): CanvasTexture {
