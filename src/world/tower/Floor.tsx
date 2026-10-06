@@ -1,27 +1,26 @@
-import { useFrame, type ThreeEvent } from "@react-three/fiber";
-import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
-import { BoxGeometry, BufferGeometry, CanvasTexture, Color, FrontSide, Group, InstancedMesh, LineBasicMaterial, Matrix4, MeshBasicMaterial, PlaneGeometry, Quaternion, SRGBColorSpace, Vector3 } from "three";
+import { type ThreeEvent } from "@react-three/fiber";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { BoxGeometry, Color, EdgesGeometry, InstancedMesh, LineBasicMaterial, Matrix4, Quaternion, Vector3 } from "three";
 import type { Listing } from "@/domain/listing";
 import { useWorldStore } from "@/state/world-store";
 import { tokens } from "@/design/tokens";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { FLOOR_HEIGHT, getFloorFootprint, getFloorY } from "@/world/tower/tower-layout";
 import { worldMaterials } from "@/world/materials/world-materials";
 import type { TowerVisualConfig } from "@/world/types";
-import { createFloorSignTexture, FACADE_BAYS, releaseFloorSignTexture, visibleFloorSigns, type FloorMediaContent } from "@/world/tower/floor-signs";
+import { createFloorSignTexture, FLOOR_ADVERTISING, FLOOR_FACADE_ROLES, floorFacadeDimensions, releaseFloorSignTexture, visibleFloorSigns, type FloorMediaContent } from "@/world/tower/floor-signs";
 
-const geometry = new BoxGeometry(1.42, FLOOR_HEIGHT, 2.28);
-const glazingGeometry = new BoxGeometry(1.31, FLOOR_HEIGHT * 0.84, 0.035);
+export const floorWingGeometry = new BoxGeometry(1.42, FLOOR_HEIGHT, 2.28);
+export const floorFrontGlazingGeometry = new BoxGeometry(1.31, FLOOR_HEIGHT * 0.84, 0.035);
 const mullionGeometry = new BoxGeometry(0.026, FLOOR_HEIGHT * 0.86, 0.045);
-const sideGlassGeometry = new BoxGeometry(0.035, FLOOR_HEIGHT * 0.84, 2.07);
+export const floorSideGlazingGeometry = new BoxGeometry(0.035, FLOOR_HEIGHT * 0.84, 2.07);
 const sideBarGeometry = new BoxGeometry(0.045, FLOOR_HEIGHT * 0.86, 0.026);
 const yAxis = new Vector3(0, 1, 0);
-const hiringPlane = new PlaneGeometry(0.34, 0.105);
-const hiringWires = new BufferGeometry().setFromPoints([
-  new Vector3(-0.13, 0.05, 0), new Vector3(-0.08, 0.13, 0),
-  new Vector3(0.13, 0.05, 0), new Vector3(0.08, 0.13, 0),
-]);
-const hiringWireMaterial = new LineBasicMaterial({ color: tokens.color.brand.navy });
+const geometry = floorWingGeometry;
+const glazingGeometry = floorFrontGlazingGeometry;
+const sideGlassGeometry = floorSideGlazingGeometry;
+const floorEdgeGeometry = new EdgesGeometry(geometry);
+const selectionMaterial = new LineBasicMaterial({ color: tokens.color.brand.blue });
+const summitMaterial = new LineBasicMaterial({ color: tokens.color.brand.summitGold });
 
 /** One paid listing maps to exactly three decorative wing instances. */
 export function listingForInstance(listings: readonly Listing[], instanceId: number): Listing | undefined {
@@ -29,7 +28,8 @@ export function listingForInstance(listings: readonly Listing[], instanceId: num
 }
 
 export function paidFloorColor(rank: number, accent: TowerVisualConfig["accent"]): string {
-  return rank === 1 ? tokens.color.brand.summitGold : tokens.color.brand[accent === "blue" ? "lightBlue" : accent];
+  void rank;
+  return tokens.color.brand[accent === "blue" ? "lightBlue" : accent];
 }
 
 interface RankedFloorsProps {
@@ -102,7 +102,8 @@ export function RankedFloors({ listings, accent, selectedListingId, focused, foc
           for (let bar = 0; bar < 3; bar++) {
             const longitudinal = (bar - 1) * 0.47 * footprint;
             position.set(Math.sin(angle) * (centerRadius + longitudinal) + Math.cos(angle) * sideOffset, y, Math.cos(angle) * (centerRadius + longitudinal) - Math.sin(angle) * sideOffset);
-            scale.setScalar(detailed ? 0 : 1);
+            // The inner/core mullion stays; the two outer bars cross the media bay.
+            scale.setScalar(detailed && bar > 0 ? 0 : 1);
             matrix.compose(position, rotation, scale);
             sideFrames.setMatrixAt(((index * 3 + wing) * 2 + side) * 3 + bar, matrix);
           }
@@ -135,63 +136,43 @@ export function RankedFloors({ listings, accent, selectedListingId, focused, foc
     <instancedMesh ref={mullions} args={[mullionGeometry, worldMaterials.frame, count * 3]} frustumCulled />
     <instancedMesh ref={sideGlass} args={[sideGlassGeometry, worldMaterials.sideGlazing, count * 2]} frustumCulled />
     <instancedMesh ref={sideBars} args={[sideBarGeometry, worldMaterials.frame, count * 6]} frustumCulled />
-    {signs.map((listing) => <FloorSign key={listing.id} listing={listing} floorCount={listings.length} onSelect={() => onSelect(listing)} />)}
+    {signs.map((listing) => <FloorSign key={listing.id} listing={listing} floorCount={listings.length} selected={listing.id === selectedListingId} onSelect={() => onSelect(listing)} />)}
     {activePreview ? <FloorSign key={activePreview.id} listing={activePreview} floorCount={listings.length} preview /> : null}
-    <HiringSigns listings={activePreview ? [...signs, activePreview] : signs} floorCount={listings.length} />
   </>;
 }
 
-function HiringSigns({ listings, floorCount }: { listings: readonly FloorMediaContent[]; floorCount: number }) {
-  const reducedMotion = useReducedMotion();
-  const signs = useRef<Group>(null);
-  const hiring = useMemo(() => listings.filter((listing) => listing.hiring), [listings]);
-  const material = useMemo(() => {
-    const canvas = document.createElement("canvas"); canvas.width = 512; canvas.height = 160;
-    const context = canvas.getContext("2d");
-    if (context) {
-      context.fillStyle = tokens.color.brand.teal; context.fillRect(0, 0, 512, 160);
-      context.strokeStyle = tokens.color.brand.navy; context.lineWidth = 12; context.strokeRect(6, 6, 500, 148);
-      context.fillStyle = tokens.color.brand.navy; context.textAlign = "center"; context.textBaseline = "middle";
-      context.font = "800 92px Inter, system-ui, sans-serif"; context.fillText("HIRING", 256, 84);
-    }
-    const map = new CanvasTexture(canvas); map.colorSpace = SRGBColorSpace;
-    return new MeshBasicMaterial({ map, side: FrontSide, toneMapped: false });
-  }, []);
-  useEffect(() => () => { material.map?.dispose(); material.dispose(); }, [material]);
-  useFrame(({ clock }) => {
-    signs.current?.children.forEach((wingGroup, index) => {
-      const hanging = wingGroup.children[0];
-      if (hanging) hanging.rotation.z = reducedMotion ? 0 : Math.sin(clock.elapsedTime * 1.5 + index * 0.77) * 0.025;
-    });
-  });
-  return <group ref={signs}>{hiring.flatMap((listing) => {
-    const footprint = getFloorFootprint(listing.rank, floorCount);
-    return [0, 1, 2].map((wing) => <group key={`${listing.id}-${wing}`} position={[0, getFloorY(listing.rank, floorCount), 0]} rotation={[0, wing * Math.PI * 2 / 3, 0]}>
-      <group position={[0.04 * footprint, -0.16, 2.43 * footprint + 0.04]}>
-        <lineSegments geometry={hiringWires} material={hiringWireMaterial} position={[0, 0, 0.012]} />
-        <mesh geometry={hiringPlane} material={material} position={[0, 0, 0.018]} />
-        <mesh geometry={hiringPlane} material={material} position={[0, 0, -0.018]} rotation={[0, Math.PI, 0]} />
-      </group>
-    </group>);
-  })}</group>;
-}
-
-function FloorSign({ listing, floorCount, preview = false, onSelect }: { listing: FloorMediaContent; floorCount: number; preview?: boolean; onSelect?: () => void }) {
+function FloorSign({ listing, floorCount, selected = false, preview = false, onSelect }: { listing: FloorMediaContent; floorCount: number; selected?: boolean; preview?: boolean; onSelect?: () => void }) {
+  const [hovered, setHovered] = useState(false);
   const footprint = getFloorFootprint(listing.rank, floorCount);
-  const wideTexture = useMemo(() => createFloorSignTexture(listing, "wide", footprint), [listing, footprint]);
-  const compactTexture = useMemo(() => createFloorSignTexture(listing, "compact", footprint), [listing, footprint]);
+  const primary = useMemo(() => createFloorSignTexture(listing, "primary", footprint), [listing, footprint]);
+  const brandFront = useMemo(() => createFloorSignTexture(listing, "brand", footprint), [listing, footprint]);
+  const brandSide = useMemo(() => createFloorSignTexture(listing, "brand", footprint, "left"), [listing, footprint]);
+  const status = useMemo(() => createFloorSignTexture(listing, "status", footprint, "right"), [listing, footprint]);
+  const logo = useMemo(() => createFloorSignTexture(listing, "logo", footprint), [listing, footprint]);
   useEffect(() => () => { if (preview) releaseFloorSignTexture(listing.id); }, [listing.id, preview]);
   const y = getFloorY(listing.rank, floorCount);
-  return <group position={[0, y, 0]}>
-    {[0, 1, 2].map((wing) => <group key={wing} rotation={[0, wing * Math.PI * 2 / 3, 0]}>
-      <mesh position={[0, 0, FACADE_BAYS.compact.outward * footprint + 0.023]} onClick={(event) => { event.stopPropagation(); onSelect?.(); }}>
-        <planeGeometry args={[FACADE_BAYS.compact.width * footprint, FACADE_BAYS.compact.height]} />
-        <meshBasicMaterial map={compactTexture} toneMapped={false} />
-      </mesh>
-      {[-1, 1].map((side) => <mesh key={side} position={[side * (FACADE_BAYS.wide.outward * footprint + 0.023), 0, FACADE_BAYS.wide.longitudinal * footprint]} rotation={[0, side * Math.PI / 2, 0]} onClick={(event) => { event.stopPropagation(); onSelect?.(); }}>
-        <planeGeometry args={[FACADE_BAYS.wide.width * footprint, FACADE_BAYS.wide.height]} />
-        <meshBasicMaterial map={wideTexture} toneMapped={false} />
-      </mesh>)}
-    </group>)}
+  const tint = selected ? 1.12 : hovered ? 1.07 : 1;
+  const color = useMemo(() => new Color(tint, tint, tint), [tint]);
+  const onClick = (event: ThreeEvent<MouseEvent>) => { event.stopPropagation(); onSelect?.(); };
+  const front = floorFacadeDimensions("front", footprint);
+  const plaque = front.height * FLOOR_ADVERTISING.logoSizeRatio;
+  return <group position={[0, y, 0]} onPointerOver={() => setHovered(true)} onPointerOut={() => setHovered(false)}>
+    {FLOOR_FACADE_ROLES.map(({ wing, face, role }) => {
+      const bay = floorFacadeDimensions(face, footprint);
+      const facePosition: [number, number, number] = face === "front" ? [0, 0, bay.frontZ] : [face === "left" ? -bay.sideX : bay.sideX, 0, bay.sideZ];
+      const faceRotation: [number, number, number] = [0, face === "left" ? -Math.PI / 2 : face === "right" ? Math.PI / 2 : 0, 0];
+      const texture = role === "primary" ? primary : role === "status" ? status : face === "front" ? brandFront : brandSide;
+      return <group key={`${wing}-${face}`} rotation={[0, wing * Math.PI * 2 / 3, 0]}>
+        <group position={facePosition} rotation={faceRotation}>
+          <mesh onClick={onClick}><planeGeometry args={[bay.width, bay.height]} /><meshBasicMaterial map={texture} color={color} transparent depthWrite={false} toneMapped={false} /></mesh>
+          {role === "primary" ? <mesh position={[-bay.width / 2 + 48 / FLOOR_ADVERTISING.primaryTextureWidth * bay.width + plaque / 2, 0, FLOOR_ADVERTISING.logoDepth]} onClick={onClick}>
+            <planeGeometry args={[plaque, plaque]} /><meshBasicMaterial map={logo} transparent toneMapped={false} />
+          </mesh> : null}
+        </group>
+      </group>;
+    })}
+    {selected || listing.rank === 1 ? [0, 1, 2].map((wing) => <group key={`edge-${wing}`} rotation={[0, wing * Math.PI * 2 / 3, 0]}>
+      <lineSegments geometry={floorEdgeGeometry} material={selected ? selectionMaterial : summitMaterial} position={[0, 0, 1.27 * footprint]} scale={[footprint, 1, footprint]} />
+    </group>) : null}
   </group>;
 }

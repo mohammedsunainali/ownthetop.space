@@ -318,3 +318,69 @@ button { cursor: pointer; }
   .world-controls .time-control { flex: 0 0 auto; }
   .app-shell--focus .floor-travel-button { display: block; }
 }
+
+/* OwnTheTop Floor Advertising System V2: detailed identity stays in DOM. */
+.profile-drawer--detail {
+  right: 158px;
+  bottom: 48px;
+  width: clamp(360px, 24vw, 420px);
+  max-height: calc(100dvh - 96px);
+  overflow-y: auto;
+  padding: 0;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, .94);
+}
+.profile-drawer__body { padding: 28px; }
+.profile-hiring { display: grid; place-items: center; min-height: 38px; background: #00bd72; color: white; font-size: .75rem; font-weight: 800; letter-spacing: .09em; }
+.profile-drawer--detail .profile-drawer__topline { justify-content: flex-start; gap: 16px; }
+.profile-drawer--detail .profile-mark { width: 72px; height: 72px; flex: 0 0 72px; overflow: hidden; border-radius: 16px; font-size: 1.3rem; }
+.profile-drawer--detail .profile-mark img { width: 100%; height: 100%; object-fit: contain; }
+.profile-drawer--detail .profile-rank { margin-left: auto; white-space: nowrap; }
+.profile-drawer--detail .profile-close { margin: -8px -8px -8px 0; flex: 0 0 44px; border-radius: 12px; }
+.profile-drawer--detail .profile-close:focus-visible, .profile-drawer--detail .profile-url:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.profile-drawer--detail h2 { margin: 20px 0 8px; font-size: 1.9rem; line-height: 1.1; overflow-wrap: anywhere; }
+.profile-drawer--detail .profile-price { margin-bottom: 16px; font-size: 1rem; }
+.profile-drawer--detail .profile-tags { gap: 8px; }
+.profile-drawer--detail .profile-tags span { padding: 7px 10px; background: #edf3fc; font-size: .72rem; }
+.profile-drawer--detail .profile-description { margin: 18px 0 20px; font-size: .88rem; }
+.profile-drawer--detail .profile-url { display: grid; place-items: center; width: 100%; min-height: 48px; margin: 0; border-radius: 12px; background: var(--ink); color: white; font-size: .88rem; font-weight: 750; text-decoration: none; }
+.profile-details { display: grid; gap: 14px; margin: 24px 0 0; padding-top: 22px; border-top: 1px solid #d9e3f0; }
+.profile-details > div { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 12px; font-size: .78rem; line-height: 1.45; }
+.profile-details dt { color: var(--muted); }
+.profile-details dd { min-width: 0; margin: 0; color: var(--ink); overflow-wrap: anywhere; }
+@media (max-width: 900px) { .profile-drawer--detail { right: 116px; width: min(360px, calc(100vw - 136px)); } }
+@media (max-width: 600px) {
+  .profile-drawer--detail { left: 7px; right: 7px; bottom: 66px; width: auto; max-height: min(58dvh, 490px); border-radius: 20px; }
+  .profile-drawer--detail .profile-drawer__body { padding: 18px; }
+  .profile-drawer--detail .profile-mark { width: 56px; height: 56px; flex-basis: 56px; }
+  .profile-drawer--detail h2 { margin-top: 14px; font-size: 1.5rem; }
+  .profile-details { margin-top: 18px; padding-top: 16px; }
+}
+
+/* Development-only, isolated Floor Advertising V2 approval fixture. */
+.floor-v2-fixture { position: relative; width: 100vw; height: 100dvh; overflow: hidden; background: #8ecbf0; color: #10234a; }
+.floor-v2-fixture__stage { position: absolute; inset: 0; }
+.floor-v2-fixture__stage canvas { touch-action: none; }
+.floor-v2-fixture__controls { position: absolute; z-index: 2; top: 20px; left: 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; max-width: min(650px, calc(100vw - 40px)); padding: 12px; border-radius: 16px; background: rgba(255,255,255,.9); box-shadow: 0 12px 36px rgba(20,50,90,.15); }
+.floor-v2-fixture__controls strong { flex: 1 0 100%; font-size: .8rem; }
+.floor-v2-fixture__controls button { border: 1px solid #b9cbea; border-radius: 9px; padding: 8px 10px; color: #123360; background: #fff; font: inherit; font-size: .75rem; cursor: pointer; }
+.floor-v2-fixture__controls button[aria-pressed="true"] { color: white; background: #167af0; border-color: #167af0; }
+.floor-v2-fixture__controls small { flex: 1 0 100%; color: #62718d; }
+.floor-v2-fixture__drawer { position: absolute; z-index: 2; top: 50%; right: 40px; width: clamp(360px, 24vw, 420px); max-height: calc(100dvh - 96px); overflow-y: auto; transform: translateY(-50%); border-radius: 24px; background: rgba(255,255,255,.96); box-shadow: 0 24px 65px rgba(15,39,77,.22); }
+.floor-v2-fixture__drawer-body { padding: 28px; }
+.floor-v2-fixture__drawer-top { display: flex; align-items: center; gap: 16px; color: #167af0; font-size: .8rem; font-weight: 800; }
+.floor-v2-fixture__drawer-top > span:nth-child(2) { margin-left: auto; }
+.floor-v2-fixture__drawer-top button { border: 0; background: transparent; color: #10234a; font-size: 1.6rem; cursor: pointer; }
+.floor-v2-fixture__mark { display: grid; place-items: center; width: 72px; height: 72px; border-radius: 16px; color: white; background: #0b2453; font-size: 1.4rem; }
+.floor-v2-fixture__drawer h1 { margin: 20px 0 6px; font-size: 1.8rem; letter-spacing: -.04em; }
+.floor-v2-fixture__drawer p { line-height: 1.5; color: #63728b; }
+.floor-v2-fixture__amount { margin: 0 0 16px; color: #167af0 !important; font-weight: 800; }
+.floor-v2-fixture__chips { display: flex; gap: 8px; }
+.floor-v2-fixture__chips span { padding: 7px 10px; border-radius: 99px; background: #edf3fc; font-size: .75rem; }
+.floor-v2-fixture__drawer a { display: grid; place-items: center; height: 48px; margin: 22px 0; border-radius: 12px; background: #10234a; color: white; font-weight: 700; text-decoration: none; }
+.floor-v2-fixture__drawer dl { margin: 0; padding-top: 20px; border-top: 1px solid #d9e3f0; }
+.floor-v2-fixture__drawer dl div { display: grid; grid-template-columns: 84px 1fr; gap: 12px; margin-bottom: 14px; font-size: .78rem; }
+.floor-v2-fixture__drawer dt { color: #63728b; }
+.floor-v2-fixture__drawer dd { margin: 0; }
+.floor-v2-fixture__hiring { display: grid; place-items: center; height: 38px; background: #00bd72; color: white; font-size: .75rem; font-weight: 800; letter-spacing: .08em; }
+@media (max-width: 700px) { .floor-v2-fixture__drawer { top: auto; right: 8px; bottom: 8px; left: 8px; width: auto; max-height: 48dvh; transform: none; }.floor-v2-fixture__drawer-body { padding: 18px; } }

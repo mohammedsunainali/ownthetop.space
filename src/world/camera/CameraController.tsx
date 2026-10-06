@@ -97,7 +97,7 @@ export function CameraController({ selectedListing, floorCounts }: CameraControl
       const count = floorCounts[towerId];
       const y = towerTravelY ?? (cameraMode === "rooftop" ? getTowerHeight(count) + 4.1 : cameraMode === "topFloor" ? getFloorY(1, count) + 0.6 : floorPreview?.towerId === towerId ? getFloorY(floorPreview.media.rank, count) + 0.2 : selectedListing ? getFloorY(selectedListing.rank, count) + 0.2 : getTowerHeight(count) * 0.72);
       target = new Vector3(tower.position[0], y, tower.position[2]);
-      offset = cameraMode === "rooftop" ? new Vector3(mobile ? 9 : 5.6, 1.5, mobile ? 11 : 7.5) : cameraMode === "topFloor" ? new Vector3(mobile ? 8 : 5.4, 1, mobile ? 10 : 7.2) : selectedListing || floorPreview ? new Vector3(mobile ? 7.5 : 5.8, 0.8, mobile ? 9.2 : 7.2) : new Vector3(mobile ? 10 : 7.8, 1.3, mobile ? 13 : 9.8);
+      offset = cameraMode === "rooftop" ? new Vector3(mobile ? 9 : 5.6, 1.5, mobile ? 11 : 7.5) : cameraMode === "topFloor" ? new Vector3(mobile ? 8 : 5.4, 1, mobile ? 10 : 7.2) : selectedListing || floorPreview ? new Vector3(mobile ? 3.3 : 2.9, 0.8, mobile ? 12.8 : 3.6) : new Vector3(mobile ? 10 : 7.8, 1.3, mobile ? 13 : 9.8);
     }
 
     const angle = cameraOrbitStep * (Math.PI / 5);

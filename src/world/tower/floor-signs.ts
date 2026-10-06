@@ -4,29 +4,85 @@ import { formatMinorUnits } from "@/domain/money";
 import { tokens } from "@/design/tokens";
 import { FLOOR_HEIGHT } from "@/world/tower/tower-layout";
 
-export type FloorMediaLayout = "wide" | "compact";
+export type FloorMediaRole = "primary" | "brand" | "status" | "logo";
+export type FloorFace = "front" | "left" | "right";
 export type FloorMediaContent = Pick<Listing, "id" | "name" | "description" | "logoUrl" | "rank" | "totalPaidMinor" | "hiring">;
-export const MAX_CACHED_SIGNS = 24;
+export const MAX_CACHED_SIGNS = 56;
 export const MAX_FOCUSED_SIGNS = 9;
-/** Inset media bays stop before each wing corner and the central core. */
-export const FACADE_BAYS = {
-  compact: { width: 1.2, height: FLOOR_HEIGHT * 0.8, outward: 2.43 },
-  wide: { width: 1.52, height: FLOOR_HEIGHT * 0.8, outward: 0.73, longitudinal: 1.49 },
-} as const;
-export function floorSignCanvasHeight(layout: FloorMediaLayout, footprint = 1): number {
-  const bay = FACADE_BAYS[layout];
-  return Math.round(FACADE_METRICS[layout].width * bay.height / (bay.width * footprint));
-}
-export const FACADE_METRICS = {
-  wide: { width: 1536, height: 384, logoX: 38, logoY: 55, logoWidth: 218, logoHeight: 274, textX: 292, textWidth: 790, rankX: 1230, rankWidth: 270 },
-  compact: { width: 1280, height: 512, logoX: 30, logoY: 110, logoWidth: 206, logoHeight: 292, textX: 266, textWidth: 676, rankX: 1000, rankWidth: 245 },
-} as const;
-const cache = new Map<string, CanvasTexture>();
 
+/** Ratios belong to advertising, never to the approved wing mesh. */
+export const FLOOR_ADVERTISING = {
+  facadeHeightRatio: 0.72,
+  horizontalInsetRatio: 0.04,
+  surfaceOffset: 0.012,
+  logoSizeRatio: 0.46,
+  logoInternalPaddingRatio: 0.18,
+  logoDepth: 0.015,
+  selectionEdge: 0.018,
+  primaryTextureWidth: 1024,
+  compactTextureWidth: 512,
+  logoTextureWidth: 256,
+} as const;
+
+// These match the existing Floor.tsx glazing instances. The inner portion of a
+// side wing joins the Y core and is not a usable media surface.
+const WING_FACE = {
+  frontWidth: 1.31,
+  frontRadius: 2.43,
+  sideWidth: 2.07,
+  sideX: 0.73,
+  sideStart: 1.12,
+  sideEnd: 2.25,
+  clearHeight: FLOOR_HEIGHT * 0.84,
+} as const;
+
+export interface FloorFacadeRole { wing: 0 | 1 | 2; face: FloorFace; role: Exclude<FloorMediaRole, "logo"> }
+/** One full identity; adjacent faces continue brand or show performance only. */
+export const FLOOR_FACADE_ROLES: readonly FloorFacadeRole[] = [
+  { wing: 0, face: "front", role: "primary" },
+  { wing: 0, face: "left", role: "brand" },
+  { wing: 0, face: "right", role: "status" },
+  { wing: 1, face: "front", role: "brand" },
+  { wing: 1, face: "left", role: "status" },
+  { wing: 1, face: "right", role: "brand" },
+  { wing: 2, face: "front", role: "brand" },
+  { wing: 2, face: "left", role: "status" },
+  { wing: 2, face: "right", role: "brand" },
+] as const;
+
+export function floorFacadeDimensions(face: FloorFace, footprint: number) {
+  const usableWidth = face === "front" ? WING_FACE.frontWidth : WING_FACE.sideEnd - WING_FACE.sideStart;
+  return {
+    width: usableWidth * footprint * (1 - 2 * FLOOR_ADVERTISING.horizontalInsetRatio),
+    height: WING_FACE.clearHeight * FLOOR_ADVERTISING.facadeHeightRatio,
+    frontZ: WING_FACE.frontRadius * footprint + 0.0175 + FLOOR_ADVERTISING.surfaceOffset,
+    sideX: WING_FACE.sideX * footprint + 0.0175 + FLOOR_ADVERTISING.surfaceOffset,
+    sideZ: (WING_FACE.sideStart + WING_FACE.sideEnd) / 2 * footprint,
+    innerEnd: WING_FACE.sideStart * footprint,
+    outerEnd: WING_FACE.sideEnd * footprint,
+  };
+}
+
+export function floorFaceListingId(listing: Pick<FloorMediaContent, "id">, face: FloorFacadeRole): string {
+  void face;
+  return listing.id;
+}
+
+function textureWidth(role: FloorMediaRole): number {
+  return role === "primary" ? FLOOR_ADVERTISING.primaryTextureWidth : role === "logo" ? FLOOR_ADVERTISING.logoTextureWidth : FLOOR_ADVERTISING.compactTextureWidth;
+}
+export function floorSignCanvasHeight(role: FloorMediaRole, footprint = 1, face: FloorFace = "front"): number {
+  if (role === "logo") return FLOOR_ADVERTISING.logoTextureWidth;
+  const bay = floorFacadeDimensions(face, footprint);
+  return Math.round(textureWidth(role) * bay.height / bay.width);
+}
+
+const cache = new Map<string, CanvasTexture>();
 export function floorSignCacheSize(): number { return cache.size; }
 export function isSafeLogoUrl(url: string): boolean { return url.startsWith("/") && !url.startsWith("//") || /^data:image\/(png|jpeg|webp);base64,/i.test(url); }
+export function initialsForName(name: string): string { return name.trim().split(/\s+/).filter(Boolean).map((part) => part[0]).slice(0, 2).join("").toUpperCase(); }
 
-/** Reduce type to a defined minimum, then and only then truncate. */
+/** Shrink a single field before ellipsis; no other column moves. */
 export function fitText(context: Pick<CanvasRenderingContext2D, "font" | "measureText">, value: string, maxWidth: number, preferredSize: number, minimumSize: number, weight = 800): { text: string; size: number; truncated: boolean } {
   let size = preferredSize;
   while (size > minimumSize) {
@@ -41,81 +97,91 @@ export function fitText(context: Pick<CanvasRenderingContext2D, "font" | "measur
   return { text: `${fitted}…`, size: minimumSize, truncated: true };
 }
 
-export function fitWideNameLines(context: Pick<CanvasRenderingContext2D, "font" | "measureText">, value: string, maxWidth: number): { lines: string[]; size: number } {
-  const single = fitText(context, value, maxWidth, 78, 54);
-  if (!single.truncated) return { lines: [single.text], size: single.size };
-  const words = value.split(/\s+/);
+/** Use two balanced lines only when a normal one-line name would become tiny. */
+export function fitPrimaryName(context: Pick<CanvasRenderingContext2D, "font" | "measureText">, value: string, maxWidth: number) {
+  const single = fitText(context, value, maxWidth, 112, 62);
+  if (single.size >= 90 && !single.truncated) return { lines: [single], multiline: false };
+  const words = value.trim().split(/\s+/);
+  if (words.length < 2) return { lines: [single], multiline: false };
+  let best: { lines: ReturnType<typeof fitText>[]; score: number } | null = null;
   for (let split = 1; split < words.length; split++) {
-    const first = words.slice(0, split).join(" "), second = words.slice(split).join(" ");
-    const left = fitText(context, first, maxWidth, 64, 54);
-    const right = fitText(context, second, maxWidth, 64, 54);
-    if (!left.truncated && !right.truncated) return { lines: [first, second], size: Math.min(left.size, right.size) };
+    const first = fitText(context, words.slice(0, split).join(" "), maxWidth, 112, 70);
+    const second = fitText(context, words.slice(split).join(" "), maxWidth, 112, 70);
+    if (first.truncated || second.truncated) continue;
+    const score = Math.min(first.size, second.size) * 10 - Math.abs(first.size - second.size);
+    if (!best || score > best.score) best = { lines: [first, second], score };
   }
-  return { lines: [single.text], size: single.size };
+  return best ? { lines: best.lines, multiline: true } : { lines: [single], multiline: false };
 }
 
-function drawLogo(context: CanvasRenderingContext2D, content: FloorMediaContent, layout: FloorMediaLayout, logo?: HTMLImageElement) {
-  const m = FACADE_METRICS[layout];
+function drawLogo(context: CanvasRenderingContext2D, content: FloorMediaContent, logo?: HTMLImageElement) {
+  const size = FLOOR_ADVERTISING.logoTextureWidth;
   context.fillStyle = tokens.color.brand.softWhite;
-  context.beginPath(); context.roundRect(m.logoX, m.logoY, m.logoWidth, m.logoHeight, 32); context.fill();
+  context.beginPath(); context.roundRect(0, 0, size, size, size * 0.18); context.fill();
+  const padding = size * FLOOR_ADVERTISING.logoInternalPaddingRatio;
   if (logo) {
-    const width = logo.naturalWidth || 180, height = logo.naturalHeight || 180;
-    const scale = Math.min((m.logoWidth - 36) / width, (m.logoHeight - 36) / height);
-    context.drawImage(logo, m.logoX + (m.logoWidth - width * scale) / 2, m.logoY + (m.logoHeight - height * scale) / 2, width * scale, height * scale);
+    const width = logo.naturalWidth || 1, height = logo.naturalHeight || 1;
+    const scale = Math.min((size - padding * 2) / width, (size - padding * 2) / height);
+    context.drawImage(logo, (size - width * scale) / 2, (size - height * scale) / 2, width * scale, height * scale);
   } else {
-    const initials = content.name.split(/\s+/).map((part) => part[0]).slice(0, 2).join("");
-    context.fillStyle = tokens.color.brand.navy; context.font = "800 104px Inter, system-ui, sans-serif";
     context.textAlign = "center"; context.textBaseline = "middle";
-    context.fillText(initials, m.logoX + m.logoWidth / 2, m.logoY + m.logoHeight / 2, m.logoWidth - 24);
+    context.fillStyle = tokens.color.brand.navy; context.font = "800 112px Inter, system-ui, sans-serif";
+    context.fillText(initialsForName(content.name), size / 2, size / 2, size - padding * 2);
   }
 }
 
-export function drawFloorMedia(context: CanvasRenderingContext2D, content: FloorMediaContent, layout: FloorMediaLayout, footprint = 1, logo?: HTMLImageElement) {
-  const base = FACADE_METRICS[layout];
-  const m = { ...base, height: floorSignCanvasHeight(layout, footprint) };
+export function drawFloorMedia(context: CanvasRenderingContext2D, content: FloorMediaContent, role: FloorMediaRole, footprint = 1, face: FloorFace = "front", logo?: HTMLImageElement) {
+  const width = textureWidth(role), height = floorSignCanvasHeight(role, footprint, face), center = height / 2;
+  context.clearRect(0, 0, width, height);
+  if (role === "logo") { drawLogo(context, content, logo); return; }
+  context.textBaseline = "middle";
   const gold = content.rank === 1;
-  context.clearRect(0, 0, m.width, m.height);
-  context.fillStyle = tokens.color.brand.navy; context.fillRect(0, 0, m.width, m.height);
-  const gradient = context.createLinearGradient(0, 0, m.width, m.height);
-  gradient.addColorStop(0, gold ? tokens.color.brand.summitGold : tokens.color.brand.blue);
-  gradient.addColorStop(1, tokens.color.brand.navy);
-  context.globalAlpha = gold ? 0.22 : 0.32;
-  context.fillStyle = gradient; context.fillRect(0, 0, m.width, m.height);
-  context.globalAlpha = 1;
-  context.fillStyle = gold ? tokens.color.brand.summitGold : tokens.color.brand.blue;
-  context.fillRect(0, 0, 14, m.height); context.fillRect(14, 0, m.width - 14, 7);
-  context.save();
-  context.translate(0, (m.height - base.height) / 2);
-  drawLogo(context, content, layout, logo);
-  context.textAlign = "left"; context.textBaseline = "alphabetic";
-  const compact = layout === "compact";
-  const name = compact ? fitText(context, content.name, m.textWidth, 70, 34) : null;
-  const wideName = compact ? null : fitWideNameLines(context, content.name, m.textWidth);
-  context.fillStyle = tokens.color.brand.white;
-  context.font = `800 ${compact ? name!.size : wideName!.size}px Inter, system-ui, sans-serif`;
-  if (compact) context.fillText(name!.text, m.textX, 208);
-  else wideName!.lines.forEach((line, index) => context.fillText(line, m.textX, wideName!.lines.length === 2 ? 115 + index * 65 : 145));
-  const subtitle = fitText(context, content.description, m.textWidth, compact ? 41 : 39, compact ? 28 : 27, 500);
-  context.fillStyle = tokens.color.brand.lightBlue;
-  context.font = `500 ${subtitle.size}px Inter, system-ui, sans-serif`;
-  context.fillText(subtitle.text, m.textX, compact ? 285 : wideName!.lines.length === 2 ? 243 : 215);
+  if (role === "primary") {
+    // The short wing face keeps identity legible; its side bay owns statistics.
+    const logoSpace = height * FLOOR_ADVERTISING.logoSizeRatio;
+    const textX = 48 + logoSpace + 36;
+    const textWidth = width - textX - 48;
+    const name = fitPrimaryName(context, content.name, textWidth);
+    context.fillStyle = tokens.color.brand.white;
+    name.lines.forEach((line, index) => {
+      context.font = `800 ${line.size}px Inter, system-ui, sans-serif`;
+      context.fillText(line.text, textX, name.multiline ? center - 66 + index * 70 : center - 38);
+    });
+    if (content.description) {
+      const detail = fitText(context, content.description, textWidth, 48, 28, 500);
+      context.fillStyle = tokens.color.brand.lightBlue; context.font = `500 ${detail.size}px Inter, system-ui, sans-serif`;
+      context.fillText(detail.text, textX, center + (name.multiline ? 74 : 35));
+    }
+    if (content.hiring) drawHiring(context, textX, center + (name.multiline ? 118 : 86));
+    return;
+  }
+  if (role === "brand") {
+    const name = fitText(context, content.name, width - 72, 64, 38);
+    context.fillStyle = tokens.color.brand.white; context.font = `800 ${name.size}px Inter, system-ui, sans-serif`;
+    context.fillText(name.text, 36, center);
+    return;
+  }
   context.fillStyle = gold ? tokens.color.brand.summitGold : tokens.color.brand.white;
-  const rank = fitText(context, `#${content.rank}`, m.rankWidth, 72, 48);
-  context.font = `800 ${rank.size}px Inter, system-ui, sans-serif`;
-  context.fillText(rank.text, m.rankX, compact ? 195 : 125);
-  const amount = fitText(context, formatMinorUnits(content.totalPaidMinor), m.rankWidth, compact ? 58 : 62, 40);
+  context.textAlign = "right";
+  context.font = "800 56px Inter, system-ui, sans-serif";
+  context.fillText(`#${content.rank}`, width - 36, center - 34);
+  const amount = fitText(context, formatMinorUnits(content.totalPaidMinor), width - 72, 62, 46);
   context.font = `800 ${amount.size}px Inter, system-ui, sans-serif`;
-  context.fillText(amount.text, m.rankX, compact ? 286 : 205);
-  context.restore();
+  context.fillText(amount.text, width - 36, center + 38);
 }
 
-/** Both face orientations use the same media content and a bounded texture cache. */
-export function createFloorSignTexture(content: FloorMediaContent, layout: FloorMediaLayout = "wide", footprint = 1): CanvasTexture {
-  const key = [content.id, layout, footprint.toFixed(3), content.rank, content.name, content.description, content.totalPaidMinor, content.hiring, content.logoUrl].join("|");
+function drawHiring(context: CanvasRenderingContext2D, x: number, y: number) {
+  context.textAlign = "left"; context.fillStyle = tokens.color.brand.teal;
+  context.beginPath(); context.roundRect(x, y - 18, 142, 37, 8); context.fill();
+  context.fillStyle = tokens.color.brand.navy; context.font = "800 21px Inter, system-ui, sans-serif";
+  context.fillText("HIRING", x + 20, y + 1);
+}
+
+export function createFloorSignTexture(content: FloorMediaContent, role: FloorMediaRole, footprint = 1, face: FloorFace = "front"): CanvasTexture {
+  const key = [content.id, role, face, footprint.toFixed(3), content.rank, content.name, content.description, content.totalPaidMinor, content.hiring, content.logoUrl].join("|");
   const existing = cache.get(key);
   if (existing) { cache.delete(key); cache.set(key, existing); return existing; }
-  const m = FACADE_METRICS[layout];
-  const canvas = document.createElement("canvas"); canvas.width = m.width; canvas.height = floorSignCanvasHeight(layout, footprint);
+  const canvas = document.createElement("canvas"); canvas.width = textureWidth(role); canvas.height = floorSignCanvasHeight(role, footprint, face);
   const context = canvas.getContext("2d");
   const texture = new CanvasTexture(canvas); texture.colorSpace = SRGBColorSpace; texture.anisotropy = 4;
   cache.set(key, texture);
@@ -126,12 +192,12 @@ export function createFloorSignTexture(content: FloorMediaContent, layout: Floor
   }
   if (context) {
     let loadedLogo: HTMLImageElement | undefined;
-    drawFloorMedia(context, content, layout, footprint);
-    if (document.fonts) void document.fonts.ready.then(() => { drawFloorMedia(context, content, layout, footprint, loadedLogo); texture.needsUpdate = true; });
-    if (content.logoUrl && isSafeLogoUrl(content.logoUrl)) {
+    drawFloorMedia(context, content, role, footprint, face);
+    if (document.fonts) void document.fonts.ready.then(() => { drawFloorMedia(context, content, role, footprint, face, loadedLogo); texture.needsUpdate = true; });
+    if (role === "logo" && content.logoUrl && isSafeLogoUrl(content.logoUrl)) {
       const image = new Image();
-      image.onload = () => { loadedLogo = image; drawFloorMedia(context, content, layout, footprint, image); texture.needsUpdate = true; };
-      image.onerror = () => { drawFloorMedia(context, content, layout, footprint); texture.needsUpdate = true; };
+      image.onload = () => { loadedLogo = image; drawFloorMedia(context, content, role, footprint, face, image); texture.needsUpdate = true; };
+      image.onerror = () => { drawFloorMedia(context, content, role, footprint, face); texture.needsUpdate = true; };
       image.src = content.logoUrl;
     }
   }
