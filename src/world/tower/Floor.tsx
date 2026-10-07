@@ -7,7 +7,7 @@ import { tokens } from "@/design/tokens";
 import { FLOOR_HEIGHT, getFloorFootprint, getFloorY } from "@/world/tower/tower-layout";
 import { worldMaterials } from "@/world/materials/world-materials";
 import type { TowerVisualConfig } from "@/world/types";
-import { createFloorSignTexture, FLOOR_ADVERTISING, FLOOR_FACADE_ROLES, floorFacadeDimensions, releaseFloorSignTexture, visibleFloorSigns, WING_FACE, type FloorMediaContent } from "@/world/tower/floor-signs";
+import { createFloorSignTexture, FLOOR_ADVERTISING, FLOOR_FACADE_ROLES, floorContentScale, floorFacadeDimensions, releaseFloorSignTexture, visibleFloorSigns, WING_FACE, type FloorMediaContent } from "@/world/tower/floor-signs";
 
 export const floorWingGeometry = new BoxGeometry(1.42, FLOOR_HEIGHT, 2.28);
 export const floorFrontGlazingGeometry = new BoxGeometry(WING_FACE.frontWidth, WING_FACE.clearHeight, 0.035);
@@ -19,6 +19,7 @@ const geometry = floorWingGeometry;
 const glazingGeometry = floorFrontGlazingGeometry;
 const sideGlassGeometry = floorSideGlazingGeometry;
 const trimGeometry = new BoxGeometry(1, 1, 1);
+const logoPlaqueMaterial = new MeshStandardMaterial({ color: tokens.color.brand.softWhite, roughness: 0.42, metalness: 0.04 });
 const selectionMaterial = new MeshStandardMaterial({ color: tokens.color.brand.blue, emissive: tokens.color.brand.blue, emissiveIntensity: 0.55, metalness: 0.25, roughness: 0.25 });
 const summitMaterial = new MeshStandardMaterial({ color: tokens.color.brand.summitGold, emissive: tokens.color.brand.summitGold, emissiveIntensity: 0.14, metalness: 0.45, roughness: 0.28 });
 
@@ -162,13 +163,19 @@ function FloorSign({ listing, floorCount, detail, selected = false, preview = fa
       const facePosition: [number, number, number] = face === "front" ? [0, 0, bay.frontZ] : [face === "left" ? -bay.sideX : bay.sideX, 0, bay.sideZ];
       const faceRotation: [number, number, number] = [0, face === "left" ? -Math.PI / 2 : face === "right" ? Math.PI / 2 : 0, 0];
       const texture = role === "nose" ? nose : face === "left" ? left : right;
-      const plaque = bay.height * (role === "nose" ? FLOOR_ADVERTISING.noseLogoSizeRatio : FLOOR_ADVERTISING.logoSizeRatio);
-      const plaqueX = role === "nose" ? 0 : face === "left" ? bay.width / 2 - bay.width * 0.045 - plaque / 2 : -bay.width / 2 + bay.width * 0.045 + plaque / 2;
+      const contentScale = floorContentScale(face, bay.width);
+      const plaque = bay.height * (role === "nose" ? FLOOR_ADVERTISING.noseLogoSizeRatio * contentScale : FLOOR_ADVERTISING.logoSizeRatio * Math.max(0.82, contentScale));
+      const spacingScale = 0.88 + 0.12 * contentScale;
+      const plaqueX = role === "nose" ? 0 : face === "left" ? bay.width / 2 - bay.width * 0.045 * spacingScale - plaque / 2 : -bay.width / 2 + bay.width * 0.045 * spacingScale + plaque / 2;
       return <group key={`${wing}-${face}`} rotation={[0, wing * Math.PI * 2 / 3, 0]}>
         <group position={facePosition} rotation={faceRotation}>
-          <mesh onClick={onClick}><planeGeometry args={[bay.width, bay.height]} /><meshStandardMaterial map={texture} color={color} roughness={0.38} metalness={0.08} emissive="#08265a" emissiveIntensity={0.07} /></mesh>
+          <mesh onClick={onClick}><planeGeometry args={[bay.width, bay.height]} /><meshStandardMaterial map={texture} color={color} transparent depthWrite={false} roughness={0.38} metalness={0.08} /></mesh>
           <mesh position={[plaqueX, role === "nose" && listing.hiring ? -bay.height * 0.07 : 0, FLOOR_ADVERTISING.logoDepth]} onClick={onClick}>
-            <boxGeometry args={[plaque, plaque, 0.012]} /><meshStandardMaterial map={logo} roughness={0.42} metalness={0.04} /></mesh>
+            <boxGeometry args={[plaque, plaque, 0.012]} /><primitive object={logoPlaqueMaterial} attach="material" />
+          </mesh>
+          <mesh position={[plaqueX, role === "nose" && listing.hiring ? -bay.height * 0.07 : 0, FLOOR_ADVERTISING.logoDepth + 0.0061]} onClick={onClick}>
+            <planeGeometry args={[plaque, plaque]} /><meshStandardMaterial map={logo} transparent depthWrite={false} roughness={0.42} metalness={0.04} />
+          </mesh>
         </group>
       </group>;
     })}

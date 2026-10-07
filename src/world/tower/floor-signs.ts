@@ -62,6 +62,14 @@ export function floorFacadeDimensions(face: FloorFace, footprint: number) {
   };
 }
 
+/** Width, not rank, controls the bounded content reduction on tapered faces. */
+export function floorContentScale(face: FloorFace, usableWidth: number): number {
+  const referenceWidth = face === "front"
+    ? WING_FACE.frontWidth * (1 - 2 * FLOOR_ADVERTISING.horizontalInsetRatio)
+    : WING_FACE.sideWidth * (1 - FLOOR_ADVERTISING.centerSeamInsetRatio - FLOOR_ADVERTISING.horizontalInsetRatio);
+  return Math.max(0.8, Math.min(1, usableWidth / referenceWidth));
+}
+
 export function floorFaceListingId(listing: Pick<FloorMediaContent, "id">, face: FloorFacadeRole): string {
   void face;
   return listing.id;
@@ -131,47 +139,47 @@ function drawLogo(context: CanvasRenderingContext2D, content: FloorMediaContent,
 
 export function drawFloorMedia(context: CanvasRenderingContext2D, content: FloorMediaContent, role: FloorMediaRole, footprint = 1, face: FloorFace = "front", logo?: HTMLImageElement) {
   const width = textureWidth(role), height = floorSignCanvasHeight(role, footprint, face), center = height / 2;
+  const scale = floorContentScale(face, floorFacadeDimensions(face, footprint).width);
   context.clearRect(0, 0, width, height);
   if (role === "logo") { drawLogo(context, content, logo); return; }
-  context.fillStyle = "#082b60";
-  context.fillRect(0, 0, width, height);
-  context.fillStyle = "rgba(37, 112, 210, 0.13)";
-  context.fillRect(0, 0, width, height * 0.16);
+  // The measured dark glazing is the sole media surface. Canvas carries only
+  // content and one restrained architectural accent, never another card.
   context.fillStyle = content.rank === 1 ? tokens.color.brand.summitGold : "#368ef2";
-  context.fillRect(width * 0.04, height - Math.max(3, height * 0.008), width * 0.92, Math.max(3, height * 0.008));
+  context.fillRect(width * 0.04, height - Math.max(2, height * 0.005), width * 0.92, Math.max(2, height * 0.005));
   context.textBaseline = "middle";
   const gold = content.rank === 1;
   if (role === "nose") {
-    if (content.hiring) drawHiring(context, width / 2 - 66, center + height * 0.32, 132, Math.max(29, height * 0.10));
+    if (content.hiring) drawHiring(context, width / 2 - 66 * scale, center + height * 0.32, 132 * scale, Math.max(29, height * 0.10) * scale);
     return;
   }
   // Both V-wing textures are generated independently. The left wing reverses
   // column placement, never glyphs/UVs, so text reads normally on either side.
-  const pad = width * 0.045;
-  const logoWidth = height * FLOOR_ADVERTISING.logoSizeRatio;
-  const gap = width * 0.034;
+  const spacingScale = 0.88 + 0.12 * scale;
+  const pad = width * 0.045 * spacingScale;
+  const logoWidth = height * FLOOR_ADVERTISING.logoSizeRatio * Math.max(0.82, scale);
+  const gap = width * 0.034 * spacingScale;
   const statsWidth = width * 0.19;
   const contentX = face === "left" ? pad + statsWidth + gap : pad + logoWidth + gap;
   const contentRight = face === "left" ? width - pad - logoWidth - gap : width - pad - statsWidth - gap;
   const contentWidth = Math.max(1, contentRight - contentX);
-  const name = fitText(context, content.name, contentWidth, height * 0.19, height * 0.115);
+  const name = fitText(context, content.name, contentWidth, height * 0.19 * scale, height * 0.15 * scale);
   context.fillStyle = tokens.color.brand.white;
   context.textAlign = "left";
   context.font = `800 ${name.size}px Inter, system-ui, sans-serif`;
   context.fillText(name.text, contentX, center - height * (content.hiring ? 0.14 : 0.10));
   if (content.description) {
-    const detail = fitText(context, content.description, contentWidth, height * 0.085, height * 0.055, 500);
+    const detail = fitText(context, content.description, contentWidth, height * 0.085 * scale, height * 0.068 * scale, 500);
     context.fillStyle = "#b9d6f4";
     context.font = `500 ${detail.size}px Inter, system-ui, sans-serif`;
     context.fillText(detail.text, contentX, center + height * (content.hiring ? 0.085 : 0.15));
   }
-  if (content.hiring) drawHiring(context, contentX, center + height * 0.31, Math.min(130, contentWidth * 0.26), height * 0.10);
+  if (content.hiring) drawHiring(context, contentX, center + height * 0.31, Math.min(130, contentWidth * 0.26) * scale, height * 0.10 * scale);
   const statsRight = face === "left" ? pad + statsWidth : width - pad;
   context.fillStyle = gold ? tokens.color.brand.summitGold : tokens.color.brand.white;
   context.textAlign = "right";
-  context.font = `800 ${height * 0.18}px Inter, system-ui, sans-serif`;
+  context.font = `800 ${height * 0.18 * scale}px Inter, system-ui, sans-serif`;
   context.fillText(`#${content.rank}`, statsRight, center - height * 0.14);
-  const amount = fitText(context, formatMinorUnits(content.totalPaidMinor), statsWidth, height * 0.195, height * 0.125);
+  const amount = fitText(context, formatMinorUnits(content.totalPaidMinor), statsWidth, height * 0.16 * scale, height * 0.16 * scale);
   context.font = `800 ${amount.size}px Inter, system-ui, sans-serif`;
   context.fillText(amount.text, statsRight, center + height * 0.14);
 }

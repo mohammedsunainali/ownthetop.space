@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { companies } from "@/mock/companies";
 import { listingForInstance, paidFloorColor } from "@/world/tower/Floor";
-import { createFloorSignTexture, drawFloorMedia, fitPrimaryName, fitText, floorFaceListingId, floorFacadeDimensions, floorSignCacheSize, FLOOR_ADVERTISING, FLOOR_FACADE_ROLES, initialsForName, isSafeLogoUrl, MAX_CACHED_SIGNS, MAX_FOCUSED_SIGNS, visibleFloorSigns } from "@/world/tower/floor-signs";
+import { createFloorSignTexture, drawFloorMedia, fitPrimaryName, fitText, floorContentScale, floorFaceListingId, floorFacadeDimensions, floorSignCacheSize, FLOOR_ADVERTISING, FLOOR_FACADE_ROLES, initialsForName, isSafeLogoUrl, MAX_CACHED_SIGNS, MAX_FOCUSED_SIGNS, visibleFloorSigns } from "@/world/tower/floor-signs";
 import { tokens } from "@/design/tokens";
 
 describe("V2 logical floor advertising", () => {
@@ -31,6 +31,9 @@ describe("V2 logical floor advertising", () => {
     expect(large.outerEnd).toBeLessThan(2.305);
     expect(large.height).toBeCloseTo(0.62 * 0.84 * 0.76);
     expect(floorFacadeDimensions("front", 1).width).toBeLessThan(large.width);
+    expect(floorContentScale("left", large.width)).toBeCloseTo(1);
+    expect(floorContentScale("left", floorFacadeDimensions("left", 0.9).width)).toBeCloseTo(0.9);
+    expect(floorContentScale("left", small.width)).toBe(0.8);
   });
 
   it("uses orientation-correct textures and a physical-logo texture", () => {
@@ -75,6 +78,7 @@ describe("V2 logical floor advertising", () => {
     } as unknown as CanvasRenderingContext2D;
     const nonHiring = { ...companies[0], hiring: false };
     drawFloorMedia(context, nonHiring, "nose", 1, "front");
+    expect(context.fillRect).toHaveBeenCalledTimes(1); // accent, no painted card/gradient
     expect(text.mock.calls.flat().join(" ")).not.toContain("HIRING");
     expect(text.mock.calls.flat().join(" ")).not.toContain(nonHiring.name);
     text.mockClear();
