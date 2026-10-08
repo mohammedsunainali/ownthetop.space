@@ -25,9 +25,10 @@ export function yieldCameraToManualControl(intro: { interrupted: boolean }, tran
 interface CameraControllerProps {
   selectedListing: Listing | null;
   floorCounts: Record<TowerId, number>;
+  introReady: boolean;
 }
 
-export function CameraController({ selectedListing, floorCounts }: CameraControllerProps) {
+export function CameraController({ selectedListing, floorCounts, introReady }: CameraControllerProps) {
   const controls = useRef<ComponentRef<typeof OrbitControls>>(null);
   const camera = useThree((state) => state.camera);
   const cameraMode = useWorldStore((state) => state.cameraMode);
@@ -84,11 +85,11 @@ export function CameraController({ selectedListing, floorCounts }: CameraControl
   }, [floorCounts, gl, selectedListing, travelTowerBy, zoomBy]);
 
   const destination = useMemo(() => {
-    const referenceHeight = getTowerHeight(20);
     const tallestHeight = getTowerHeight(Math.max(...Object.values(floorCounts)));
     const tallFixture = tallestHeight > getTowerHeight(40);
-    let target = new Vector3(0, tallestHeight * (tallFixture ? 0.62 : mobile ? 1.42 : 1.5), 0);
-    let offset = new Vector3(mobile ? 7 : 5, mobile ? 9 : 7, mobile ? 23 : 20).multiplyScalar(Math.max(1, tallestHeight / referenceHeight));
+    const overviewScale = Math.max(0.82, tallestHeight / getTowerHeight(50));
+    let target = new Vector3(0, tallestHeight * (tallFixture ? 0.5 : mobile ? 0.47 : 0.65), 0);
+    let offset = new Vector3(mobile ? 10 : 22, mobile ? 25 : 46, mobile ? 56 : 84).multiplyScalar(overviewScale);
 
     if (cameraMode !== "overview") {
       const towerId = selectedListing?.towerId ?? selectedTowerId ??
@@ -110,6 +111,10 @@ export function CameraController({ selectedListing, floorCounts }: CameraControl
   useEffect(() => {
     const prior = previousDestination.current;
     const anchorChanged = previousAnchor.current !== anchor;
+    if (prior && (cameraDistance !== previousDistance.current || cameraOrbitStep !== previousOrbitStep.current)) {
+      // Toolbar actions have the same authority as pointer and wheel input.
+      yieldCameraToManualControl(intro.current, transition, manual);
+    }
     if (anchorChanged) {
       manual.current = false;
       transition.current = 1;
@@ -134,14 +139,21 @@ export function CameraController({ selectedListing, floorCounts }: CameraControl
 
   useFrame((_, delta) => {
     if (cameraMode !== "overview") intro.current.interrupted = true;
-    if (shouldRunIntro(reducedMotion) && !intro.current.interrupted && intro.current.elapsed < 3.1) {
-      intro.current.elapsed = Math.min(3.1, intro.current.elapsed + delta);
-      const t = intro.current.elapsed / 3.1;
+    const introducing = !intro.current.interrupted && cameraMode === "overview" && (!introReady || (shouldRunIntro(reducedMotion) && intro.current.elapsed < 2.6));
+    if (introducing) {
+      const aerialTarget = destination.target.clone().add(new Vector3(0, -3, 0));
+      const aerialPosition = destination.position.clone().add(new Vector3(0, 13, 8));
+      if (!introReady) {
+        camera.position.copy(aerialPosition);
+        controls.current?.target.copy(aerialTarget);
+        controls.current?.update();
+        return;
+      }
+      intro.current.elapsed = Math.min(2.6, intro.current.elapsed + delta);
+      const t = intro.current.elapsed / 2.6;
       const eased = t * t * (3 - 2 * t);
-      const introTarget = destination.target.clone();
-      introTarget.y = 2.5 + (destination.target.y - 2.5) * eased;
-      camera.position.copy(introTarget.clone().add(destination.position.clone().sub(destination.target)));
-      controls.current?.target.copy(introTarget);
+      camera.position.copy(aerialPosition.lerp(destination.position, eased));
+      controls.current?.target.copy(aerialTarget.lerp(destination.target, eased));
       controls.current?.update();
       if (t === 1) transition.current = 0;
       return;

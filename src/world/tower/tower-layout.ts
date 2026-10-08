@@ -8,10 +8,17 @@ export const PODIUM_HEIGHT = 0.7;
 export const FLOOR_BASE_Y = PODIUM_HEIGHT + FLOOR_HEIGHT / 2 + 0.16;
 export const CROWN_UNSCALED_HEIGHT = 6.48;
 export const HELIPAD_LEVEL_OFFSET = 0.9;
+/** Helicopter origin when landed; the visible pad surface sits 0.24 below it. */
+export const HELIPAD_LOCAL_ANCHOR = [0, HELIPAD_LEVEL_OFFSET + 0.248, 1.36] as const;
 export function getCrownVerticalScale(floorCount: number): number { return Math.max(0.67, Math.min(1.25, 0.67 + floorCount * 0.0165)); }
 export function getCrownHeight(floorCount: number): number { return 0.18 + CROWN_UNSCALED_HEIGHT * getCrownVerticalScale(floorCount); }
 export function getHelipadWorldPosition(floorCount: number): [number, number, number] {
-  return [towerVisuals.companies.position[0], getTowerHeight(floorCount) + 0.18 + HELIPAD_LEVEL_OFFSET * getCrownVerticalScale(floorCount), towerVisuals.companies.position[2] + 1.58];
+  const tower = towerVisuals.companies;
+  return [
+    tower.position[0] + HELIPAD_LOCAL_ANCHOR[0] * tower.scale,
+    tower.position[1] + (getTowerHeight(floorCount) + 0.18 + HELIPAD_LOCAL_ANCHOR[1] * getCrownVerticalScale(floorCount)) * tower.scale,
+    tower.position[2] + HELIPAD_LOCAL_ANCHOR[2] * tower.scale,
+  ];
 }
 
 export const towerVisuals: Record<TowerId, TowerVisualConfig> = {

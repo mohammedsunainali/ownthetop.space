@@ -5,7 +5,7 @@ import { Html } from "@react-three/drei";
 import { tokens } from "@/design/tokens";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { worldMaterials } from "@/world/materials/world-materials";
-import { getCrownVerticalScale, HELIPAD_LEVEL_OFFSET } from "@/world/tower/tower-layout";
+import { getCrownVerticalScale, HELIPAD_LOCAL_ANCHOR } from "@/world/tower/tower-layout";
 
 /** Non-ranked tiers continue the paid tower's three-wing plan. */
 export const CROWN_TIERS = [
@@ -140,12 +140,12 @@ export function TopPavilion({ y, floorCount }: { y: number; floorCount: number; 
     </group>
     <SkyCat />
     {/* The pad is a braced cantilever off an upper shoulder, below the glass level. */}
-    <group position={[0, HELIPAD_LEVEL_OFFSET, 0.9]}>
-      <mesh material={worldMaterials.podium} position={[0, -0.08, 0.22]} castShadow><boxGeometry args={[0.98, 0.12, 1.05]} /></mesh>
-      <mesh material={worldMaterials.frame} position={[0, -0.21, 0.48]} rotation={[0.38, 0, 0]}><boxGeometry args={[0.4, 0.36, 0.08]} /></mesh>
-      <mesh material={worldMaterials.sign} position={[0, -0.005, 0.46]} rotation={[-Math.PI / 2, 0, 0]}><circleGeometry args={[0.42, 24]} /></mesh>
-      <mesh material={worldMaterials.summit} position={[0, 0.002, 0.46]} rotation={[-Math.PI / 2, 0, 0]}><ringGeometry args={[0.31, 0.34, 24]} /></mesh>
-      <mesh position={[0, 0.008, 0.46]} rotation={[-Math.PI / 2, 0, 0]}><planeGeometry args={[0.22, 0.3]} /><meshBasicMaterial color={tokens.color.brand.white} side={DoubleSide} /></mesh>
+    <group position={HELIPAD_LOCAL_ANCHOR}>
+      <mesh material={worldMaterials.podium} position={[0, -0.328, -0.24]} castShadow><boxGeometry args={[0.98, 0.12, 1.05]} /></mesh>
+      <mesh material={worldMaterials.frame} position={[0, -0.458, 0.02]} rotation={[0.38, 0, 0]}><boxGeometry args={[0.4, 0.36, 0.08]} /></mesh>
+      <mesh material={worldMaterials.sign} position={[0, -0.253, 0]} rotation={[-Math.PI / 2, 0, 0]}><circleGeometry args={[0.42, 24]} /></mesh>
+      <mesh material={worldMaterials.summit} position={[0, -0.246, 0]} rotation={[-Math.PI / 2, 0, 0]}><ringGeometry args={[0.31, 0.34, 24]} /></mesh>
+      <mesh position={[0, -0.24, 0]} rotation={[-Math.PI / 2, 0, 0]}><planeGeometry args={[0.22, 0.3]} /><meshBasicMaterial color={tokens.color.brand.white} side={DoubleSide} /></mesh>
     </group>
     <mesh material={crownFrame} position={[0, 3.62, 0]} castShadow><cylinderGeometry args={[0.16, 0.23, 0.68, 6]} /></mesh>
     <mesh material={worldMaterials.crown} position={[0, 4.18, 0]} castShadow><cylinderGeometry args={[0.09, 0.16, 0.52, 8]} /></mesh>

@@ -3,7 +3,7 @@ import { useMemo, useRef } from "react";
 import { CanvasTexture, CatmullRomCurve3, FrontSide, Group, SRGBColorSpace, Vector3 } from "three";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { worldMaterials } from "@/world/materials/world-materials";
-import { getHelipadWorldPosition } from "@/world/tower/tower-layout";
+import { getCrownHeight, getHelipadWorldPosition, getTowerHeight } from "@/world/tower/tower-layout";
 import { tokens } from "@/design/tokens";
 
 type AircraftKind = "plane" | "helicopter" | "drone";
@@ -16,17 +16,17 @@ export const aircraftConfigurations: readonly { kind: AircraftKind; offset: numb
 ];
 
 export type HelicopterPhase = "CRUISE" | "APPROACH" | "ALIGN" | "HOVER" | "DESCEND" | "LAND" | "IDLE" | "ASCEND" | "DEPART";
-export function helicopterPose(seconds: number, floorCount = 20): { phase: HelicopterPhase; position: Vector3 } {
+export function helicopterPose(seconds: number, floorCount: number): { phase: HelicopterPhase; position: Vector3 } {
   const [padX, padY, padZ] = getHelipadWorldPosition(floorCount);
   const segments: { phase: HelicopterPhase; duration: number; from: [number, number, number]; to: [number, number, number] }[] = [
     { phase: "CRUISE", duration: 4, from: [12, padY + 3, -6], to: [8, padY + 2.2, 5] },
     { phase: "APPROACH", duration: 4, from: [8, padY + 2.2, 5], to: [3, padY + 1.5, padZ + 2] },
     { phase: "ALIGN", duration: 3, from: [3, padY + 1.5, padZ + 2], to: [padX, padY + 1.2, padZ] },
     { phase: "HOVER", duration: 2, from: [padX, padY + 1.2, padZ], to: [padX, padY + 1.2, padZ] },
-    { phase: "DESCEND", duration: 3, from: [padX, padY + 1.2, padZ], to: [padX, padY + 0.24, padZ] },
-    { phase: "LAND", duration: 1, from: [padX, padY + 0.24, padZ], to: [padX, padY + 0.24, padZ] },
-    { phase: "IDLE", duration: 3, from: [padX, padY + 0.24, padZ], to: [padX, padY + 0.24, padZ] },
-    { phase: "ASCEND", duration: 3, from: [padX, padY + 0.24, padZ], to: [padX, padY + 1.4, padZ] },
+    { phase: "DESCEND", duration: 3, from: [padX, padY + 1.2, padZ], to: [padX, padY, padZ] },
+    { phase: "LAND", duration: 1, from: [padX, padY, padZ], to: [padX, padY, padZ] },
+    { phase: "IDLE", duration: 3, from: [padX, padY, padZ], to: [padX, padY, padZ] },
+    { phase: "ASCEND", duration: 3, from: [padX, padY, padZ], to: [padX, padY + 1.4, padZ] },
     { phase: "DEPART", duration: 6, from: [padX, padY + 1.4, padZ], to: [-11, padY + 3.5, -8] },
   ];
   const cycle = segments.reduce((sum, item) => sum + item.duration, 0);
@@ -70,17 +70,20 @@ function AircraftShape({ kind, index, rotorRef, bannerRef }: { kind: AircraftKin
   </group>;
 }
 
-export function AircraftSystem({ mobile }: { mobile: boolean }) {
+export function AircraftSystem({ mobile, companiesFloorCount, sideTowerFloorCount }: { mobile: boolean; companiesFloorCount: number; sideTowerFloorCount: number }) {
   const reducedMotion = useReducedMotion();
   const refs = useRef<(Group | null)[]>([]);
   const rotor = useRef<Group | null>(null);
   const banners = useRef<(Group | null)[]>([]);
-  const curves = useMemo(() => aircraftConfigurations.map((item, index) => new CatmullRomCurve3([
-    new Vector3(item.radius, item.altitude, -3 + index),
-    new Vector3(2, item.altitude + 0.4, item.radius),
-    new Vector3(-item.radius, item.altitude, 1 - index),
-    new Vector3(-2, item.altitude - 0.3, -item.radius),
-    ], true)), []);
+  const curves = useMemo(() => aircraftConfigurations.map((item, index) => {
+    const altitude = item.kind === "drone" ? Math.max(item.altitude, getTowerHeight(sideTowerFloorCount) + getCrownHeight(sideTowerFloorCount) + 2) : item.altitude;
+    return new CatmullRomCurve3([
+      new Vector3(item.radius, altitude, -3 + index),
+      new Vector3(2, altitude + 0.4, item.radius),
+      new Vector3(-item.radius, altitude, 1 - index),
+      new Vector3(-2, altitude - 0.3, -item.radius),
+    ], true);
+  }), [sideTowerFloorCount]);
   useFrame(({ clock }) => {
     if (reducedMotion) return;
     if (rotor.current) rotor.current.rotation.y = clock.elapsedTime * 13;
@@ -88,7 +91,7 @@ export function AircraftSystem({ mobile }: { mobile: boolean }) {
     refs.current.forEach((group, index) => {
       if (!group) return;
       if (index === 2) {
-        const pose = helicopterPose(clock.elapsedTime);
+        const pose = helicopterPose(clock.elapsedTime, companiesFloorCount);
         group.position.copy(pose.position);
         group.rotation.y = pose.phase === "DEPART" ? -0.8 : pose.phase === "CRUISE" ? 1.2 : 0;
         return;

@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { Component, Suspense, useMemo, useSyncExternalStore, type ReactNode } from "react";
+import { Component, Suspense, useEffect, useMemo, useSyncExternalStore, type ReactNode } from "react";
 import { RankingFallback } from "@/components/fallback/RankingFallback";
 import { formatMinorUnits } from "@/domain/money";
 import { towers } from "@/mock/towers";
@@ -20,16 +20,17 @@ class WorldErrorBoundary extends Component<{ children: ReactNode }, { failed: bo
   render() { return this.state.failed ? <RankingFallback /> : this.props.children; }
 }
 
-export function WorldCanvas() {
+export function WorldCanvas({ onSceneReady, introReady }: { onSceneReady: () => void; introReady: boolean }) {
   const selectListing = useWorldStore((state) => state.selectListing);
   const selectTower = useWorldStore((state) => state.selectTower);
   const mobile = useWorldQuality();
   const webglSupported = useSyncExternalStore(noSubscribe, canUseWebGL, () => true);
   const stressMode = useSyncExternalStore(noSubscribe, isStressMode, () => false);
   const sceneListings = useMemo(() => getSceneListings(stressMode), [stressMode]);
+  useEffect(() => { if (!webglSupported) onSceneReady(); }, [webglSupported, onSceneReady]);
 
   return (
-    <div className="world-canvas" aria-label="Interactive three-tower skyline">
+    <div className="world-canvas" aria-label="Interactive three-tower skyline" onPointerDown={(event) => event.currentTarget.classList.add("world-canvas--dragging")} onPointerUp={(event) => event.currentTarget.classList.remove("world-canvas--dragging")} onPointerLeave={(event) => event.currentTarget.classList.remove("world-canvas--dragging")}>
       {!webglSupported ? <RankingFallback /> : <WorldErrorBoundary>
       <Canvas
         dpr={mobile ? [1, 1.25] : [1, 1.75]}
@@ -38,7 +39,7 @@ export function WorldCanvas() {
         gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
       >
         <Suspense fallback={null}>
-          <WorldScene listingsByTower={sceneListings} />
+          <WorldScene listingsByTower={sceneListings} onSceneReady={onSceneReady} introReady={introReady} />
         </Suspense>
       </Canvas>
       </WorldErrorBoundary>}

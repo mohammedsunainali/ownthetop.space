@@ -8,8 +8,9 @@ import { CityLife } from "@/world/environment/CityLife";
 import { AircraftSystem } from "@/world/aircraft/AircraftSystem";
 import { applyTimeToWorldMaterials } from "@/world/materials/world-materials";
 import { scheduledWorldTime } from "@/state/world-store";
+import { environmentTokens } from "@/world/environment/environment-tokens";
 
-export function BasicEnvironment({ tallestFloorCount = 20 }: { tallestFloorCount?: number }) {
+export function BasicEnvironment({ tallestFloorCount, companiesFloorCount, sideTowerFloorCount }: { tallestFloorCount: number; companiesFloorCount: number; sideTowerFloorCount: number }) {
   const timeMode = useWorldStore((state) => state.worldTime);
   const [localHour, setLocalHour] = useState(() => new Date().getHours());
   useEffect(() => {
@@ -32,7 +33,7 @@ export function BasicEnvironment({ tallestFloorCount = 20 }: { tallestFloorCount
     <directionalLight position={time === "sunset" ? [-12, 11, 6] : [11, 18, 12]} intensity={night ? 0.85 : time === "sunset" ? 1.7 : 2.2} color={time === "sunset" ? tokens.color.brand.peach : tokens.color.brand.white} castShadow={!mobile} shadow-mapSize={mobile ? [512, 512] : [1024, 1024]} />
     <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow position={[0, -0.08, 0]}>
       <circleGeometry args={[23, 64]} />
-      <meshStandardMaterial color={tokens.color.brand.softWhite} roughness={0.88} />
+      <meshStandardMaterial color={environmentTokens.lawn} roughness={0.88} />
     </mesh>
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.13, 0]}>
       <circleGeometry args={[65, 64]} />
@@ -41,6 +42,6 @@ export function BasicEnvironment({ tallestFloorCount = 20 }: { tallestFloorCount
     <CompanionSkyline mobile={mobile} night={night} />
     <WorldProps mobile={mobile} night={night} />
     <CityLife mobile={mobile} />
-    <AircraftSystem mobile={mobile} />
+    <AircraftSystem mobile={mobile} companiesFloorCount={companiesFloorCount} sideTowerFloorCount={sideTowerFloorCount} />
   </>;
 }

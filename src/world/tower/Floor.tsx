@@ -23,6 +23,13 @@ const logoPlaqueMaterial = new MeshStandardMaterial({ color: tokens.color.brand.
 const selectionMaterial = new MeshStandardMaterial({ color: tokens.color.brand.blue, emissive: tokens.color.brand.blue, emissiveIntensity: 0.55, metalness: 0.25, roughness: 0.25 });
 const summitMaterial = new MeshStandardMaterial({ color: tokens.color.brand.summitGold, emissive: tokens.color.brand.summitGold, emissiveIntensity: 0.14, metalness: 0.45, roughness: 0.28 });
 
+function setFloorCursor(event: ThreeEvent<PointerEvent>, interactive: boolean) {
+  const surface = event.nativeEvent.target as HTMLElement;
+  const canvas = surface.closest(".world-canvas");
+  if (interactive) canvas?.setAttribute("data-interactive", "true");
+  else canvas?.removeAttribute("data-interactive");
+}
+
 /** One paid listing maps to exactly three decorative wing instances. */
 export function listingForInstance(listings: readonly Listing[], instanceId: number): Listing | undefined {
   return listings[Math.floor(instanceId / 3)];
@@ -135,8 +142,8 @@ export function RankedFloors({ listings, accent, selectedListingId, focused, foc
   };
 
   return <>
-    <instancedMesh ref={mesh} args={[geometry, worldMaterials.facade, count]} onClick={handleClick} castShadow receiveShadow frustumCulled />
-    <instancedMesh ref={glazing} args={[glazingGeometry, worldMaterials.glazing, count]} onClick={handleClick} frustumCulled />
+    <instancedMesh ref={mesh} args={[geometry, worldMaterials.facade, count]} onClick={handleClick} onPointerOver={(event) => setFloorCursor(event, true)} onPointerOut={(event) => setFloorCursor(event, false)} castShadow receiveShadow frustumCulled />
+    <instancedMesh ref={glazing} args={[glazingGeometry, worldMaterials.glazing, count]} onClick={handleClick} onPointerOver={(event) => setFloorCursor(event, true)} onPointerOut={(event) => setFloorCursor(event, false)} frustumCulled />
     <instancedMesh ref={mullions} args={[mullionGeometry, worldMaterials.frame, count * 3]} frustumCulled />
     <instancedMesh ref={sideGlass} args={[sideGlassGeometry, worldMaterials.sideGlazing, count * 2]} frustumCulled />
     <instancedMesh ref={sideBars} args={[sideBarGeometry, worldMaterials.frame, count * 6]} frustumCulled />
@@ -157,7 +164,7 @@ function FloorSign({ listing, floorCount, detail, selected = false, preview = fa
   const tint = selected ? 1.12 : hovered ? 1.07 : 1;
   const color = useMemo(() => new Color(tint, tint, tint), [tint]);
   const onClick = (event: ThreeEvent<MouseEvent>) => { event.stopPropagation(); onSelect?.(); };
-  return <group position={[0, y, 0]} onPointerOver={() => setHovered(true)} onPointerOut={() => setHovered(false)}>
+  return <group position={[0, y, 0]} onPointerOver={(event) => { setHovered(true); setFloorCursor(event, true); }} onPointerOut={(event) => { setHovered(false); setFloorCursor(event, false); }}>
     {FLOOR_FACADE_ROLES.filter((face) => detail || face.role === "nose").map(({ wing, face, role }) => {
       const bay = floorFacadeDimensions(face, footprint);
       const facePosition: [number, number, number] = face === "front" ? [0, 0, bay.frontZ] : [face === "left" ? -bay.sideX : bay.sideX, 0, bay.sideZ];
