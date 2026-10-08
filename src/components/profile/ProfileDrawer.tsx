@@ -1,14 +1,18 @@
 "use client";
 
 import Image from "next/image";
+import { useMemo, useSyncExternalStore } from "react";
 import { formatMinorUnits } from "@/domain/money";
-import { allListings } from "@/mock";
+import { allListings, regressionListings } from "@/mock";
+import { createStressListings } from "@/mock/stress-floors";
 import { useWorldStore } from "@/state/world-store";
 import { initialsForName, isSafeLogoUrl } from "@/world/tower/floor-signs";
 
 export function ProfileDrawer() {
   const selectedListingId = useWorldStore((state) => state.selectedListingId);
-  const selected = allListings.find((listing) => listing.id === selectedListingId);
+  const fixture = useSyncExternalStore(()=>()=>{},()=>process.env.NODE_ENV==="development"&&new URLSearchParams(window.location.search).get("stressFloors")==="220"?"stress":new URLSearchParams(window.location.search).get("regression")==="legacy"?"legacy":"demo",()=>"demo");
+  const inventory=useMemo(()=>fixture==="stress"?createStressListings():fixture==="legacy"?regressionListings:allListings,[fixture]);
+  const selected = inventory.find((listing) => listing.id === selectedListingId);
 
   if (!selected) {
     return (

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { companies, people, products } from "@/mock";
+import { companies, people, products, listingsByTower } from "@/mock";
 import { createStressListings, getSceneListings } from "@/mock/stress-floors";
 import { getFloorY, getNearestFloorRank } from "@/world/tower/tower-layout";
 import { visibleFloorSigns } from "@/world/tower/floor-signs";
@@ -7,7 +7,8 @@ import { visibleFloorSigns } from "@/world/tower/floor-signs";
 describe("development floor load", () => {
   it("keeps canonical Phase 2 demo counts unchanged", () => {
     expect([companies.length, products.length, people.length]).toEqual([50, 20, 20]);
-    expect(getSceneListings(false).companies).toBe(companies);
+    expect(getSceneListings(false)).toBe(listingsByTower);
+    expect(Object.values(listingsByTower).map(items=>items.length)).toEqual([24,14,14]);
   });
   it("maps 220 synthetic listings to 220 ranked floors, with #1 highest", () => {
     const fixture = createStressListings();

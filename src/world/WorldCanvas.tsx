@@ -9,10 +9,13 @@ import { useWorldStore } from "@/state/world-store";
 import { useWorldQuality } from "@/hooks/use-world-quality";
 import { WorldScene } from "@/world/WorldScene";
 import { getSceneListings } from "@/mock/stress-floors";
+import { phase3Listings } from "@/mock/phase-3-fixture";
 import { canUseWebGL } from "@/world/webgl-support";
 
 const noSubscribe = () => () => {};
 const isStressMode = () => process.env.NODE_ENV === "development" && new URLSearchParams(window.location.search).get("stressFloors") === "220";
+const isArchitectureFixture = () => new URLSearchParams(window.location.search).get("architecture") === "phase3";
+const isLegacyFixture = () => new URLSearchParams(window.location.search).get("regression") === "legacy";
 
 class WorldErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   state = { failed: false };
@@ -26,7 +29,9 @@ export function WorldCanvas({ onSceneReady, introReady }: { onSceneReady: () => 
   const mobile = useWorldQuality();
   const webglSupported = useSyncExternalStore(noSubscribe, canUseWebGL, () => true);
   const stressMode = useSyncExternalStore(noSubscribe, isStressMode, () => false);
-  const sceneListings = useMemo(() => getSceneListings(stressMode), [stressMode]);
+  const architectureFixture = useSyncExternalStore(noSubscribe, isArchitectureFixture, () => false);
+  const legacyFixture = useSyncExternalStore(noSubscribe, isLegacyFixture, () => false);
+  const sceneListings = useMemo(() => architectureFixture && !stressMode ? phase3Listings : getSceneListings(stressMode,legacyFixture), [stressMode, architectureFixture,legacyFixture]);
   useEffect(() => { if (!webglSupported) onSceneReady(); }, [webglSupported, onSceneReady]);
 
   return (

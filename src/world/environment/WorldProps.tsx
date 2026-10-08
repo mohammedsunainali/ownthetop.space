@@ -7,6 +7,8 @@ import { worldMaterials } from "@/world/materials/world-materials";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { districtLayout, routePoint } from "@/world/environment/district-layout";
 import { environmentTokens } from "@/world/environment/environment-tokens";
+import { towerVisuals } from "@/world/tower/tower-layout";
+const outsideTowerFootprints = ({x,z}:{x:number;z:number}) => Object.values(towerVisuals).every(tower=>Math.abs(x-tower.position[0])>4.2 || Math.abs(z-tower.position[2])>3.1);
 
 const treeGeometry = new IcosahedronGeometry(0.65, 1);
 const trunkGeometry = new CylinderGeometry(0.07, 0.1, 0.9, 6);
@@ -25,13 +27,13 @@ const treePlaces = Array.from({ length: 56 }, (_, i) => {
   const angle = cluster * Math.PI / 4 + (i % 7 - 3) * 0.035;
   const radius = 0.72 + (i * 7 % 5) * 0.05;
   return { x: Math.cos(angle) * districtLayout.green.x * radius, z: Math.sin(angle) * districtLayout.green.z * radius };
-});
+}).filter(outsideTowerFootprints);
 const cloudPlaces = Array.from({ length: 8 }, (_, i) => ({ x: -18 + i * 5.2, y: 11 + i % 3 * 1.7, z: -13 - i % 2 * 5 }));
 const shrubPlaces = Array.from({ length: 64 }, (_, i) => {
   const phase = (Math.floor(i / 4) + (i % 4) * 0.014) / 16;
   const [x, z] = routePoint(districtLayout.green.x * 0.87, districtLayout.green.z * 0.87, phase);
   return { x, z };
-});
+}).filter(outsideTowerFootprints);
 const palmPlaces = Array.from({ length: 8 }, (_, i) => ({ x: (i % 4 - 1.5) * 3.3, z: i < 4 ? 10.1 : -10.1 }));
 const lampPlaces = [0.125, 0.375, 0.625, 0.875].map((phase) => {
   const [x, z] = routePoint(districtLayout.walkway.x * 1.09, districtLayout.walkway.z * 1.09, phase);
@@ -112,10 +114,12 @@ export function WorldProps({ mobile, night }: { mobile: boolean; night: boolean 
     <instancedMesh ref={lampPoles} args={[lampPoleGeometry, lampPoleMaterial, lampPlaces.length]} frustumCulled />
     <instancedMesh ref={lampHeads} args={[lampHeadGeometry, lampHeadMaterial, lampPlaces.length]} frustumCulled />
     {lampPlaces.map((item, index) => <pointLight key={index} position={[item.x, 2.05, item.z]} color={environmentTokens.lampWarm} intensity={night ? 14 : 0} distance={8} decay={2} />)}
-    <mesh position={[-10.8, 1.1, 2.2]} material={worldMaterials.sign}><boxGeometry args={[1.8, 1, 0.12]} /></mesh>
-    <mesh position={[-10.8, 1.1, 2.28]} material={worldMaterials.podium}><planeGeometry args={[1.7, 0.44]} /></mesh>
-    <mesh position={[-10.8, 1.1, 2.285]}><planeGeometry args={[1.62, 0.35]} /><meshBasicMaterial map={logoTexture} transparent depthWrite={false} /></mesh>
-    <mesh position={[-10.8, 0.52, 2.2]} material={worldMaterials.frame}><boxGeometry args={[0.08, 1.1, 0.08]} /></mesh>
-    <pointLight position={[-10.8, 1.3, 2.5]} intensity={night ? 0.8 : 0} color={tokens.color.brand.blue} distance={3} />
+    <group position={[-13.2, 0, 3.3]}>
+      <mesh position={[0, 1.1, 0]} material={worldMaterials.sign}><boxGeometry args={[1.8, 1, 0.12]} /></mesh>
+      <mesh position={[0, 1.1, 0.08]} material={worldMaterials.podium}><planeGeometry args={[1.7, 0.44]} /></mesh>
+      <mesh position={[0, 1.1, 0.085]}><planeGeometry args={[1.62, 0.35]} /><meshBasicMaterial map={logoTexture} transparent depthWrite={false} /></mesh>
+      <mesh position={[0, 0.52, 0]} material={worldMaterials.frame}><boxGeometry args={[0.08, 1.1, 0.08]} /></mesh>
+      <pointLight position={[0, 1.3, 0.3]} intensity={night ? 0.8 : 0} color={tokens.color.brand.blue} distance={3} />
+    </group>
   </>;
 }

@@ -281,6 +281,7 @@ button { cursor: pointer; }
 .floor-preview-status strong { color: var(--color-brand-summit-gold); white-space: nowrap; }
 .floor-preview-status button { min-height: 36px; padding: 0 9px; border: 1px solid var(--color-brand-white); border-radius: 8px; color: var(--color-brand-white); background: transparent; white-space: nowrap; }
 .floor-travel-button { display: none; }
+.app-shell--focus .floor-travel-button { display: block; }
 @media (max-width: 900px) {
   .app-shell { min-height: 100dvh; }
   .world-section { min-height: 100dvh; }
@@ -395,7 +396,7 @@ button { cursor: pointer; }
 .profile-details dd { min-width: 0; margin: 0; color: var(--ink); overflow-wrap: anywhere; }
 @media (max-width: 900px) { .profile-drawer--detail { right: 116px; width: min(360px, calc(100vw - 136px)); } }
 @media (max-width: 600px) {
-  .profile-drawer--detail { left: 7px; right: 7px; bottom: 66px; width: auto; max-height: min(58dvh, 490px); border-radius: 20px; }
+  .profile-drawer--detail { left: 7px; right: 7px; bottom: 66px; width: auto; max-height: min(42dvh, 360px); border-radius: 20px; }
   .profile-drawer--detail .profile-drawer__body { padding: 18px; }
   .profile-drawer--detail .profile-mark { width: 56px; height: 56px; flex-basis: 56px; }
   .profile-drawer--detail h2 { margin-top: 14px; font-size: 1.5rem; }

@@ -1,18 +1,20 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { allListings, companies, people, products } from "@/mock";
+import { allListings, listingsByTower, regressionListingsByTower } from "@/mock";
 import { getArchitecturalHeightFeet } from "@/world/tower/tower-layout";
 
 export function MetricsPanel() {
   const stressMode = useSyncExternalStore(() => () => {}, () => process.env.NODE_ENV === "development" && new URLSearchParams(window.location.search).get("stressFloors") === "220", () => false);
-  const companyCount = stressMode ? 220 : companies.length;
+  const legacy = useSyncExternalStore(() => () => {}, () => new URLSearchParams(window.location.search).get("regression") === "legacy", () => false);
+  const inventory=legacy?regressionListingsByTower:listingsByTower;
+  const companyCount = stressMode ? 220 : inventory.companies.length;
   const metrics = [
-    { value: stressMode ? companyCount : allListings.length, unit: "", label: stressMode ? "synthetic floors" : "claimed floors" },
+    { value: stressMode ? companyCount : legacy?90:allListings.length, unit: "", label: "synthetic floors" },
     { value: getArchitecturalHeightFeet(companyCount).toLocaleString("en-US"), unit: "ft", label: "total tower height" },
     { value: companyCount, unit: "", label: stressMode ? "synthetic companies" : "companies" },
-    { value: stressMode ? 0 : products.length, unit: "", label: "products" },
-    { value: stressMode ? 0 : people.length, unit: "", label: "people" },
+    { value: stressMode ? 0 : inventory.products.length, unit: "", label: "products" },
+    { value: stressMode ? 0 : inventory.people.length, unit: "", label: "people" },
   ];
 
   return (

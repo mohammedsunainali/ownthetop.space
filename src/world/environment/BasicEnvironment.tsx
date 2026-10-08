@@ -9,6 +9,7 @@ import { AircraftSystem } from "@/world/aircraft/AircraftSystem";
 import { applyTimeToWorldMaterials } from "@/world/materials/world-materials";
 import { scheduledWorldTime } from "@/state/world-store";
 import { environmentTokens } from "@/world/environment/environment-tokens";
+import { getTowerHeight } from "@/world/tower/tower-layout";
 
 export function BasicEnvironment({ tallestFloorCount, companiesFloorCount, sideTowerFloorCount }: { tallestFloorCount: number; companiesFloorCount: number; sideTowerFloorCount: number }) {
   const timeMode = useWorldStore((state) => state.worldTime);
@@ -27,7 +28,7 @@ export function BasicEnvironment({ tallestFloorCount, companiesFloorCount, sideT
   useEffect(() => { applyTimeToWorldMaterials(time); }, [time]);
   return <>
     <color attach="background" args={[palette.skyDeep]} />
-    <fog attach="fog" args={[palette.horizon, tallestFloorCount > 100 ? 600 : tallestFloorCount > 40 ? 240 : 27, tallestFloorCount > 100 ? 1100 : tallestFloorCount > 40 ? 470 : 74]} />
+    <fog attach="fog" args={[palette.horizon, Math.max(140,getTowerHeight(tallestFloorCount)*3),Math.max(270,getTowerHeight(tallestFloorCount)*5)]} />
     <ambientLight intensity={night ? 0.42 : 0.82} />
     <hemisphereLight args={[palette.skyMid, tokens.color.brand.navy, night ? 0.45 : 1.1]} />
     <directionalLight position={time === "sunset" ? [-12, 11, 6] : [11, 18, 12]} intensity={night ? 0.85 : time === "sunset" ? 1.7 : 2.2} color={time === "sunset" ? tokens.color.brand.peach : tokens.color.brand.white} castShadow={!mobile} shadow-mapSize={mobile ? [512, 512] : [1024, 1024]} />

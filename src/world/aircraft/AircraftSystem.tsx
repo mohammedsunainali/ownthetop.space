@@ -5,6 +5,7 @@ import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { worldMaterials } from "@/world/materials/world-materials";
 import { getCrownHeight, getHelipadWorldPosition, getTowerHeight } from "@/world/tower/tower-layout";
 import { tokens } from "@/design/tokens";
+import { useWorldStore } from "@/state/world-store";
 
 type AircraftKind = "plane" | "helicopter" | "drone";
 export const aircraftConfigurations: readonly { kind: AircraftKind; offset: number; altitude: number; radius: number }[] = [
@@ -16,8 +17,8 @@ export const aircraftConfigurations: readonly { kind: AircraftKind; offset: numb
 ];
 
 export type HelicopterPhase = "CRUISE" | "APPROACH" | "ALIGN" | "HOVER" | "DESCEND" | "LAND" | "IDLE" | "ASCEND" | "DEPART";
-export function helicopterPose(seconds: number, floorCount: number): { phase: HelicopterPhase; position: Vector3 } {
-  const [padX, padY, padZ] = getHelipadWorldPosition(floorCount);
+export function helicopterPose(seconds: number, floorCount: number, exploded=false): { phase: HelicopterPhase; position: Vector3 } {
+  const [padX, padY, padZ] = getHelipadWorldPosition(floorCount,exploded);
   const segments: { phase: HelicopterPhase; duration: number; from: [number, number, number]; to: [number, number, number] }[] = [
     { phase: "CRUISE", duration: 4, from: [12, padY + 3, -6], to: [8, padY + 2.2, 5] },
     { phase: "APPROACH", duration: 4, from: [8, padY + 2.2, 5], to: [3, padY + 1.5, padZ + 2] },
@@ -27,7 +28,7 @@ export function helicopterPose(seconds: number, floorCount: number): { phase: He
     { phase: "LAND", duration: 1, from: [padX, padY, padZ], to: [padX, padY, padZ] },
     { phase: "IDLE", duration: 3, from: [padX, padY, padZ], to: [padX, padY, padZ] },
     { phase: "ASCEND", duration: 3, from: [padX, padY, padZ], to: [padX, padY + 1.4, padZ] },
-    { phase: "DEPART", duration: 6, from: [padX, padY + 1.4, padZ], to: [-11, padY + 3.5, -8] },
+    { phase: "DEPART", duration: 6, from: [padX, padY + 1.4, padZ], to: [12, padY + 3, -6] },
   ];
   const cycle = segments.reduce((sum, item) => sum + item.duration, 0);
   let elapsed = ((seconds % cycle) + cycle) % cycle;
@@ -71,19 +72,20 @@ function AircraftShape({ kind, index, rotorRef, bannerRef }: { kind: AircraftKin
 }
 
 export function AircraftSystem({ mobile, companiesFloorCount, sideTowerFloorCount }: { mobile: boolean; companiesFloorCount: number; sideTowerFloorCount: number }) {
+  const exploded=useWorldStore(state=>state.floorsExploded);
   const reducedMotion = useReducedMotion();
   const refs = useRef<(Group | null)[]>([]);
   const rotor = useRef<Group | null>(null);
   const banners = useRef<(Group | null)[]>([]);
   const curves = useMemo(() => aircraftConfigurations.map((item, index) => {
-    const altitude = item.kind === "drone" ? Math.max(item.altitude, getTowerHeight(sideTowerFloorCount) + getCrownHeight(sideTowerFloorCount) + 2) : item.altitude;
+    const altitude = Math.max(item.altitude, getTowerHeight(Math.max(companiesFloorCount,sideTowerFloorCount),exploded) + getCrownHeight(companiesFloorCount) + 3 + index);
     return new CatmullRomCurve3([
       new Vector3(item.radius, altitude, -3 + index),
       new Vector3(2, altitude + 0.4, item.radius),
       new Vector3(-item.radius, altitude, 1 - index),
       new Vector3(-2, altitude - 0.3, -item.radius),
     ], true);
-  }), [sideTowerFloorCount]);
+  }), [sideTowerFloorCount,companiesFloorCount,exploded]);
   useFrame(({ clock }) => {
     if (reducedMotion) return;
     if (rotor.current) rotor.current.rotation.y = clock.elapsedTime * 13;
@@ -91,7 +93,7 @@ export function AircraftSystem({ mobile, companiesFloorCount, sideTowerFloorCoun
     refs.current.forEach((group, index) => {
       if (!group) return;
       if (index === 2) {
-        const pose = helicopterPose(clock.elapsedTime, companiesFloorCount);
+        const pose = helicopterPose(clock.elapsedTime, companiesFloorCount,exploded);
         group.position.copy(pose.position);
         group.rotation.y = pose.phase === "DEPART" ? -0.8 : pose.phase === "CRUISE" ? 1.2 : 0;
         return;

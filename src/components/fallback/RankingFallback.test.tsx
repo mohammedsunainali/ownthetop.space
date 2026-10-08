@@ -6,10 +6,10 @@ import { useWorldStore } from "@/state/world-store";
 
 describe("2D ranking fallback", () => {
   beforeEach(() => useWorldStore.setState({ selectedListingId: null, selectedTowerId: null, cameraMode: "overview" }));
-  it("shows all 90 ranked listings in three towers and opens the matching profile", () => {
+  it("shows all 52 active synthetic listings in three towers and opens the matching profile", () => {
     render(<><RankingFallback /><ProfileDrawer /></>);
     const fallback = screen.getByLabelText("2D ranking fallback");
-    expect(fallback.querySelectorAll(".fallback-tower button")).toHaveLength(90);
+    expect(fallback.querySelectorAll(".fallback-tower button")).toHaveLength(52);
     const products = screen.getByLabelText("Products rankings");
     fireEvent.click(products.querySelector("button")!);
     expect(useWorldStore.getState().selectedTowerId).toBe("products");

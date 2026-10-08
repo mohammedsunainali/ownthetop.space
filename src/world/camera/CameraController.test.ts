@@ -14,14 +14,15 @@ describe("tower camera travel", () => {
       const localY = getFloorY(1, towerId === "companies" ? 50 : 20);
       expect(towerCameraWorldY(towerId, localY)).toBeCloseTo(towerVisuals[towerId].position[1] + localY * towerVisuals[towerId].scale);
     }
-    expect(towerCameraWorldY("people", getFloorY(1, 20))).toBeLessThan(getFloorY(1, 20));
+    expect(towerCameraWorldY("people", getFloorY(1, 20))).toBe(getFloorY(1, 20));
   });
   it("skips cinematic movement for reduced motion", () => {
     expect(shouldRunIntro(true)).toBe(false);
     expect(shouldRunIntro(false)).toBe(true);
   });
   it("separates focused vertical travel from trackpad pinch zoom", () => {
-    expect(focusedWheelAction({ ctrlKey: false, metaKey: false })).toBe("travel");
+    expect(focusedWheelAction({ ctrlKey: false, metaKey: false })).toBe("zoom");
+    expect(focusedWheelAction({ ctrlKey: false, metaKey: false,shiftKey:true })).toBe("travel");
     expect(focusedWheelAction({ ctrlKey: true, metaKey: false })).toBe("zoom");
     expect(focusedWheelAction({ ctrlKey: false, metaKey: true })).toBe("zoom");
   });

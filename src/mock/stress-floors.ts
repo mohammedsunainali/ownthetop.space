@@ -1,5 +1,5 @@
 import type { Listing } from "@/domain/listing";
-import { listingsByTower } from "@/mock";
+import { listingsByTower, regressionListingsByTower } from "@/mock";
 
 /** Development-only visual load; these are never represented as real claimed listings. */
 export function createStressListings(count = 220): readonly Listing[] {
@@ -25,6 +25,6 @@ export function createStressListings(count = 220): readonly Listing[] {
   });
 }
 
-export function getSceneListings(stress: boolean) {
-  return stress ? { companies: createStressListings(), products: [], people: [] } : listingsByTower;
+export function getSceneListings(stress: boolean, legacy=false) {
+  return stress ? { companies: createStressListings(), products: [], people: [] } : legacy ? regressionListingsByTower : listingsByTower;
 }

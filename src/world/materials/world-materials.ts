@@ -10,6 +10,8 @@ const glassByAccent = {
 } satisfies Record<TowerVisualConfig["accent"], string>;
 
 export const worldMaterials = {
+  rectangularGlass: new MeshStandardMaterial({color:"#205678",metalness:0.48,roughness:0.27,emissive:"#174f79",emissiveIntensity:0.07}),
+  windowLight: new MeshStandardMaterial({color:"#6d9aac",emissive:"#f5db9e",emissiveIntensity:0.03,roughness:0.3}),
   podium: new MeshStandardMaterial({ color: tokens.material3d.body.color, roughness: tokens.material3d.body.roughness }),
   frame: new MeshStandardMaterial({ color: brand.navy, metalness: 0.55, roughness: 0.3 }),
   facade: new MeshStandardMaterial({ color: brand.white, metalness: 0.48, roughness: 0.23 }),
@@ -28,6 +30,8 @@ export const worldMaterials = {
 };
 
 export function applyTimeToWorldMaterials(time: "day" | "sunset" | "night") {
+  worldMaterials.rectangularGlass.emissiveIntensity=time==="night"?0.24:time==="sunset"?0.12:0.07;
+  worldMaterials.windowLight.emissiveIntensity=time==="night"?0.9:time==="sunset"?0.3:0.03;
   for (const material of Object.values(worldMaterials.floor)) {
     material.emissive.set(brand.blue);
     material.emissiveIntensity = time === "night" ? 0.18 : time === "sunset" ? 0.045 : 0;

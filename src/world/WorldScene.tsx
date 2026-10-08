@@ -29,7 +29,7 @@ export function WorldScene({ listingsByTower, onSceneReady, introReady }: { list
       ))}
       <CameraController selectedListing={selectedListing} floorCounts={floorCounts} introReady={introReady} />
       <SceneReadySignal onReady={onSceneReady} />
-      {process.env.NODE_ENV === "development" ? <RendererDiagnostics /> : null}
+      {process.env.NODE_ENV === "development" || typeof window!=="undefined" && new URLSearchParams(window.location.search).get("diagnostics")==="1" ? <RendererDiagnostics /> : null}
     </>
   );
 }

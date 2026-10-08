@@ -2,7 +2,7 @@
 
 import { useWorldStore } from "@/state/world-store";
 import { useEffect, useRef } from "react";
-import { listingsByTower } from "@/mock";
+import { listingsByTower, regressionListingsByTower } from "@/mock";
 import { FLOOR_PITCH, getCrownHeight, getFloorY, getTowerHeight } from "@/world/tower/tower-layout";
 
 export function WorldControls() {
@@ -21,13 +21,16 @@ export function WorldControls() {
   const toggleSound = useWorldStore((state) => state.toggleSound);
   const cameraMode = useWorldStore((state) => state.cameraMode);
   const selectedTowerId = useWorldStore((state) => state.selectedTowerId);
+  const selectedListingId = useWorldStore((state) => state.selectedListingId);
   const travelTowerBy = useWorldStore((state) => state.travelTowerBy);
   const travelOneFloor = (direction: number) => {
     const id = selectedTowerId ?? "companies";
     const stressMode = process.env.NODE_ENV === "development" && typeof window !== "undefined" && new URLSearchParams(window.location.search).get("stressFloors") === "220";
-    const count = stressMode ? (id === "companies" ? 220 : 0) : listingsByTower[id].length;
+    const inventory=typeof window!=="undefined"&&new URLSearchParams(window.location.search).get("regression")==="legacy"?regressionListingsByTower:listingsByTower;
+    const count = stressMode ? (id === "companies" ? 220 : 0) : inventory[id].length;
     if (count === 0) return;
-    travelTowerBy(direction * FLOOR_PITCH, 1.1, getTowerHeight(count) + getCrownHeight(count) - 0.7, getFloorY(1, count));
+    const selected=inventory[id].find(item=>item.id===selectedListingId);
+    travelTowerBy(direction * (FLOOR_PITCH+(floorsExploded?0.12:0)), getFloorY(count,count,floorsExploded), getTowerHeight(count,floorsExploded) + getCrownHeight(count) - 0.7, getFloorY(selected?.rank??1, count,floorsExploded));
   };
   const audio = useRef<AudioContext | null>(null);
   useEffect(() => () => { void audio.current?.close(); }, []);

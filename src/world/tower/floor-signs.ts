@@ -2,7 +2,8 @@ import { CanvasTexture, MeshStandardMaterial, SRGBColorSpace } from "three";
 import type { Listing } from "@/domain/listing";
 import { formatMinorUnits } from "@/domain/money";
 import { tokens } from "@/design/tokens";
-import { FLOOR_HEIGHT } from "@/world/tower/tower-layout";
+// Retained Phase 2 media regression geometry; production uses rectangular-layout.
+const FLOOR_HEIGHT = 0.62;
 
 export type FloorMediaRole = "nose" | "wing" | "logo";
 export type FloorFace = "front" | "left" | "right";

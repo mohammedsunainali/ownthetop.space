@@ -1,9 +1,10 @@
 /** World-space route dimensions shared by the road/path meshes and moving life. */
 export const districtLayout = {
-  road: { x: 13.15, z: 8.65, width: 0.92 },
-  walkway: { x: 10.75, z: 6.45, width: 0.48 },
-  green: { x: 11.65, z: 7.25 },
-  plaza: { x: 8.4, z: 4.45 },
+  // Same living-city routes; widened only to clear the rectangular footprints.
+  road: { x: 16, z: 8.65, width: 0.92 },
+  walkway: { x: 14, z: 6.45, width: 0.48 },
+  green: { x: 15, z: 7.25 },
+  plaza: { x: 12.4, z: 4.45 },
 } as const;
 
 export function routePoint(xRadius: number, zRadius: number, phase: number): [number, number] {

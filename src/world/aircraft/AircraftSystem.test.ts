@@ -4,6 +4,9 @@ import { helicopterPose } from "@/world/aircraft/AircraftSystem";
 import { getHelipadWorldPosition, getTowerHeight } from "@/world/tower/tower-layout";
 
 describe("deterministic helicopter loop", () => {
+  it("joins departure to cruise without a cycle teleport",()=>{
+    expect(helicopterPose(29-0.0001,24).position.distanceTo(helicopterPose(29,24).position)).toBeLessThan(0.001);
+  });
   it("approaches, lands on the connected pad, and departs", () => {
     expect(helicopterPose(5, 20).phase).toBe("APPROACH");
     expect(helicopterPose(12, 20).phase).toBe("HOVER");
