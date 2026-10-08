@@ -52,17 +52,11 @@ export function WorldControls() {
 
   return (
     <nav className="world-controls" aria-label="Scene controls">
-      <button type="button" onClick={resetWorld}>Reset</button>
-      {cameraMode !== "overview" ? <><button className="floor-travel-button" type="button" onClick={() => travelOneFloor(1)} aria-label="Travel one floor up">↑ Floor</button><button className="floor-travel-button" type="button" onClick={() => travelOneFloor(-1)} aria-label="Travel one floor down">↓ Floor</button></> : null}
-      <button type="button" onClick={() => zoomBy(-0.14)} aria-label="Zoom in">＋</button>
-      <button type="button" onClick={() => zoomBy(0.14)} aria-label="Zoom out">−</button>
-      <button type="button" onClick={rotateWorld}>Rotate</button>
-      <button type="button" onClick={focusTop}>Top floor</button>
-      <button type="button" onClick={focusRooftop}>Crown</button>
-      <button type="button" aria-pressed={rulerVisible} onClick={toggleRuler}>Height</button>
-      <button type="button" aria-pressed={soundEnabled} onClick={handleSound}>{soundEnabled ? "Sound on" : "Sound off"}</button>
-      <button type="button" aria-pressed={floorsExploded} onClick={toggleFloorsExploded}>Floors</button>
-      <label className="time-control">Sky <select aria-label="Sky time" value={worldTime} onChange={(event) => setWorldTime(event.target.value as "auto" | "day" | "sunset" | "night")}><option value="auto">Auto</option><option value="day">Day</option><option value="sunset">Sunset</option><option value="night">Night</option></select></label>
+      <div className="world-controls__group"><span>View</span><button type="button" onClick={resetWorld}>Reset</button></div>
+      <div className="world-controls__group"><span>Zoom</span><div className="world-controls__pair"><button type="button" onClick={() => zoomBy(-0.14)} aria-label="Zoom in">＋</button><button type="button" onClick={() => zoomBy(0.14)} aria-label="Zoom out">−</button></div></div>
+      <div className="world-controls__group"><span>Navigate</span><button type="button" onClick={rotateWorld}>Rotate</button><button type="button" onClick={focusTop}>Top floor</button><button type="button" onClick={focusRooftop}>Crown</button>{cameraMode !== "overview" ? <><button className="floor-travel-button" type="button" onClick={() => travelOneFloor(1)} aria-label="Travel one floor up">↑ Floor</button><button className="floor-travel-button" type="button" onClick={() => travelOneFloor(-1)} aria-label="Travel one floor down">↓ Floor</button></> : null}</div>
+      <div className="world-controls__group"><span>Display</span><button type="button" aria-pressed={rulerVisible} onClick={toggleRuler}>Height</button><button type="button" aria-pressed={soundEnabled} onClick={handleSound}>{soundEnabled ? "Sound on" : "Sound off"}</button><button type="button" aria-pressed={floorsExploded} onClick={toggleFloorsExploded}>Floors</button></div>
+      <div className="world-controls__group"><span>Environment</span><label className="time-control">Sky <select aria-label="Sky time" value={worldTime} onChange={(event) => setWorldTime(event.target.value as "auto" | "day" | "sunset" | "night")}><option value="auto">Auto</option><option value="day">Day</option><option value="sunset">Sunset</option><option value="night">Night</option></select></label></div>
     </nav>
   );
 }

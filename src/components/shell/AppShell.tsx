@@ -9,13 +9,14 @@ import { WorldControls } from "@/components/controls/WorldControls";
 import { ProfileDrawer } from "@/components/profile/ProfileDrawer";
 import { WorldCanvas } from "@/world/WorldCanvas";
 import { WorldLoadingOverlay } from "@/components/shell/WorldLoadingOverlay";
-import { useWorldStore } from "@/state/world-store";
+import { scheduledWorldTime, useWorldStore } from "@/state/world-store";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 export function AppShell() {
   const [sceneReady, setSceneReady] = useState(false);
   const [introReady, setIntroReady] = useState(false);
   const [arrivalDone, setArrivalDone] = useState(false);
+  const [mobileClaimOpen, setMobileClaimOpen] = useState(false);
   const reducedMotion = useReducedMotion();
   const completeLoading = useCallback(() => setIntroReady(true), []);
   useEffect(() => {
@@ -24,13 +25,15 @@ export function AppShell() {
     return () => window.clearTimeout(timer);
   }, [introReady, reducedMotion]);
   const cameraMode = useWorldStore((state) => state.cameraMode);
+  const worldTime = useWorldStore((state) => state.worldTime);
   const hudRevealed = useWorldStore((state) => state.hudRevealed);
   const revealHud = useWorldStore((state) => state.revealHud);
   const preview = useWorldStore((state) => state.floorPreview);
   const clearPreview = useWorldStore((state) => state.clearFloorPreview);
   const focused = cameraMode !== "overview";
+  const nightHud = worldTime === "night" || worldTime === "auto" && scheduledWorldTime(new Date().getHours()) === "night";
   return (
-    <main className={`app-shell${focused && !hudRevealed ? " app-shell--focus" : ""}${!arrivalDone ? " app-shell--arriving" : ""}`}>
+    <main className={`app-shell${focused && !hudRevealed ? " app-shell--focus" : ""}${!arrivalDone ? " app-shell--arriving" : ""}${nightHud ? " app-shell--night" : ""}${mobileClaimOpen ? " app-shell--mobile-claim-open" : ""}`}>
       <section className="world-section" id="top" aria-label="OwnTheTop skyline">
         <WorldCanvas onSceneReady={() => setSceneReady(true)} introReady={introReady} />
         {!introReady ? <WorldLoadingOverlay sceneReady={sceneReady} onComplete={completeLoading} /> : null}
@@ -39,7 +42,8 @@ export function AppShell() {
           <p>Claim your space. Own the top.</p>
           <span className="phase-badge">Interactive skyline · demo</span>
         </header>
-        <div className="world-hero"><ClaimPanel /></div>
+        {!focused ? <button type="button" className="mobile-claim-toggle" onClick={() => setMobileClaimOpen((open) => !open)} aria-expanded={mobileClaimOpen} aria-controls="world-claim-panel">{mobileClaimOpen ? "Explore world" : "Claim a floor"}</button> : null}
+        <div className="world-hero" id="world-claim-panel"><ClaimPanel /></div>
         {focused && !hudRevealed ? <button type="button" className="hud-reveal" onClick={revealHud}>Show claim controls</button> : null}
         <MetricsPanel />
         <WorldControls />

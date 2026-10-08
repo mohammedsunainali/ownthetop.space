@@ -1,4 +1,4 @@
-import { CanvasTexture, SRGBColorSpace } from "three";
+import { CanvasTexture, MeshStandardMaterial, SRGBColorSpace } from "three";
 import type { Listing } from "@/domain/listing";
 import { formatMinorUnits } from "@/domain/money";
 import { tokens } from "@/design/tokens";
@@ -9,16 +9,38 @@ export type FloorFace = "front" | "left" | "right";
 export type FloorMediaContent = Pick<Listing, "id" | "name" | "description" | "logoUrl" | "rank" | "totalPaidMinor" | "hiring">;
 export const MAX_CACHED_SIGNS = 56;
 export const MAX_FOCUSED_SIGNS = 9;
+export const SIGN_FONT_FAMILY = "Montserrat, system-ui, sans-serif";
+let hiringSignMaterial: MeshStandardMaterial | null = null;
+
+export function getHiringSignMaterial(): MeshStandardMaterial {
+  if (hiringSignMaterial) return hiringSignMaterial;
+  const canvas = document.createElement("canvas"); canvas.width = 512; canvas.height = 152;
+  const context = canvas.getContext("2d");
+  const paint = () => {
+    if (!context) return;
+    context.fillStyle = tokens.color.brand.teal;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = tokens.color.brand.white;
+    context.textAlign = "center"; context.textBaseline = "middle";
+    context.font = `800 86px ${SIGN_FONT_FAMILY}`;
+    context.fillText("HIRING", canvas.width / 2, canvas.height / 2, canvas.width * 0.84);
+  };
+  paint();
+  const texture = new CanvasTexture(canvas); texture.colorSpace = SRGBColorSpace; texture.anisotropy = 4;
+  hiringSignMaterial = new MeshStandardMaterial({ map: texture, color: tokens.color.brand.white, roughness: 0.46, metalness: 0.08, emissive: tokens.color.brand.teal, emissiveIntensity: 0.08 });
+  if (document.fonts) void document.fonts.load("800 86px Montserrat").then(() => { paint(); texture.needsUpdate = true; }).catch(() => { /* Keep fallback lettering visible. */ });
+  return hiringSignMaterial;
+}
 
 /** Ratios belong to advertising, never to the approved wing mesh. */
 export const FLOOR_ADVERTISING = {
   facadeHeightRatio: 0.76,
   horizontalInsetRatio: 0.04,
-  centerSeamInsetRatio: 0.08,
+  centerSeamInsetRatio: 0.12,
   surfaceOffset: 0.010,
   noseLogoSizeRatio: 0.55,
-  logoSizeRatio: 0.42,
-  logoInternalPaddingRatio: 0.18,
+  logoSizeRatio: 0.50,
+  logoInternalPaddingRatio: 0.10,
   logoDepth: 0.014,
   selectionEdge: 0.014,
   wingTextureWidth: 1536,
@@ -70,6 +92,14 @@ export function floorContentScale(face: FloorFace, usableWidth: number): number 
   return Math.max(0.8, Math.min(1, usableWidth / referenceWidth));
 }
 
+/** Canvas height rises as a wing tapers; counter that pixel-density change
+ * before applying the bounded content reduction. */
+export function wingTypeHeight(face: FloorFace, footprint: number): number {
+  const bay = floorFacadeDimensions(face, footprint);
+  const wideBay = floorFacadeDimensions(face, 1);
+  return floorSignCanvasHeight("wing", footprint, face) * (bay.width / wideBay.width) * floorContentScale(face, bay.width);
+}
+
 export function floorFaceListingId(listing: Pick<FloorMediaContent, "id">, face: FloorFacadeRole): string {
   void face;
   return listing.id;
@@ -93,11 +123,11 @@ export function initialsForName(name: string): string { return name.trim().split
 export function fitText(context: Pick<CanvasRenderingContext2D, "font" | "measureText">, value: string, maxWidth: number, preferredSize: number, minimumSize: number, weight = 800): { text: string; size: number; truncated: boolean } {
   let size = preferredSize;
   while (size > minimumSize) {
-    context.font = `${weight} ${size}px Inter, system-ui, sans-serif`;
+    context.font = `${weight} ${size}px ${SIGN_FONT_FAMILY}`;
     if (context.measureText(value).width <= maxWidth) return { text: value, size, truncated: false };
     size = Math.max(minimumSize, size - 2);
   }
-  context.font = `${weight} ${minimumSize}px Inter, system-ui, sans-serif`;
+  context.font = `${weight} ${minimumSize}px ${SIGN_FONT_FAMILY}`;
   if (context.measureText(value).width <= maxWidth) return { text: value, size: minimumSize, truncated: false };
   let fitted = value;
   while (fitted.length > 1 && context.measureText(`${fitted}…`).width > maxWidth) fitted = fitted.slice(0, -1);
@@ -105,15 +135,15 @@ export function fitText(context: Pick<CanvasRenderingContext2D, "font" | "measur
 }
 
 /** Use two balanced lines only when a normal one-line name would become tiny. */
-export function fitPrimaryName(context: Pick<CanvasRenderingContext2D, "font" | "measureText">, value: string, maxWidth: number) {
-  const single = fitText(context, value, maxWidth, 112, 62);
-  if (single.size >= 90 && !single.truncated) return { lines: [single], multiline: false };
+export function fitPrimaryName(context: Pick<CanvasRenderingContext2D, "font" | "measureText">, value: string, maxWidth: number, preferredSize = 112, minimumSize = 62) {
+  const single = fitText(context, value, maxWidth, preferredSize, minimumSize);
+  if (single.size >= preferredSize * 0.82 && !single.truncated) return { lines: [single], multiline: false };
   const words = value.trim().split(/\s+/);
   if (words.length < 2) return { lines: [single], multiline: false };
   let best: { lines: ReturnType<typeof fitText>[]; score: number } | null = null;
   for (let split = 1; split < words.length; split++) {
-    const first = fitText(context, words.slice(0, split).join(" "), maxWidth, 112, 70);
-    const second = fitText(context, words.slice(split).join(" "), maxWidth, 112, 70);
+    const first = fitText(context, words.slice(0, split).join(" "), maxWidth, preferredSize, minimumSize);
+    const second = fitText(context, words.slice(split).join(" "), maxWidth, preferredSize, minimumSize);
     if (first.truncated || second.truncated) continue;
     const score = Math.min(first.size, second.size) * 10 - Math.abs(first.size - second.size);
     if (!best || score > best.score) best = { lines: [first, second], score };
@@ -127,14 +157,49 @@ function drawLogo(context: CanvasRenderingContext2D, content: FloorMediaContent,
   context.beginPath(); context.roundRect(0, 0, size, size, size * 0.18); context.fill();
   const padding = size * FLOOR_ADVERTISING.logoInternalPaddingRatio;
   if (logo) {
-    const width = logo.naturalWidth || 1, height = logo.naturalHeight || 1;
+    const source = logoArtworkCrop(logo);
+    const width = source.width, height = source.height;
     const scale = Math.min((size - padding * 2) / width, (size - padding * 2) / height);
-    context.drawImage(logo, (size - width * scale) / 2, (size - height * scale) / 2, width * scale, height * scale);
+    context.drawImage(logo, source.x, source.y, width, height, (size - width * scale) / 2, (size - height * scale) / 2, width * scale, height * scale);
   } else {
     context.textAlign = "center"; context.textBaseline = "middle";
-    context.fillStyle = tokens.color.brand.navy; context.font = "800 112px Inter, system-ui, sans-serif";
+    context.fillStyle = tokens.color.brand.navy; context.font = `800 112px ${SIGN_FONT_FAMILY}`;
     context.fillText(initialsForName(content.name), size / 2, size / 2, size - padding * 2);
   }
+}
+
+/** Normalize only transparent or near-white asset margins at display time.
+ * Opaque dark logo backgrounds remain part of the supplied artwork. */
+export function logoArtworkCrop(logo: HTMLImageElement): { x: number; y: number; width: number; height: number } {
+  const sourceWidth = logo.naturalWidth || 1, sourceHeight = logo.naturalHeight || 1;
+  const full = { x: 0, y: 0, width: sourceWidth, height: sourceHeight };
+  try {
+    const sample = document.createElement("canvas");
+    const ratio = Math.min(1, 256 / Math.max(sourceWidth, sourceHeight));
+    sample.width = Math.max(1, Math.round(sourceWidth * ratio));
+    sample.height = Math.max(1, Math.round(sourceHeight * ratio));
+    const context = sample.getContext("2d", { willReadFrequently: true });
+    if (!context) return full;
+    context.drawImage(logo, 0, 0, sample.width, sample.height);
+    const pixels = context.getImageData(0, 0, sample.width, sample.height).data;
+    const corner = (x: number, y: number) => {
+      const i = (y * sample.width + x) * 4;
+      return pixels[i + 3] > 240 && pixels[i] > 240 && pixels[i + 1] > 240 && pixels[i + 2] > 240;
+    };
+    const whiteMatte = corner(0, 0) && corner(sample.width - 1, 0) && corner(0, sample.height - 1) && corner(sample.width - 1, sample.height - 1);
+    let minX = sample.width, minY = sample.height, maxX = -1, maxY = -1;
+    for (let y = 0; y < sample.height; y++) for (let x = 0; x < sample.width; x++) {
+      const i = (y * sample.width + x) * 4;
+      const visible = pixels[i + 3] > 24 && (!whiteMatte || pixels[i] < 235 || pixels[i + 1] < 235 || pixels[i + 2] < 235);
+      if (visible) { minX = Math.min(minX, x); minY = Math.min(minY, y); maxX = Math.max(maxX, x); maxY = Math.max(maxY, y); }
+    }
+    if (maxX < minX || maxY < minY) return full;
+    const paddingX = Math.max(1, Math.round((maxX - minX + 1) * 0.05));
+    const paddingY = Math.max(1, Math.round((maxY - minY + 1) * 0.05));
+    minX = Math.max(0, minX - paddingX); minY = Math.max(0, minY - paddingY);
+    maxX = Math.min(sample.width - 1, maxX + paddingX); maxY = Math.min(sample.height - 1, maxY + paddingY);
+    return { x: minX / sample.width * sourceWidth, y: minY / sample.height * sourceHeight, width: (maxX - minX + 1) / sample.width * sourceWidth, height: (maxY - minY + 1) / sample.height * sourceHeight };
+  } catch { return full; }
 }
 
 export function drawFloorMedia(context: CanvasRenderingContext2D, content: FloorMediaContent, role: FloorMediaRole, footprint = 1, face: FloorFace = "front", logo?: HTMLImageElement) {
@@ -149,9 +214,11 @@ export function drawFloorMedia(context: CanvasRenderingContext2D, content: Floor
   context.textBaseline = "middle";
   const gold = content.rank === 1;
   if (role === "nose") {
-    if (content.hiring) drawHiring(context, width / 2 - 66 * scale, center + height * 0.32, 132 * scale, Math.max(29, height * 0.10) * scale);
+    // The nose is a logo-only brand anchor. A badge here sat behind the
+    // physical logo plaque at oblique angles; wing advertising owns hiring.
     return;
   }
+  const typeHeight = wingTypeHeight(face, footprint);
   // Both V-wing textures are generated independently. The left wing reverses
   // column placement, never glyphs/UVs, so text reads normally on either side.
   const spacingScale = 0.88 + 0.12 * scale;
@@ -162,33 +229,28 @@ export function drawFloorMedia(context: CanvasRenderingContext2D, content: Floor
   const contentX = face === "left" ? pad + statsWidth + gap : pad + logoWidth + gap;
   const contentRight = face === "left" ? width - pad - logoWidth - gap : width - pad - statsWidth - gap;
   const contentWidth = Math.max(1, contentRight - contentX);
-  const name = fitText(context, content.name, contentWidth, height * 0.19 * scale, height * 0.15 * scale);
+  const name = fitPrimaryName(context, content.name, contentWidth, typeHeight * 0.31, typeHeight * 0.19);
   context.fillStyle = tokens.color.brand.white;
   context.textAlign = "left";
-  context.font = `800 ${name.size}px Inter, system-ui, sans-serif`;
-  context.fillText(name.text, contentX, center - height * (content.hiring ? 0.14 : 0.10));
-  if (content.description) {
-    const detail = fitText(context, content.description, contentWidth, height * 0.085 * scale, height * 0.068 * scale, 500);
-    context.fillStyle = "#b9d6f4";
-    context.font = `500 ${detail.size}px Inter, system-ui, sans-serif`;
-    context.fillText(detail.text, contentX, center + height * (content.hiring ? 0.085 : 0.15));
+  for (const [index, line] of name.lines.entries()) {
+    context.font = `800 ${line.size}px ${SIGN_FONT_FAMILY}`;
+    const nameY = name.multiline ? center + height * (index === 0 ? -0.25 : -0.025) : center - height * (content.hiring ? 0.15 : 0.12);
+    context.fillText(line.text, contentX, nameY);
   }
-  if (content.hiring) drawHiring(context, contentX, center + height * 0.31, Math.min(130, contentWidth * 0.26) * scale, height * 0.10 * scale);
+  if (content.description) {
+    const detail = fitText(context, content.description, contentWidth, typeHeight * 0.11, typeHeight * 0.08, 500);
+    context.fillStyle = "#b9d6f4";
+    context.font = `500 ${detail.size}px ${SIGN_FONT_FAMILY}`;
+    context.fillText(detail.text, contentX, center + height * (name.multiline ? 0.17 : content.hiring ? 0.095 : 0.15));
+  }
   const statsRight = face === "left" ? pad + statsWidth : width - pad;
   context.fillStyle = gold ? tokens.color.brand.summitGold : tokens.color.brand.white;
   context.textAlign = "right";
-  context.font = `800 ${height * 0.18 * scale}px Inter, system-ui, sans-serif`;
+  context.font = `800 ${typeHeight * 0.20}px ${SIGN_FONT_FAMILY}`;
   context.fillText(`#${content.rank}`, statsRight, center - height * 0.14);
-  const amount = fitText(context, formatMinorUnits(content.totalPaidMinor), statsWidth, height * 0.16 * scale, height * 0.16 * scale);
-  context.font = `800 ${amount.size}px Inter, system-ui, sans-serif`;
+  const amount = fitText(context, formatMinorUnits(content.totalPaidMinor), statsWidth, typeHeight * 0.18, typeHeight * 0.15);
+  context.font = `800 ${amount.size}px ${SIGN_FONT_FAMILY}`;
   context.fillText(amount.text, statsRight, center + height * 0.14);
-}
-
-function drawHiring(context: CanvasRenderingContext2D, x: number, y: number, width: number, height: number) {
-  context.textAlign = "left"; context.fillStyle = tokens.color.brand.teal;
-  context.beginPath(); context.roundRect(x, y - height / 2, width, height, height * 0.22); context.fill();
-  context.fillStyle = tokens.color.brand.navy; context.font = `800 ${height * 0.55}px Inter, system-ui, sans-serif`;
-  context.fillText("HIRING", x + width * 0.12, y + 1, width * 0.76);
 }
 
 export function createFloorSignTexture(content: FloorMediaContent, role: FloorMediaRole, footprint = 1, face: FloorFace = "front"): CanvasTexture {
@@ -207,7 +269,7 @@ export function createFloorSignTexture(content: FloorMediaContent, role: FloorMe
   if (context) {
     let loadedLogo: HTMLImageElement | undefined;
     drawFloorMedia(context, content, role, footprint, face);
-    if (document.fonts) void document.fonts.ready.then(() => { drawFloorMedia(context, content, role, footprint, face, loadedLogo); texture.needsUpdate = true; });
+    if (document.fonts) void Promise.all([document.fonts.load("800 96px Montserrat"), document.fonts.load("500 48px Montserrat")]).then(() => { drawFloorMedia(context, content, role, footprint, face, loadedLogo); texture.needsUpdate = true; }).catch(() => { /* Fallback text remains usable if a font request fails. */ });
     if (role === "logo" && content.logoUrl && isSafeLogoUrl(content.logoUrl)) {
       const image = new Image();
       image.onload = () => { loadedLogo = image; drawFloorMedia(context, content, role, footprint, face, image); texture.needsUpdate = true; };

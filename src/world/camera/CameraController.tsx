@@ -12,6 +12,10 @@ import { getCrownHeight, getFloorY, getTowerHeight, towerVisuals } from "@/world
 export function clampTowerTravel(y: number, floorCount: number): number {
   return Math.max(1.1, Math.min(getTowerHeight(floorCount) + getCrownHeight(floorCount) - 0.7, y));
 }
+export function towerCameraWorldY(towerId: TowerId, localY: number): number {
+  const tower = towerVisuals[towerId];
+  return tower.position[1] + localY * tower.scale;
+}
 export function shouldRunIntro(reducedMotion: boolean): boolean { return !reducedMotion; }
 export function focusedWheelAction(event: Pick<WheelEvent, "ctrlKey" | "metaKey">): "zoom" | "travel" {
   return event.ctrlKey || event.metaKey ? "zoom" : "travel";
@@ -35,6 +39,7 @@ export function CameraController({ selectedListing, floorCounts, introReady }: C
   const selectedTowerId = useWorldStore((state) => state.selectedTowerId);
   const cameraDistance = useWorldStore((state) => state.cameraDistance);
   const cameraOrbitStep = useWorldStore((state) => state.cameraOrbitStep);
+  const cameraResetVersion = useWorldStore((state) => state.cameraResetVersion);
   const towerTravelY = useWorldStore((state) => state.towerTravelY);
   const floorPreview = useWorldStore((state) => state.floorPreview);
   const travelTowerBy = useWorldStore((state) => state.travelTowerBy);
@@ -86,19 +91,19 @@ export function CameraController({ selectedListing, floorCounts, introReady }: C
 
   const destination = useMemo(() => {
     const tallestHeight = getTowerHeight(Math.max(...Object.values(floorCounts)));
-    const tallFixture = tallestHeight > getTowerHeight(40);
+    const tallFixture = Math.max(...Object.values(floorCounts)) > 100;
     const overviewScale = Math.max(0.82, tallestHeight / getTowerHeight(50));
-    let target = new Vector3(0, tallestHeight * (tallFixture ? 0.5 : mobile ? 0.47 : 0.65), 0);
-    let offset = new Vector3(mobile ? 10 : 22, mobile ? 25 : 46, mobile ? 56 : 84).multiplyScalar(overviewScale);
+    let target = new Vector3(0, tallestHeight * (tallFixture ? 0.5 : mobile ? 0.58 : 0.9), 0);
+    let offset = new Vector3(mobile ? 10 : 28, mobile ? 25 : 56, mobile ? 70 : 100).multiplyScalar(overviewScale);
 
     if (cameraMode !== "overview") {
       const towerId = selectedListing?.towerId ?? selectedTowerId ??
         (cameraMode === "companiesTower" ? "companies" : cameraMode === "productsTower" ? "products" : "people");
       const tower = towerVisuals[towerId];
       const count = floorCounts[towerId];
-      const y = towerTravelY ?? (cameraMode === "rooftop" ? getTowerHeight(count) + 4.1 : cameraMode === "topFloor" ? getFloorY(1, count) + 0.6 : floorPreview?.towerId === towerId ? getFloorY(floorPreview.media.rank, count) + 0.2 : selectedListing ? getFloorY(selectedListing.rank, count) + 0.2 : getTowerHeight(count) * 0.72);
-      target = new Vector3(tower.position[0] + (selectedListing && !mobile ? 0.35 : 0), y, tower.position[2]);
-      offset = cameraMode === "rooftop" ? new Vector3(mobile ? 9 : 5.6, 1.5, mobile ? 11 : 7.5) : cameraMode === "topFloor" ? new Vector3(mobile ? 8 : 5.4, 1, mobile ? 10 : 7.2) : selectedListing || floorPreview ? new Vector3(mobile ? 3.3 : 4.2, 0.8, mobile ? 12.8 : 3.0) : new Vector3(mobile ? 10 : 7.8, 1.3, mobile ? 13 : 9.8);
+      const localY = towerTravelY ?? (cameraMode === "rooftop" ? getTowerHeight(count) + 4.1 : cameraMode === "topFloor" ? getFloorY(1, count) + 0.6 : floorPreview?.towerId === towerId ? getFloorY(floorPreview.media.rank, count) + 0.2 : selectedListing ? getFloorY(selectedListing.rank, count) + 0.2 : getTowerHeight(count) * 0.72);
+      target = new Vector3(tower.position[0] + (selectedListing && !mobile ? 1.45 : 0), towerCameraWorldY(towerId, localY), tower.position[2]);
+      offset = cameraMode === "rooftop" ? new Vector3(mobile ? 9 : 5.6, 1.5, mobile ? 11 : 7.5) : cameraMode === "topFloor" ? new Vector3(mobile ? 8 : 5.4, 1, mobile ? 10 : 7.2) : selectedListing || floorPreview ? new Vector3(mobile ? 3.3 : 2.2, mobile ? 0.8 : 0.36, mobile ? 12.8 : 1.7) : new Vector3(mobile ? 10 : 7.8, 1.3, mobile ? 13 : 9.8);
     }
 
     const angle = cameraOrbitStep * (Math.PI / 5);
@@ -107,7 +112,7 @@ export function CameraController({ selectedListing, floorCounts, introReady }: C
     return { position: target.clone().add(offset), target };
   }, [cameraDistance, cameraMode, cameraOrbitStep, floorCounts, floorPreview, mobile, selectedListing, selectedTowerId, towerTravelY]);
 
-  const anchor = `${cameraMode}|${selectedTowerId}|${selectedListing?.id ?? ""}|${floorPreview?.media.id ?? ""}`;
+  const anchor = `${cameraMode}|${selectedTowerId}|${selectedListing?.id ?? ""}|${floorPreview?.media.id ?? ""}|${cameraResetVersion}`;
   useEffect(() => {
     const prior = previousDestination.current;
     const anchorChanged = previousAnchor.current !== anchor;
@@ -167,6 +172,9 @@ export function CameraController({ selectedListing, floorCounts, introReady }: C
     transition.current *= 1 - alpha;
   });
 
+  const overviewMaxDistance = new Vector3(mobile ? 10 : 28, mobile ? 25 : 56, mobile ? 70 : 100).length()
+    * Math.max(0.82, getTowerHeight(Math.max(...Object.values(floorCounts))) / getTowerHeight(50)) * 1.13;
+
   return (
     <OrbitControls
       ref={controls}
@@ -174,8 +182,8 @@ export function CameraController({ selectedListing, floorCounts, introReady }: C
       makeDefault
       enableDamping={!reducedMotion}
       dampingFactor={0.08}
-      minDistance={4}
-      maxDistance={240}
+      minDistance={cameraMode === "overview" ? 16 : 2.4}
+      maxDistance={cameraMode === "overview" ? overviewMaxDistance : cameraMode === "selectedFloor" ? 10 : 34}
       enableZoom
       enableRotate
       zoomSpeed={0.8}

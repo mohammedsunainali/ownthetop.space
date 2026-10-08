@@ -37,4 +37,16 @@ describe("Phase 2 world interaction state", () => {
     useWorldStore.getState().setWorldTime("day");
     expect(useWorldStore.getState().worldTime).toBe("day");
   });
+  it("makes repeated overview resets distinct and bounds toolbar zoom", () => {
+    useWorldStore.getState().resetWorld();
+    const first = useWorldStore.getState().cameraResetVersion;
+    useWorldStore.getState().zoomBy(10);
+    expect(useWorldStore.getState().cameraDistance).toBe(1.12);
+    useWorldStore.getState().resetWorld();
+    expect(useWorldStore.getState().cameraResetVersion).toBe(first + 1);
+    expect(useWorldStore.getState().cameraDistance).toBe(1);
+    useWorldStore.getState().selectListing(allListings[0].id, allListings[0].towerId);
+    useWorldStore.getState().zoomBy(-10);
+    expect(useWorldStore.getState().cameraDistance).toBe(0.86);
+  });
 });

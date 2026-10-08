@@ -49,7 +49,7 @@ function TowBanner({ copy, bannerRef }: { copy: string; bannerRef?: (group: Grou
     if (context) {
       context.fillStyle = tokens.color.brand.summitGold; context.fillRect(0, 0, 1536, 384);
       context.strokeStyle = tokens.color.brand.navy; context.lineWidth = 22; context.strokeRect(11, 11, 1514, 362);
-      context.fillStyle = tokens.color.brand.navy; context.textAlign = "center"; context.font = "800 104px Inter, system-ui, sans-serif";
+      context.fillStyle = tokens.color.brand.navy; context.textAlign = "center"; context.font = "800 104px Montserrat, system-ui, sans-serif";
       context.fillText(copy, 768, 230, 1390);
     }
     const map = new CanvasTexture(canvas); map.colorSpace = SRGBColorSpace; map.anisotropy = 4; return map;

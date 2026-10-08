@@ -30,6 +30,7 @@ interface WorldState {
   rulerVisible: boolean;
   cameraDistance: number;
   cameraOrbitStep: number;
+  cameraResetVersion: number;
   towerTravelY: number | null;
   hudRevealed: boolean;
   claimDraft: { url: string; towerId: TowerId; category: string; amountMinor: number; estimatedRank: number } | null;
@@ -70,6 +71,7 @@ export const useWorldStore = create<WorldState>((set) => ({
   rulerVisible: false,
   cameraDistance: 1,
   cameraOrbitStep: 0,
+  cameraResetVersion: 0,
   towerTravelY: null,
   hudRevealed: false,
   claimDraft: null,
@@ -83,19 +85,20 @@ export const useWorldStore = create<WorldState>((set) => ({
   selectListing: (listingId, towerId) =>
     set({ selectedListingId: listingId, selectedTowerId: towerId, floorPreview: null, cameraMode: "selectedFloor", towerTravelY: null, hudRevealed: false }),
   resetWorld: () =>
-    set({
+    set((state) => ({
       selectedTowerId: null,
       selectedListingId: null,
       cameraMode: "overview",
       cameraDistance: 1,
       cameraOrbitStep: 0,
+      cameraResetVersion: state.cameraResetVersion + 1,
       floorsExploded: false,
       towerTravelY: null,
       hudRevealed: false,
       floorPreview: null,
       claimDraft: null,
-    }),
-  zoomBy: (delta) => set((state) => ({ cameraDistance: Math.min(1.45, Math.max(0.62, state.cameraDistance + delta)) })),
+    })),
+  zoomBy: (delta) => set((state) => ({ cameraDistance: Math.min(state.cameraMode === "overview" ? 1.12 : 1.45, Math.max(state.cameraMode === "selectedFloor" ? 0.86 : 0.72, state.cameraDistance + delta)) })),
   rotateWorld: () => set((state) => ({ cameraOrbitStep: state.cameraOrbitStep + 1 })),
   toggleSound: () => set((state) => ({ soundEnabled: !state.soundEnabled })),
   focusTop: () => set((state) => ({ selectedTowerId: state.selectedTowerId ?? "companies", selectedListingId: null, cameraMode: "topFloor", towerTravelY: null, hudRevealed: false })),

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { clampTowerTravel, focusedWheelAction, shouldRunIntro, yieldCameraToManualControl } from "@/world/camera/CameraController";
-import { getCrownHeight, getTowerHeight } from "@/world/tower/tower-layout";
+import { clampTowerTravel, focusedWheelAction, shouldRunIntro, towerCameraWorldY, yieldCameraToManualControl } from "@/world/camera/CameraController";
+import { getCrownHeight, getFloorY, getTowerHeight, towerVisuals } from "@/world/tower/tower-layout";
 
 describe("tower camera travel", () => {
   it("clamps below podium and above crown for canonical and 220 floors", () => {
@@ -8,6 +8,13 @@ describe("tower camera travel", () => {
       expect(clampTowerTravel(-100, count)).toBe(1.1);
       expect(clampTowerTravel(9999, count)).toBeCloseTo(getTowerHeight(count) + getCrownHeight(count) - 0.7);
     }
+  });
+  it("aims at scaled world-space floor elevations on all three towers", () => {
+    for (const towerId of ["companies", "products", "people"] as const) {
+      const localY = getFloorY(1, towerId === "companies" ? 50 : 20);
+      expect(towerCameraWorldY(towerId, localY)).toBeCloseTo(towerVisuals[towerId].position[1] + localY * towerVisuals[towerId].scale);
+    }
+    expect(towerCameraWorldY("people", getFloorY(1, 20))).toBeLessThan(getFloorY(1, 20));
   });
   it("skips cinematic movement for reduced motion", () => {
     expect(shouldRunIntro(true)).toBe(false);

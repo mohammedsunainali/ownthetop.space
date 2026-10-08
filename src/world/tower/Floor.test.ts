@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { companies } from "@/mock/companies";
 import { listingForInstance, paidFloorColor } from "@/world/tower/Floor";
-import { createFloorSignTexture, drawFloorMedia, fitPrimaryName, fitText, floorContentScale, floorFaceListingId, floorFacadeDimensions, floorSignCacheSize, FLOOR_ADVERTISING, FLOOR_FACADE_ROLES, initialsForName, isSafeLogoUrl, MAX_CACHED_SIGNS, MAX_FOCUSED_SIGNS, visibleFloorSigns } from "@/world/tower/floor-signs";
+import { createFloorSignTexture, drawFloorMedia, fitPrimaryName, fitText, floorContentScale, floorFaceListingId, floorFacadeDimensions, floorSignCacheSize, FLOOR_ADVERTISING, FLOOR_FACADE_ROLES, initialsForName, isSafeLogoUrl, MAX_CACHED_SIGNS, MAX_FOCUSED_SIGNS, visibleFloorSigns, wingTypeHeight } from "@/world/tower/floor-signs";
 import { tokens } from "@/design/tokens";
 
 describe("V2 logical floor advertising", () => {
@@ -34,6 +34,7 @@ describe("V2 logical floor advertising", () => {
     expect(floorContentScale("left", large.width)).toBeCloseTo(1);
     expect(floorContentScale("left", floorFacadeDimensions("left", 0.9).width)).toBeCloseTo(0.9);
     expect(floorContentScale("left", small.width)).toBe(0.8);
+    expect(wingTypeHeight("left", 0.72) / wingTypeHeight("left", 1)).toBeCloseTo(0.8, 1);
   });
 
   it("uses orientation-correct textures and a physical-logo texture", () => {
@@ -83,7 +84,10 @@ describe("V2 logical floor advertising", () => {
     expect(text.mock.calls.flat().join(" ")).not.toContain(nonHiring.name);
     text.mockClear();
     drawFloorMedia(context, { ...companies[0], hiring: true }, "nose", 1, "front");
-    expect(text.mock.calls.flat().join(" ")).toContain("HIRING");
+    expect(text.mock.calls.flat().join(" ")).not.toContain("HIRING");
+    text.mockClear();
+    drawFloorMedia(context, { ...companies[0], hiring: true }, "wing", 1, "right");
+    expect(text.mock.calls.flat().join(" ")).not.toContain("HIRING"); // physical wing sign owns this state
     text.mockClear();
     drawFloorMedia(context, nonHiring, "wing", 1, "right");
     expect(text.mock.calls.flat().join(" ")).toContain(nonHiring.name);

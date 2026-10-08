@@ -63,7 +63,7 @@ function Pennant() {
     const context = canvas.getContext("2d");
     if (context) {
       context.fillStyle = tokens.color.brand.navy; context.fillRect(0, 0, 1024, 256);
-      context.fillStyle = tokens.color.brand.white; context.font = "800 82px Inter, system-ui, sans-serif";
+      context.fillStyle = tokens.color.brand.white; context.font = "800 82px Montserrat, system-ui, sans-serif";
       context.textAlign = "center"; context.textBaseline = "middle";
       context.fillText("OwnTheTop.space", 512, 128, 920);
     }
@@ -103,7 +103,7 @@ function PremiumSkyLounge() {
     if (context) {
       context.fillStyle = tokens.color.brand.navy; context.fillRect(0, 0, 1024, 192);
       context.strokeStyle = tokens.color.brand.summitGold; context.lineWidth = 10; context.strokeRect(5, 5, 1014, 182);
-      context.fillStyle = tokens.color.brand.white; context.textAlign = "center"; context.font = "800 66px Inter, system-ui, sans-serif";
+      context.fillStyle = tokens.color.brand.white; context.textAlign = "center"; context.font = "800 66px Montserrat, system-ui, sans-serif";
       context.fillText("OWN THE TOP FLOOR", 512, 122);
     }
     const map = new CanvasTexture(canvas); map.colorSpace = SRGBColorSpace; return map;

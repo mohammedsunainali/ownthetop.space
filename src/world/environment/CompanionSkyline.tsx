@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { BoxGeometry, Color, InstancedMesh, Matrix4, MeshStandardMaterial, Quaternion, Vector3 } from "three";
 import { tokens } from "@/design/tokens";
+import { environmentTokens } from "@/world/environment/environment-tokens";
 
 const unitBox = new BoxGeometry(1, 1, 1);
 const bodyMaterial = new MeshStandardMaterial({ color: tokens.color.brand.white, metalness: 0.32, roughness: 0.45 });
@@ -26,7 +27,7 @@ export function CompanionSkyline({ mobile, night }: { mobile: boolean; night: bo
   const panes = useRef<InstancedMesh>(null);
   const count = mobile ? 18 : locations.length;
   const paneCount = windows.filter((item) => item.buildingIndex < count).length;
-  useEffect(() => { glassMaterial.emissiveIntensity = night ? 0.28 : 0.04; }, [night]);
+  useEffect(() => { glassMaterial.emissive.set(night ? environmentTokens.lampWarm : tokens.color.brand.blue); glassMaterial.emissiveIntensity = night ? 0.12 : 0.04; }, [night]);
   useLayoutEffect(() => {
     const body = bodies.current, roof = roofs.current, glass = panes.current;
     if (!body || !roof || !glass) return;
@@ -50,11 +51,12 @@ export function CompanionSkyline({ mobile, night }: { mobile: boolean; night: bo
       scale.set(item.width, 0.3, 0.014);
       matrix.compose(pos, rotation, scale);
       glass.setMatrixAt(paneIndex, matrix);
-      glass.setColorAt(paneIndex, new Color((item.buildingIndex + Math.floor(item.y * 10) + paneIndex) % 5 === 0 ? tokens.color.brand.navy : tokens.color.brand.lightBlue));
+      const lit = (item.buildingIndex + Math.floor(item.y * 10) + paneIndex) % 5 === 0;
+      glass.setColorAt(paneIndex, new Color(night ? lit ? environmentTokens.lampWarm : tokens.color.brand.navy : lit ? tokens.color.brand.navy : tokens.color.brand.lightBlue));
       paneIndex++;
     }
     for (const mesh of [body, roof, glass]) { mesh.instanceMatrix.needsUpdate = true; mesh.computeBoundingSphere(); if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true; }
-  }, [count]);
+  }, [count, night]);
   return <>
     <instancedMesh ref={bodies} args={[unitBox, bodyMaterial, count]} castShadow={!mobile} />
     <instancedMesh ref={roofs} args={[unitBox, roofMaterial, count]} />

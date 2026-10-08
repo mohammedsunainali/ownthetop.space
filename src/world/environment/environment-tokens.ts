@@ -10,4 +10,11 @@ export const environmentTokens = {
   road: "#637b83",
   lane: "#e7e3c9",
   plaza: "#e8eae4",
+  lampWarm: "#ffd69a",
+  lampPost: "#587078",
+  lawnNight: "#486c65",
+  plazaNight: "#697b78",
+  pathNight: "#899991",
+  sidewalkNight: "#667b79",
+  roadNight: "#344b55",
 } as const;

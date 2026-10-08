@@ -7,7 +7,7 @@ import { tokens } from "@/design/tokens";
 import { FLOOR_HEIGHT, getFloorFootprint, getFloorY } from "@/world/tower/tower-layout";
 import { worldMaterials } from "@/world/materials/world-materials";
 import type { TowerVisualConfig } from "@/world/types";
-import { createFloorSignTexture, FLOOR_ADVERTISING, FLOOR_FACADE_ROLES, floorContentScale, floorFacadeDimensions, releaseFloorSignTexture, visibleFloorSigns, WING_FACE, type FloorMediaContent } from "@/world/tower/floor-signs";
+import { createFloorSignTexture, FLOOR_ADVERTISING, FLOOR_FACADE_ROLES, floorContentScale, floorFacadeDimensions, getHiringSignMaterial, releaseFloorSignTexture, visibleFloorSigns, WING_FACE, type FloorMediaContent } from "@/world/tower/floor-signs";
 
 export const floorWingGeometry = new BoxGeometry(1.42, FLOOR_HEIGHT, 2.28);
 export const floorFrontGlazingGeometry = new BoxGeometry(WING_FACE.frontWidth, WING_FACE.clearHeight, 0.035);
@@ -22,6 +22,7 @@ const trimGeometry = new BoxGeometry(1, 1, 1);
 const logoPlaqueMaterial = new MeshStandardMaterial({ color: tokens.color.brand.softWhite, roughness: 0.42, metalness: 0.04 });
 const selectionMaterial = new MeshStandardMaterial({ color: tokens.color.brand.blue, emissive: tokens.color.brand.blue, emissiveIntensity: 0.55, metalness: 0.25, roughness: 0.25 });
 const summitMaterial = new MeshStandardMaterial({ color: tokens.color.brand.summitGold, emissive: tokens.color.brand.summitGold, emissiveIntensity: 0.14, metalness: 0.45, roughness: 0.28 });
+const hiringSignGeometry = new BoxGeometry(1, 1, 0.014);
 
 function setFloorCursor(event: ThreeEvent<PointerEvent>, interactive: boolean) {
   const surface = event.nativeEvent.target as HTMLElement;
@@ -159,6 +160,7 @@ function FloorSign({ listing, floorCount, detail, selected = false, preview = fa
   const left = useMemo(() => detail ? createFloorSignTexture(listing, "wing", footprint, "left") : null, [detail, listing, footprint]);
   const right = useMemo(() => detail ? createFloorSignTexture(listing, "wing", footprint, "right") : null, [detail, listing, footprint]);
   const logo = useMemo(() => createFloorSignTexture(listing, "logo", footprint), [listing, footprint]);
+  const hiringMaterial = useMemo(() => listing.hiring && detail ? getHiringSignMaterial() : null, [listing.hiring, detail]);
   useEffect(() => () => { if (preview) releaseFloorSignTexture(listing.id); }, [listing.id, preview]);
   const y = getFloorY(listing.rank, floorCount);
   const tint = selected ? 1.12 : hovered ? 1.07 : 1;
@@ -174,15 +176,21 @@ function FloorSign({ listing, floorCount, detail, selected = false, preview = fa
       const plaque = bay.height * (role === "nose" ? FLOOR_ADVERTISING.noseLogoSizeRatio * contentScale : FLOOR_ADVERTISING.logoSizeRatio * Math.max(0.82, contentScale));
       const spacingScale = 0.88 + 0.12 * contentScale;
       const plaqueX = role === "nose" ? 0 : face === "left" ? bay.width / 2 - bay.width * 0.045 * spacingScale - plaque / 2 : -bay.width / 2 + bay.width * 0.045 * spacingScale + plaque / 2;
+      const hiringWidth = Math.min(0.33, bay.width * 0.21);
+      const hiringHeight = Math.min(0.095, bay.height * 0.24);
+      const hiringX = face === "left"
+        ? bay.width / 2 - bay.width * 0.045 * spacingScale - plaque - bay.width * 0.034 * spacingScale - hiringWidth / 2
+        : -bay.width / 2 + bay.width * 0.045 * spacingScale + plaque + bay.width * 0.034 * spacingScale + hiringWidth / 2;
       return <group key={`${wing}-${face}`} rotation={[0, wing * Math.PI * 2 / 3, 0]}>
         <group position={facePosition} rotation={faceRotation}>
           <mesh onClick={onClick}><planeGeometry args={[bay.width, bay.height]} /><meshStandardMaterial map={texture} color={color} transparent depthWrite={false} roughness={0.38} metalness={0.08} /></mesh>
-          <mesh position={[plaqueX, role === "nose" && listing.hiring ? -bay.height * 0.07 : 0, FLOOR_ADVERTISING.logoDepth]} onClick={onClick}>
+          <mesh position={[plaqueX, 0, FLOOR_ADVERTISING.logoDepth]} onClick={onClick}>
             <boxGeometry args={[plaque, plaque, 0.012]} /><primitive object={logoPlaqueMaterial} attach="material" />
           </mesh>
-          <mesh position={[plaqueX, role === "nose" && listing.hiring ? -bay.height * 0.07 : 0, FLOOR_ADVERTISING.logoDepth + 0.0061]} onClick={onClick}>
+          <mesh position={[plaqueX, 0, FLOOR_ADVERTISING.logoDepth + 0.0061]} onClick={onClick}>
             <planeGeometry args={[plaque, plaque]} /><meshStandardMaterial map={logo} transparent depthWrite={false} roughness={0.42} metalness={0.04} />
           </mesh>
+          {role === "wing" && hiringMaterial ? <mesh geometry={hiringSignGeometry} material={hiringMaterial} position={[hiringX, -bay.height * 0.31, FLOOR_ADVERTISING.logoDepth]} scale={[hiringWidth, hiringHeight, 1]} onClick={onClick} /> : null}
         </group>
       </group>;
     })}
