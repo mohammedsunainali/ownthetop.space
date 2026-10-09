@@ -8,10 +8,13 @@ import {useWorldStore} from "@/state/world-store";
 import {BuildingPreviewSign} from "./BuildingPreviewSign";
 import { cityDetails } from "./city-details";
 
+import { cityForms, cityFormIndex, cityRoof, cityTrim, cityCanopy, isCurvedCanopy } from "@/world/geometry/city-forms";
+import { architecturalGlass } from "@/world/materials/architectural-glass";
+
 const unitBox = new BoxGeometry(1, 1, 1);
 const bodyMaterial = new MeshStandardMaterial({ color: tokens.color.brand.white, metalness: 0.08, roughness: 0.68 });
-const glassMaterial = new MeshStandardMaterial({ color: tokens.color.brand.navy, metalness: 0.57, roughness: 0.18, emissive: tokens.color.brand.blue, emissiveIntensity: 0.04 });
-const roofMaterial = new MeshStandardMaterial({ color: tokens.color.brand.softWhite, metalness: 0.28, roughness: 0.48 });
+const glassMaterial = architecturalGlass;
+const roofMaterial = new MeshStandardMaterial({ color: tokens.color.brand.softWhite, metalness: 0.08, roughness: 0.62 });
 const nightGlass = new MeshStandardMaterial({ color: tokens.color.brand.white, metalness: .3, roughness: .35 });
 const nightLitGlass = new MeshBasicMaterial({ color: tokens.color.brand.white, toneMapped: false });
 const locations = neighborhoodBuildings;
@@ -25,29 +28,34 @@ const windows = locations.flatMap((building, buildingIndex) => {
 
 /** A quiet, windowed urban backdrop. All bodies, roof caps and panes are instanced. */
 export function CompanionSkyline({ mobile, night }: { mobile: boolean; night: boolean }) {
-  const bodies = useRef<InstancedMesh>(null);
+  const bodies = useRef<(InstancedMesh | null)[]>([]);
   const roofs = useRef<InstancedMesh>(null);
   const panes = useRef<InstancedMesh>(null);
   const litPanes = useRef<InstancedMesh>(null);
   const details = useRef<InstancedMesh>(null);
   const architecture = useRef<InstancedMesh>(null);
+  const canopies = useRef<InstancedMesh>(null);
   const count = mobile ? Math.min(36, locations.length) : locations.length;
   const paneCount = windows.filter((item) => item.buildingIndex < count&&!item.lit).length;
   const litPaneCount = windows.filter((item) => item.buildingIndex < count&&item.lit).length;
-  const architectureCount = cityDetails.filter(item => item.buildingIndex < count).length;
+  const architectureCount = cityDetails.filter(item => item.buildingIndex < count && !isCurvedCanopy(item.role)).length;
+  const canopyCount = cityDetails.filter(item => item.buildingIndex < count && isCurvedCanopy(item.role)).length;
   useLayoutEffect(() => {
-    const body = bodies.current, roof = roofs.current, glass = panes.current, detail = details.current;
-    if (!body || !roof || !glass || !detail) return;
+    const roof = roofs.current, glass = panes.current, detail = details.current;
+    if (!roof || !glass || !detail) return;
     const matrix = new Matrix4(), rotation = new Quaternion(), pos = new Vector3(), scale = new Vector3();
+    const formCounts = [0, 0, 0];
     for (let index = 0; index < count; index++) {
       const item = locations[index];
       const palette=cityArchetypes[item.archetype];
       matrix.makeScale(item.width, item.height, item.depth);
       matrix.setPosition(item.x, item.height / 2, item.z);
-      body.setMatrixAt(index, matrix);
-      body.setColorAt(index, new Color(palette.body));
-      matrix.makeScale(item.width + 0.13, 0.11, item.depth + 0.13);
-      matrix.setPosition(item.x, item.height + 0.02, item.z);
+      const form = cityFormIndex(item.archetype), body = bodies.current[form], formIndex = formCounts[form]++;
+      body?.setMatrixAt(formIndex, matrix);
+      body?.setColorAt(formIndex, new Color(palette.body));
+      const roofHeight = item.style === 2 ? 0.20 : 0.11;
+      matrix.makeScale(item.width + 0.13, roofHeight, item.depth + 0.13);
+      matrix.setPosition(item.x, item.height + roofHeight / 2 - 0.035, item.z);
       roof.setMatrixAt(index, matrix);
       roof.setColorAt(index,new Color(palette.roof));
       // Low shop awnings, residential balcony bands, and office rooftop equipment.
@@ -65,24 +73,31 @@ export function CompanionSkyline({ mobile, night }: { mobile: boolean; night: bo
       matrix.compose(pos, rotation, scale);
       const target=item.lit?litPanes.current:glass,index=item.lit?litPaneIndex++:paneIndex++;
       target?.setMatrixAt(index, matrix);
-      target?.setColorAt(index, new Color(night ? item.lit ? environmentTokens.lampWarm : tokens.color.brand.navy : item.lit ? tokens.color.brand.navy : tokens.color.brand.lightBlue));
+      target?.setColorAt(index, new Color(night ? item.lit ? environmentTokens.lampWarm : tokens.color.brand.navy : item.lit ? "#93b0ba" : "#65899a"));
     }
-    let architectureIndex = 0;
+    let architectureIndex = 0, canopyIndex = 0;
     for (const item of cityDetails) if (item.buildingIndex < count) {
       matrix.makeScale(...item.size).setPosition(...item.position);
-      architecture.current?.setMatrixAt(architectureIndex, matrix);
-      architecture.current?.setColorAt(architectureIndex++, new Color(item.color));
+      const target = isCurvedCanopy(item.role) ? canopies.current : architecture.current;
+      const index = isCurvedCanopy(item.role) ? canopyIndex++ : architectureIndex++;
+      target?.setMatrixAt(index, matrix);
+      target?.setColorAt(index, new Color(item.color));
     }
     if (architecture.current) { architecture.current.instanceMatrix.needsUpdate = true; architecture.current.computeBoundingSphere(); if (architecture.current.instanceColor) architecture.current.instanceColor.needsUpdate = true; }
-    for (const mesh of [body, roof, glass, detail,litPanes.current]) if(mesh) { mesh.instanceMatrix.needsUpdate = true; mesh.computeBoundingSphere(); if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true; }
+    if (canopies.current) { canopies.current.instanceMatrix.needsUpdate = true; canopies.current.computeBoundingSphere(); if (canopies.current.instanceColor) canopies.current.instanceColor.needsUpdate = true; }
+    for (const mesh of [...bodies.current, roof, glass, detail,litPanes.current]) if(mesh) { mesh.instanceMatrix.needsUpdate = true; mesh.computeBoundingSphere(); if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true; }
   }, [count, night]);
-  return <>
-    <instancedMesh ref={bodies} args={[unitBox, bodyMaterial, count]} castShadow={!mobile} onClick={event=>{const building=locations[event.instanceId??-1];if(building?.style===0){event.stopPropagation();useWorldStore.getState().selectDistrictBuilding(building.id);}}}/>
-    <instancedMesh ref={roofs} args={[unitBox, roofMaterial, count]} />
+  return <group>
+    {cityForms.map((geometry, form) => {
+      const members = locations.slice(0, count).filter(item => cityFormIndex(item.archetype) === form);
+      return <instancedMesh key={form} ref={mesh => { bodies.current[form] = mesh; }} args={[geometry, bodyMaterial, members.length]} castShadow={!mobile} receiveShadow onClick={event => { const building = members[event.instanceId ?? -1]; if (building?.style === 0) { event.stopPropagation(); useWorldStore.getState().selectDistrictBuilding(building.id); } }} />;
+    })}
+    <instancedMesh ref={roofs} args={[cityRoof, roofMaterial, count]} />
     <instancedMesh ref={panes} args={[unitBox, glassMaterial, paneCount]} material={night?nightGlass:glassMaterial} />
     <instancedMesh ref={litPanes} args={[unitBox, glassMaterial, litPaneCount]} material={night?nightLitGlass:glassMaterial} />
-    <instancedMesh ref={details} args={[unitBox, roofMaterial, count]} />
-    <instancedMesh ref={architecture} args={[unitBox, roofMaterial, architectureCount]} />
+    <instancedMesh ref={details} args={[cityTrim, roofMaterial, count]} />
+    <instancedMesh ref={architecture} args={[cityTrim, roofMaterial, architectureCount]} />
+    <instancedMesh ref={canopies} args={[cityCanopy, roofMaterial, canopyCount]} />
     <BuildingPreviewSign/>
-  </>;
+  </group>;
 }

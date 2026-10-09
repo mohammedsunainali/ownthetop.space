@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
-import { BoxGeometry, Color, ConeGeometry, CylinderGeometry, IcosahedronGeometry, InstancedMesh, Matrix4, MeshStandardMaterial } from "three";
+import { BoxGeometry, Color, ConeGeometry, CylinderGeometry, IcosahedronGeometry, InstancedMesh, Matrix4, MeshStandardMaterial, SphereGeometry } from "three";
+import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { tokens } from "@/design/tokens";
 import { worldMaterials } from "@/world/materials/world-materials";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
@@ -9,12 +10,17 @@ import { districtLayout, routePoint, outsideTowerApproaches } from "@/world/envi
 import { environmentTokens } from "@/world/environment/environment-tokens";
 import { treePlaces, palmPlaces } from "@/world/environment/vegetation-layout";
 
-const treeGeometry = new IcosahedronGeometry(0.65, 1);
+const canopyLobes = [[0,.09,0,.48],[-.16,-.08,.04,.39],[.17,-.06,-.04,.38]].map(([x,y,z,r]) => new SphereGeometry(r,10,7).translate(x,y,z));
+const treeGeometry = mergeGeometries(canopyLobes)!;
+canopyLobes.forEach(geometry => geometry.dispose());
 const angularTreeGeometry = new IcosahedronGeometry(0.65, 0);
 // Radius/height fit inside the existing conservative0.65 canopy sphere.
-const evergreenGeometry = new ConeGeometry(0.38, 1.05, 7);
+const evergreenLayers = [[.38,.65,-.2],[.31,.58,.06],[.22,.50,.275]].map(([radius,height,y]) => new ConeGeometry(radius,height,9).translate(0,y,0));
+const evergreenGeometry = mergeGeometries(evergreenLayers)!;
+evergreenLayers.forEach(geometry => geometry.dispose());
 const trunkGeometry = new CylinderGeometry(0.07, 0.1, 0.9, 6);
 const treeMaterial = worldMaterials.leaf;
+const trunkMaterial = new MeshStandardMaterial({ color: "#867058", roughness: 0.94 });
 const cloudGeometry = new IcosahedronGeometry(1, 1);
 const shrubGeometry = new IcosahedronGeometry(0.24, 0);
 const palmGeometry = new IcosahedronGeometry(0.45, 0);
@@ -95,21 +101,21 @@ export function WorldProps({ mobile, night }: { mobile: boolean; night: boolean 
   useFrame(({ clock }) => {
     if (clouds.current && !reducedMotion) clouds.current.position.x = Math.sin(clock.elapsedTime * 0.035) * 0.28;
   });
-  return <>
+  return <group>
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.048, 0]} scale={[districtLayout.green.x, districtLayout.green.z, 1]} receiveShadow><circleGeometry args={[1, 96]} /><meshStandardMaterial color={night ? environmentTokens.lawnNight : environmentTokens.lawn} roughness={0.95} /></mesh>
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.041, 0]} scale={[districtLayout.plaza.x, districtLayout.plaza.z, 1]} receiveShadow><circleGeometry args={[1, 96]} /><meshStandardMaterial color={night ? environmentTokens.plazaNight : environmentTokens.plaza} roughness={0.95} /></mesh>
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.03, 0]} scale={[districtLayout.walkway.x, districtLayout.walkway.z, 1]} receiveShadow><ringGeometry args={[0.93, 1.07, 96]} /><meshStandardMaterial color={night ? environmentTokens.pathNight : environmentTokens.path} roughness={0.92} side={2} /></mesh>
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.027, 0]} scale={[districtLayout.road.x, districtLayout.road.z, 1]} receiveShadow><ringGeometry args={[0.89, 1.11, 96]} /><meshStandardMaterial color={night ? environmentTokens.sidewalkNight : environmentTokens.sidewalk} roughness={0.94} side={2} /></mesh>
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.021, 0]} scale={[districtLayout.road.x, districtLayout.road.z, 1]} receiveShadow><ringGeometry args={[0.955, 1.045, 96]} /><meshStandardMaterial color={night ? environmentTokens.roadNight : environmentTokens.road} roughness={0.87} side={2} /></mesh>
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.017, 0]} scale={[districtLayout.road.x, districtLayout.road.z, 1]}><ringGeometry args={[0.999, 1.001, 96]} /><meshBasicMaterial color={environmentTokens.lane} transparent opacity={0.56} side={2} /></mesh>
-    <instancedMesh ref={trees} args={[treeGeometry, treeMaterial, Math.ceil(treeCount / 3)]} frustumCulled />
+    <instancedMesh ref={trees} args={[treeGeometry, treeMaterial, Math.ceil(treeCount / 3)]} castShadow={!mobile} receiveShadow frustumCulled />
     <instancedMesh ref={angularTrees} args={[angularTreeGeometry, treeMaterial, Math.ceil((treeCount - 1) / 3)]} frustumCulled />
     <instancedMesh ref={evergreens} args={[evergreenGeometry, treeMaterial, Math.ceil((treeCount - 2) / 3)]} frustumCulled />
-    <instancedMesh ref={trunks} args={[trunkGeometry, worldMaterials.frame, treeCount]} frustumCulled />
+    <instancedMesh ref={trunks} args={[trunkGeometry, trunkMaterial, treeCount]} frustumCulled />
     <instancedMesh ref={clouds} args={[cloudGeometry, cloudMaterial, cloudCount * 3]} frustumCulled />
     <instancedMesh ref={shrubs} args={[shrubGeometry, worldMaterials.leaf, shrubCount]} frustumCulled />
     <instancedMesh ref={palms} args={[palmGeometry, worldMaterials.leaf, palmCount]} frustumCulled />
-    <instancedMesh ref={palmTrunks} args={[palmTrunkGeometry, worldMaterials.frame, palmCount]} frustumCulled />
+    <instancedMesh ref={palmTrunks} args={[palmTrunkGeometry, trunkMaterial, palmCount]} frustumCulled />
     <instancedMesh ref={lampPoles} args={[lampPoleGeometry, lampPoleMaterial, lampPlaces.length]} frustumCulled />
     <instancedMesh ref={lampHeads} args={[lampHeadGeometry, lampHeadMaterial, lampPlaces.length]} frustumCulled />
     {lampPlaces.map((item, index) => <pointLight key={index} position={[item.x, 2.05, item.z]} color={environmentTokens.lampWarm} intensity={night ? 14 : 0} distance={8} decay={2} />)}
@@ -120,5 +126,5 @@ export function WorldProps({ mobile, night }: { mobile: boolean; night: boolean 
       <mesh position={[0, 0.52, 0]} material={worldMaterials.frame}><boxGeometry args={[0.08, 1.1, 0.08]} /></mesh>
       <pointLight position={[0, 1.3, 0.3]} intensity={night ? 0.8 : 0} color={tokens.color.brand.blue} distance={3} />
     </group>
-  </>;
+  </group>;
 }

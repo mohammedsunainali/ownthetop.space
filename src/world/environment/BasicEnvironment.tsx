@@ -14,6 +14,7 @@ import { CentralPlaza } from "./CentralPlaza";
 import { DistrictStreets } from "./DistrictStreets";
 import { celestialDirection, SkyAtmosphere } from "./SkyAtmosphere";
 import { BirdLife } from "./BirdLife";
+import { StudioReflections } from "./StudioReflections";
 
 export function BasicEnvironment({ tallestFloorCount, companiesFloorCount, sideTowerFloorCount }: { tallestFloorCount: number; companiesFloorCount: number; sideTowerFloorCount: number }) {
   const timeMode = useWorldStore((state) => state.worldTime);
@@ -30,14 +31,19 @@ export function BasicEnvironment({ tallestFloorCount, companiesFloorCount, sideT
   const mobile = useWorldQuality();
   const palette = tokens.environment[time];
   const night = time === "night";
+  const sunPosition = celestialDirection(time).map(value => value * 4) as [number, number, number];
   useEffect(() => { applyTimeToWorldMaterials(time); }, [time]);
   return <>
     <color attach="background" args={[palette.skyDeep]} />
     <SkyAtmosphere time={time} upper={palette.skyDeep} horizon={palette.horizon} />
     <fog attach="fog" args={[palette.horizon, Math.max(140,getTowerHeight(tallestFloorCount)*3),Math.max(270,getTowerHeight(tallestFloorCount)*5)]} />
-    <ambientLight intensity={night ? 0.42 : 0.82} />
-    <hemisphereLight args={[palette.skyMid, tokens.color.brand.navy, night ? 0.45 : 1.1]} />
-    <directionalLight position={celestialDirection(time)} intensity={night ? 0.85 : time === "sunset" ? 1.7 : 2.2} color={time === "sunset" ? tokens.color.brand.peach : tokens.color.brand.white} castShadow={!mobile} shadow-mapSize={mobile ? [512, 512] : [1024, 1024]} />
+    <StudioReflections mobile={mobile} night={night} />
+    <ambientLight intensity={night ? 0.28 : 0.38} />
+    <hemisphereLight args={[palette.skyMid, "#a8a08a", night ? 0.48 : 1.05]} />
+    <directionalLight position={sunPosition} intensity={night ? 0.7 : time === "sunset" ? 1.9 : 2.5} color={night ? "#bccfff" : time === "sunset" ? "#ffd0a0" : "#fff2df"} castShadow={!mobile && tallestFloorCount < 80}
+      shadow-mapSize={[1024, 1024]} shadow-bias={-0.00015} shadow-normalBias={0.035}
+      shadow-camera-left={-38} shadow-camera-right={38} shadow-camera-top={42} shadow-camera-bottom={-38}
+      shadow-camera-near={0.1} shadow-camera-far={Math.max(120, getTowerHeight(tallestFloorCount) * 2.5)} />
     <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow position={[0, -0.08, 0]}>
       <planeGeometry args={[2000, 2000]} />
       <meshStandardMaterial color={night ? environmentTokens.lawnNight : environmentTokens.lawn} roughness={0.88} />

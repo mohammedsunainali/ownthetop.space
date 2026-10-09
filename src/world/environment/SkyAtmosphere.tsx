@@ -16,7 +16,7 @@ export function SkyAtmosphere({ time, upper, horizon }: { time: "day" | "sunset"
       <shaderMaterial side={BackSide} depthWrite={false} toneMapped={false}
         uniforms={{ upper: { value: new Color(upper) }, horizon: { value: new Color(horizon) } }}
         vertexShader={"varying vec3 skyDirection; void main(){skyDirection=normalize(position); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}"}
-        fragmentShader={"uniform vec3 upper; uniform vec3 horizon; varying vec3 skyDirection; void main(){float height=smoothstep(0.0,0.15,max(0.0,normalize(skyDirection).y)); gl_FragColor=vec4(mix(horizon,upper,height),1.0);\n#include <colorspace_fragment>\n}"} />
+        fragmentShader={"uniform vec3 upper; uniform vec3 horizon; varying vec3 skyDirection; void main(){float height=smoothstep(-0.08,0.35,normalize(skyDirection).y); gl_FragColor=vec4(mix(horizon,upper,height),1.0);\n#include <colorspace_fragment>\n}"} />
     </mesh>
     <mesh position={position} renderOrder={-90}>
       <sphereGeometry args={[time === "night" ? 2 : 2.7, 16, 12]} />

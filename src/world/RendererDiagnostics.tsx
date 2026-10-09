@@ -34,6 +34,13 @@ export function RendererDiagnostics() {
       documentHidden: document.hidden,
       dpr: gl.getPixelRatio(),
       navigation: navigationSnapshot(),
+      heapUsedBytes: (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize ?? null,
+      loading: performance.getEntriesByType("navigation").map(entry => {
+        const timing = entry as PerformanceNavigationTiming;
+        return { domInteractiveMs: timing.domInteractive, loadEndMs: timing.loadEventEnd };
+      }),
+      resourceTransferBytes: performance.getEntriesByType("resource").reduce((sum, entry) => sum + (entry as PerformanceResourceTiming).transferSize, 0),
+      reflectionBakeMs: Number(gl.domElement.dataset.ottReflectionBakeMs) || null,
     };
     window.__OWNTHTOP_PERF__ = snapshot;
     gl.domElement.dataset.ottPerf = JSON.stringify(snapshot);

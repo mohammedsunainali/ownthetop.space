@@ -1,0 +1,1590 @@
+{
+  "build": "a-4ZfDR2twe7xblYlkZRL",
+  "baselineBuild": "741grq37ds6kucKWnoIWM",
+  "environment": "Codex IAB on this Mac, warm cached local production, DPR 1; viewport 1440x900 except mobile 375x812; not physical-device certification",
+  "measurements": {
+    "before-overview-sustained": {
+      "sampleWindows": 12,
+      "windowSpacingSeconds": 2.1,
+      "metrics": {
+        "fps": {
+          "min": 120,
+          "median": 120.0,
+          "max": 120
+        },
+        "frameP50Ms": {
+          "min": 8.300000071525574,
+          "median": 8.300000071525574,
+          "max": 8.300000071525574
+        },
+        "frameP95Ms": {
+          "min": 8.5,
+          "median": 10.199999928474426,
+          "max": 10.299999952316284
+        },
+        "frameP99Ms": {
+          "min": 9.700000047683716,
+          "median": 10.300000071525574,
+          "max": 10.399999976158142
+        },
+        "calls": {
+          "min": 783,
+          "median": 783.0,
+          "max": 783
+        },
+        "triangles": {
+          "min": 141246,
+          "median": 141246.0,
+          "max": 141246
+        },
+        "geometries": {
+          "min": 716,
+          "median": 716.0,
+          "max": 716
+        },
+        "textures": {
+          "min": 169,
+          "median": 169.0,
+          "max": 169
+        },
+        "heapUsedBytes": {
+          "min": 60814749,
+          "median": 64387387.0,
+          "max": 65956253
+        }
+      },
+      "lastSample": {
+        "calls": 783,
+        "documentHidden": false,
+        "dpr": 1,
+        "fps": 120,
+        "frameMaxMs": 10.300000071525574,
+        "frameP50Ms": 8.300000071525574,
+        "frameP95Ms": 8.5,
+        "frameP99Ms": 10.199999928474426,
+        "geometries": 716,
+        "heapUsedBytes": 60814749,
+        "loading": [
+          {
+            "domInteractiveMs": 82.5,
+            "loadEndMs": 122.20000004768372
+          }
+        ],
+        "navigation": {
+          "longTaskMs": {
+            "count": 1,
+            "max": 118,
+            "p50": 118,
+            "p95": 118,
+            "p99": 118,
+            "total": 118
+          },
+          "sideTextureCreateMs": {
+            "count": 152,
+            "max": 2.5,
+            "p50": 0.10000002384185792,
+            "p95": 0.3999999761581421,
+            "p99": 0.8999999761581421,
+            "total": 26.899999141693115
+          },
+          "sideTexturePaintMs": {
+            "count": 312,
+            "max": 2.1999999284744263,
+            "p50": 0.10000002384185792,
+            "p95": 0.20000004768371585,
+            "p99": 0.3999999761581421,
+            "total": 30.29999876022339
+          }
+        },
+        "reflectionBakeMs": null,
+        "resourceTransferBytes": 42253,
+        "samples": 240,
+        "textures": 169,
+        "triangles": 141246
+      }
+    },
+    "final-overview-sustained": {
+      "sampleWindows": 12,
+      "windowSpacingSeconds": 2.1,
+      "metrics": {
+        "fps": {
+          "min": 120,
+          "median": 120.0,
+          "max": 120
+        },
+        "frameP50Ms": {
+          "min": 8.300000071525574,
+          "median": 8.300000071525574,
+          "max": 8.300000071525574
+        },
+        "frameP95Ms": {
+          "min": 8.400000095367432,
+          "median": 8.5,
+          "max": 9.899999976158142
+        },
+        "frameP99Ms": {
+          "min": 8.600000023841858,
+          "median": 10.200000047683716,
+          "max": 10.399999976158142
+        },
+        "calls": {
+          "min": 818,
+          "median": 818.0,
+          "max": 818
+        },
+        "triangles": {
+          "min": 236926,
+          "median": 236926.0,
+          "max": 236926
+        },
+        "geometries": {
+          "min": 632,
+          "median": 632.0,
+          "max": 632
+        },
+        "textures": {
+          "min": 170,
+          "median": 170.0,
+          "max": 170
+        },
+        "heapUsedBytes": {
+          "min": 43275471,
+          "median": 55726079.5,
+          "max": 68631915
+        }
+      },
+      "lastSample": {
+        "calls": 818,
+        "documentHidden": false,
+        "dpr": 1,
+        "fps": 120,
+        "frameMaxMs": 9.5,
+        "frameP50Ms": 8.300000071525574,
+        "frameP95Ms": 8.400000095367432,
+        "frameP99Ms": 8.600000023841858,
+        "geometries": 632,
+        "heapUsedBytes": 67603286,
+        "loading": [
+          {
+            "domInteractiveMs": 47.70000004768371,
+            "loadEndMs": 65
+          }
+        ],
+        "navigation": {
+          "longTaskMs": {
+            "count": 1,
+            "max": 143,
+            "p50": 143,
+            "p95": 143,
+            "p99": 143,
+            "total": 143
+          },
+          "sideTextureCreateMs": {
+            "count": 208,
+            "max": 2.0999999046325684,
+            "p50": 0.10000002384185792,
+            "p95": 0.2999999523162842,
+            "p99": 0.3999999761581421,
+            "total": 26.799999833106995
+          },
+          "sideTexturePaintMs": {
+            "count": 428,
+            "max": 2,
+            "p50": 0.09999990463256836,
+            "p95": 0.20000004768371585,
+            "p99": 0.30000007152557373,
+            "total": 30.100000023841854
+          }
+        },
+        "reflectionBakeMs": 29.100000023841854,
+        "resourceTransferBytes": 3000,
+        "samples": 240,
+        "textures": 170,
+        "triangles": 236926
+      }
+    },
+    "before-focused-sustained": {
+      "sampleWindows": 10,
+      "windowSpacingSeconds": 2.1,
+      "metrics": {
+        "fps": {
+          "min": 120,
+          "median": 120.0,
+          "max": 120
+        },
+        "frameP50Ms": {
+          "min": 8.300000071525574,
+          "median": 8.300000071525574,
+          "max": 8.300000071525574
+        },
+        "frameP95Ms": {
+          "min": 8.400000095367432,
+          "median": 9.849999964237213,
+          "max": 10.299999952316284
+        },
+        "frameP99Ms": {
+          "min": 9.200000047683716,
+          "median": 10.25,
+          "max": 10.399999976158142
+        },
+        "calls": {
+          "min": 260,
+          "median": 262.0,
+          "max": 269
+        },
+        "triangles": {
+          "min": 91818,
+          "median": 91822.0,
+          "max": 92090
+        },
+        "geometries": {
+          "min": 737,
+          "median": 737.0,
+          "max": 737
+        },
+        "textures": {
+          "min": 171,
+          "median": 171.0,
+          "max": 171
+        },
+        "heapUsedBytes": {
+          "min": 29582196,
+          "median": 32297394.5,
+          "max": 34725811
+        }
+      },
+      "lastSample": {
+        "calls": 260,
+        "documentHidden": false,
+        "dpr": 1,
+        "fps": 120,
+        "frameMaxMs": 10.200000047683716,
+        "frameP50Ms": 8.300000071525574,
+        "frameP95Ms": 8.5,
+        "frameP99Ms": 9.5,
+        "geometries": 737,
+        "heapUsedBytes": 34725811,
+        "loading": [
+          {
+            "domInteractiveMs": 82.5,
+            "loadEndMs": 122.20000004768372
+          }
+        ],
+        "navigation": {
+          "longTaskMs": {
+            "count": 1,
+            "max": 118,
+            "p50": 118,
+            "p95": 118,
+            "p99": 118,
+            "total": 118
+          },
+          "sideTextureCreateMs": {
+            "count": 172,
+            "max": 2.5,
+            "p50": 0.10000002384185792,
+            "p95": 0.30000007152557373,
+            "p99": 0.8999999761581421,
+            "total": 29.19999933242798
+          },
+          "sideTexturePaintMs": {
+            "count": 352,
+            "max": 2.1999999284744263,
+            "p50": 0.10000002384185792,
+            "p95": 0.20000004768371585,
+            "p99": 0.3999999761581421,
+            "total": 32.999998927116394
+          },
+          "sightlineSearchMs": {
+            "count": 3,
+            "max": 0.30000007152557373,
+            "p50": 0.20000004768371585,
+            "p95": 0.30000007152557373,
+            "p99": 0.30000007152557373,
+            "total": 0.5000001192092896
+          }
+        },
+        "reflectionBakeMs": null,
+        "resourceTransferBytes": 42253,
+        "samples": 240,
+        "textures": 171,
+        "triangles": 91886
+      }
+    },
+    "final-focused-sustained": {
+      "sampleWindows": 12,
+      "windowSpacingSeconds": 2.1,
+      "metrics": {
+        "fps": {
+          "min": 120,
+          "median": 120.0,
+          "max": 120
+        },
+        "frameP50Ms": {
+          "min": 8.299999952316284,
+          "median": 8.300000071525574,
+          "max": 8.300000071525574
+        },
+        "frameP95Ms": {
+          "min": 9.299999952316284,
+          "median": 10.050000011920929,
+          "max": 10.399999976158142
+        },
+        "frameP99Ms": {
+          "min": 10.300000071525574,
+          "median": 10.700000047683716,
+          "max": 10.800000071525574
+        },
+        "calls": {
+          "min": 280,
+          "median": 287.5,
+          "max": 293
+        },
+        "triangles": {
+          "min": 174578,
+          "median": 174834.0,
+          "max": 175086
+        },
+        "geometries": {
+          "min": 652,
+          "median": 652.0,
+          "max": 652
+        },
+        "textures": {
+          "min": 172,
+          "median": 172.0,
+          "max": 172
+        },
+        "heapUsedBytes": {
+          "min": 64356437,
+          "median": 70129968.5,
+          "max": 76183074
+        }
+      },
+      "lastSample": {
+        "calls": 286,
+        "documentHidden": false,
+        "dpr": 1,
+        "fps": 120,
+        "frameMaxMs": 12.699999928474426,
+        "frameP50Ms": 8.300000071525574,
+        "frameP95Ms": 10.299999952316284,
+        "frameP99Ms": 10.700000047683716,
+        "geometries": 652,
+        "heapUsedBytes": 67797635,
+        "loading": [
+          {
+            "domInteractiveMs": 80.5,
+            "loadEndMs": 120.89999997615814
+          }
+        ],
+        "navigation": {
+          "longTaskMs": {
+            "count": 2,
+            "max": 154,
+            "p50": 154,
+            "p95": 154,
+            "p99": 154,
+            "total": 205
+          },
+          "sideTextureCreateMs": {
+            "count": 212,
+            "max": 2,
+            "p50": 0.10000002384185792,
+            "p95": 0.30000007152557373,
+            "p99": 0.6000000238418579,
+            "total": 29.999999403953552
+          },
+          "sideTexturePaintMs": {
+            "count": 436,
+            "max": 1.7999999523162842,
+            "p50": 0.09999990463256836,
+            "p95": 0.20000004768371585,
+            "p99": 0.3999999761581421,
+            "total": 33.59999907016754
+          },
+          "sightlineSearchMs": {
+            "count": 4,
+            "max": 0.6000000238418579,
+            "p50": 0.20000004768371585,
+            "p95": 0.6000000238418579,
+            "p99": 0.6000000238418579,
+            "total": 1.1000001430511477
+          }
+        },
+        "reflectionBakeMs": 31.200000047683716,
+        "resourceTransferBytes": 44537,
+        "samples": 241,
+        "textures": 172,
+        "triangles": 174818
+      }
+    },
+    "mobile-sustained": {
+      "sampleWindows": 8,
+      "windowSpacingSeconds": 2.1,
+      "metrics": {
+        "fps": {
+          "min": 120,
+          "median": 120.0,
+          "max": 120
+        },
+        "frameP50Ms": {
+          "min": 8.299999952316284,
+          "median": 8.299999952316284,
+          "max": 8.299999952316284
+        },
+        "frameP95Ms": {
+          "min": 8.899999976158142,
+          "median": 9.800000011920929,
+          "max": 10.399999976158142
+        },
+        "frameP99Ms": {
+          "min": 10.400000095367432,
+          "median": 10.699999988079071,
+          "max": 10.799999952316284
+        },
+        "calls": {
+          "min": 734,
+          "median": 734.0,
+          "max": 734
+        },
+        "triangles": {
+          "min": 152818,
+          "median": 152818.0,
+          "max": 152818
+        },
+        "geometries": {
+          "min": 626,
+          "median": 626.0,
+          "max": 626
+        },
+        "textures": {
+          "min": 169,
+          "median": 169.0,
+          "max": 169
+        },
+        "heapUsedBytes": {
+          "min": 31643875,
+          "median": 34247204.5,
+          "max": 36181211
+        }
+      },
+      "lastSample": {
+        "calls": 734,
+        "documentHidden": false,
+        "dpr": 1,
+        "fps": 120,
+        "frameMaxMs": 10.800000071525574,
+        "frameP50Ms": 8.299999952316284,
+        "frameP95Ms": 9.799999952316284,
+        "frameP99Ms": 10.600000023841858,
+        "geometries": 626,
+        "heapUsedBytes": 36181211,
+        "loading": [
+          {
+            "domInteractiveMs": 47.70000004768371,
+            "loadEndMs": 65
+          }
+        ],
+        "navigation": {
+          "longTaskMs": {
+            "count": 2,
+            "max": 444,
+            "p50": 444,
+            "p95": 444,
+            "p99": 444,
+            "total": 587
+          },
+          "sideTextureCreateMs": {
+            "count": 216,
+            "max": 2.0999999046325684,
+            "p50": 0.10000002384185792,
+            "p95": 0.30000007152557373,
+            "p99": 1.399999976158142,
+            "total": 30.299999952316284
+          },
+          "sideTexturePaintMs": {
+            "count": 444,
+            "max": 2,
+            "p50": 0.09999990463256836,
+            "p95": 0.20000004768371585,
+            "p99": 0.30000007152557373,
+            "total": 33.90000009536743
+          },
+          "sightlineSearchMs": {
+            "count": 5,
+            "max": 0.19999992847442627,
+            "p50": 0.10000002384185792,
+            "p95": 0.19999992847442627,
+            "p99": 0.19999992847442627,
+            "total": 0.3999999761581421
+          }
+        },
+        "reflectionBakeMs": 29.100000023841854,
+        "resourceTransferBytes": 3000,
+        "samples": 241,
+        "textures": 169,
+        "triangles": 152818
+      }
+    },
+    "stress-sustained": {
+      "sampleWindows": 10,
+      "windowSpacingSeconds": 2.1,
+      "metrics": {
+        "fps": {
+          "min": 120,
+          "median": 120.0,
+          "max": 120
+        },
+        "frameP50Ms": {
+          "min": 8.299999952316284,
+          "median": 8.299999952316284,
+          "max": 8.300000071525574
+        },
+        "frameP95Ms": {
+          "min": 9.200000047683716,
+          "median": 10.399999976158142,
+          "max": 10.600000023841858
+        },
+        "frameP99Ms": {
+          "min": 10.600000023841858,
+          "median": 10.700000047683716,
+          "max": 11.399999976158142
+        },
+        "calls": {
+          "min": 1436,
+          "median": 1436.0,
+          "max": 1436
+        },
+        "triangles": {
+          "min": 261958,
+          "median": 261958.0,
+          "max": 261958
+        },
+        "geometries": {
+          "min": 1288,
+          "median": 1288.0,
+          "max": 1288
+        },
+        "textures": {
+          "min": 669,
+          "median": 669.0,
+          "max": 669
+        },
+        "heapUsedBytes": {
+          "min": 48032289,
+          "median": 61349268.5,
+          "max": 71359764
+        }
+      },
+      "lastSample": {
+        "calls": 1436,
+        "documentHidden": false,
+        "dpr": 1,
+        "fps": 120,
+        "frameMaxMs": 13.299999952316284,
+        "frameP50Ms": 8.299999952316284,
+        "frameP95Ms": 10.100000023841858,
+        "frameP99Ms": 11.399999976158142,
+        "geometries": 1288,
+        "heapUsedBytes": 67484634,
+        "loading": [
+          {
+            "domInteractiveMs": 53.300000071525574,
+            "loadEndMs": 71.20000004768372
+          }
+        ],
+        "navigation": {
+          "longTaskMs": {
+            "count": 2,
+            "max": 1810,
+            "p50": 1810,
+            "p95": 1810,
+            "p99": 1810,
+            "total": 1942
+          },
+          "sideTextureCreateMs": {
+            "count": 512,
+            "max": 0.6999999284744263,
+            "p50": 0.10000002384185792,
+            "p95": 0.20000004768371585,
+            "p99": 0.3999999761581421,
+            "total": 56.99999964237213
+          },
+          "sideTexturePaintMs": {
+            "count": 512,
+            "max": 0.6000000238418579,
+            "p50": 0.09999990463256836,
+            "p95": 0.19999992847442627,
+            "p99": 0.20000004768371585,
+            "total": 30.799999237060547
+          }
+        },
+        "reflectionBakeMs": 81.90000009536743,
+        "resourceTransferBytes": 2100,
+        "samples": 241,
+        "textures": 669,
+        "triangles": 261958
+      }
+    },
+    "resource-cycles": {
+      "sampleWindows": 6,
+      "windowSpacingSeconds": 2.1,
+      "metrics": {
+        "fps": {
+          "min": 119,
+          "median": 120.0,
+          "max": 120
+        },
+        "frameP50Ms": {
+          "min": 8.299999952316284,
+          "median": 8.300000071525574,
+          "max": 8.300000071525574
+        },
+        "frameP95Ms": {
+          "min": 9.399999976158142,
+          "median": 10.050000011920929,
+          "max": 10.300000071525574
+        },
+        "frameP99Ms": {
+          "min": 10.399999976158142,
+          "median": 10.75,
+          "max": 12.199999928474426
+        },
+        "calls": {
+          "min": 339,
+          "median": 371.0,
+          "max": 394
+        },
+        "triangles": {
+          "min": 176872,
+          "median": 184752.0,
+          "max": 186076
+        },
+        "geometries": {
+          "min": 629,
+          "median": 629.0,
+          "max": 672
+        },
+        "textures": {
+          "min": 174,
+          "median": 174.0,
+          "max": 174
+        },
+        "heapUsedBytes": {
+          "min": 31707045,
+          "median": 34272591.5,
+          "max": 43899215
+        }
+      },
+      "lastSample": {
+        "calls": 394,
+        "documentHidden": false,
+        "dpr": 1,
+        "fps": 120,
+        "frameMaxMs": 13.799999952316284,
+        "frameP50Ms": 8.300000071525574,
+        "frameP95Ms": 9.799999952316284,
+        "frameP99Ms": 11,
+        "geometries": 629,
+        "heapUsedBytes": 43899215,
+        "loading": [
+          {
+            "domInteractiveMs": 69.30000007152557,
+            "loadEndMs": 87.60000002384186
+          }
+        ],
+        "navigation": {
+          "longTaskMs": {
+            "count": 1,
+            "max": 153,
+            "p50": 153,
+            "p95": 153,
+            "p99": 153,
+            "total": 153
+          },
+          "sideTextureCreateMs": {
+            "count": 268,
+            "max": 2,
+            "p50": 0.10000002384185792,
+            "p95": 0.20000004768371585,
+            "p99": 0.3999999761581421,
+            "total": 33.09999918937683
+          },
+          "sideTexturePaintMs": {
+            "count": 512,
+            "max": 0.3999999761581421,
+            "p50": 0.09999990463256836,
+            "p95": 0.20000004768371585,
+            "p99": 0.2999999523162842,
+            "total": 35.700000643730164
+          },
+          "sightlineSearchMs": {
+            "count": 18,
+            "max": 0.7999999523162842,
+            "p50": 0.20000004768371585,
+            "p95": 0.7999999523162842,
+            "p99": 0.7999999523162842,
+            "total": 3.5
+          }
+        },
+        "reflectionBakeMs": 29.200000047683716,
+        "resourceTransferBytes": 3000,
+        "samples": 240,
+        "textures": 174,
+        "triangles": 186076
+      }
+    },
+    "before-wheel": {
+      "camera": {
+        "blocked": false,
+        "cameraMode": "selectedFloor",
+        "destination": [
+          0,
+          31.169999999999995,
+          -9
+        ],
+        "districtBuildingId": null,
+        "exploded": false,
+        "face": "front",
+        "floorCenter": [
+          447.9221326689227,
+          460.0874606207185
+        ],
+        "listingId": "companies-02",
+        "position": [
+          0.4337746729175802,
+          31.646673670102498,
+          3.3935544095155237
+        ],
+        "preview": false,
+        "projection": {
+          "amount": 34.545909430901354,
+          "facadeWidth": 736.9794011925621,
+          "logo": 92.12242514907028,
+          "name": 33.826202984424235,
+          "rank": 34.545909430901354,
+          "subtitle": 16.55324826897356
+        },
+        "rank": 2,
+        "safeViewport": {
+          "bottom": 825,
+          "left": 16,
+          "right": 898,
+          "top": 75
+        },
+        "size": {
+          "height": 900,
+          "left": 0,
+          "top": 0,
+          "width": 1440
+        },
+        "target": [
+          0,
+          31.17132724435669,
+          -8.999998017067764
+        ],
+        "time": "day",
+        "towerId": "companies"
+      },
+      "perf": {
+        "calls": 276,
+        "documentHidden": false,
+        "dpr": 1,
+        "fps": 120,
+        "frameMaxMs": 10.399999976158142,
+        "frameP50Ms": 8.300000071525574,
+        "frameP95Ms": 9.799999952316284,
+        "frameP99Ms": 10.300000071525574,
+        "geometries": 755,
+        "heapUsedBytes": 33648933,
+        "loading": [
+          {
+            "domInteractiveMs": 82.5,
+            "loadEndMs": 122.20000004768372
+          }
+        ],
+        "navigation": {
+          "inputToCameraFrameMs": {
+            "count": 1,
+            "max": 7.5,
+            "p50": 7.5,
+            "p95": 7.5,
+            "p99": 7.5,
+            "total": 7.5
+          },
+          "longTaskMs": {
+            "count": 1,
+            "max": 118,
+            "p50": 118,
+            "p95": 118,
+            "p99": 118,
+            "total": 118
+          },
+          "sideTextureCreateMs": {
+            "count": 174,
+            "max": 2.5,
+            "p50": 0.10000002384185792,
+            "p95": 0.30000007152557373,
+            "p99": 0.8999999761581421,
+            "total": 29.499999403953552
+          },
+          "sideTexturePaintMs": {
+            "count": 356,
+            "max": 2.1999999284744263,
+            "p50": 0.10000002384185792,
+            "p95": 0.20000004768371585,
+            "p99": 0.3999999761581421,
+            "total": 33.29999899864197
+          },
+          "sightlineSearchMs": {
+            "count": 5,
+            "max": 0.30000007152557373,
+            "p50": 0.10000002384185792,
+            "p95": 0.30000007152557373,
+            "p99": 0.30000007152557373,
+            "total": 0.6000001430511475
+          },
+          "wheelDeltaPixels": {
+            "count": 1,
+            "max": 1800,
+            "p50": 1800,
+            "p95": 1800,
+            "p99": 1800,
+            "total": 1800
+          },
+          "wheelHandlerMs": {
+            "count": 1,
+            "max": 0.10000002384185792,
+            "p50": 0.10000002384185792,
+            "p95": 0.10000002384185792,
+            "p99": 0.10000002384185792,
+            "total": 0.10000002384185792
+          }
+        },
+        "reflectionBakeMs": null,
+        "resourceTransferBytes": 42253,
+        "samples": 240,
+        "textures": 172,
+        "triangles": 92258
+      }
+    },
+    "final-wheel": {
+      "camera": {
+        "blocked": false,
+        "cameraMode": "selectedFloor",
+        "destination": [
+          0,
+          31.169999999999995,
+          -9
+        ],
+        "districtBuildingId": null,
+        "exploded": false,
+        "face": "front",
+        "floorCenter": [
+          447.9221292311152,
+          460.08801506242577
+        ],
+        "listingId": "companies-02",
+        "position": [
+          0.43377430092887576,
+          31.64667834152889,
+          3.39355143044218
+        ],
+        "preview": false,
+        "projection": {
+          "amount": 34.545919040313166,
+          "facadeWidth": 736.9796061933475,
+          "logo": 92.12245077416844,
+          "name": 33.82621239363998,
+          "rank": 34.545919040313166,
+          "subtitle": 16.55325287348339
+        },
+        "rank": 2,
+        "safeViewport": {
+          "bottom": 825,
+          "left": 16,
+          "right": 898,
+          "top": 75
+        },
+        "size": {
+          "height": 900,
+          "left": 0,
+          "top": 0,
+          "width": 1440
+        },
+        "target": [
+          0,
+          31.17133195475467,
+          -8.99999999182254
+        ],
+        "time": "day",
+        "towerId": "companies"
+      },
+      "perf": {
+        "calls": 317,
+        "documentHidden": false,
+        "dpr": 1,
+        "fps": 120,
+        "frameMaxMs": 14.899999976158142,
+        "frameP50Ms": 8.300000071525574,
+        "frameP95Ms": 9.700000047683716,
+        "frameP99Ms": 11,
+        "geometries": 670,
+        "heapUsedBytes": 83289564,
+        "loading": [
+          {
+            "domInteractiveMs": 80.5,
+            "loadEndMs": 120.89999997615814
+          }
+        ],
+        "navigation": {
+          "inputToCameraFrameMs": {
+            "count": 1,
+            "max": 7.799999952316284,
+            "p50": 7.799999952316284,
+            "p95": 7.799999952316284,
+            "p99": 7.799999952316284,
+            "total": 7.799999952316284
+          },
+          "longTaskMs": {
+            "count": 2,
+            "max": 154,
+            "p50": 154,
+            "p95": 154,
+            "p99": 154,
+            "total": 205
+          },
+          "sideTextureCreateMs": {
+            "count": 214,
+            "max": 2,
+            "p50": 0.10000002384185792,
+            "p95": 0.30000007152557373,
+            "p99": 0.6000000238418579,
+            "total": 30.29999947547913
+          },
+          "sideTexturePaintMs": {
+            "count": 440,
+            "max": 1.7999999523162842,
+            "p50": 0.09999990463256836,
+            "p95": 0.20000004768371585,
+            "p99": 0.3999999761581421,
+            "total": 33.99999916553497
+          },
+          "sightlineSearchMs": {
+            "count": 6,
+            "max": 0.6000000238418579,
+            "p50": 0.20000004768371585,
+            "p95": 0.6000000238418579,
+            "p99": 0.6000000238418579,
+            "total": 1.4000002145767212
+          },
+          "wheelDeltaPixels": {
+            "count": 1,
+            "max": 1800,
+            "p50": 1800,
+            "p95": 1800,
+            "p99": 1800,
+            "total": 1800
+          },
+          "wheelHandlerMs": {
+            "count": 1,
+            "max": 0.19999992847442627,
+            "p50": 0.19999992847442627,
+            "p95": 0.19999992847442627,
+            "p99": 0.19999992847442627,
+            "total": 0.19999992847442627
+          }
+        },
+        "reflectionBakeMs": 31.200000047683716,
+        "resourceTransferBytes": 44537,
+        "samples": 240,
+        "textures": 173,
+        "triangles": 175618
+      }
+    },
+    "reduced-motion": {
+      "motionA": {
+        "pedestrians": [
+          {
+            "rotation": 1.5707963267948966,
+            "walking": false,
+            "x": 24,
+            "z": 0
+          },
+          {
+            "rotation": -1.5707963267948966,
+            "walking": false,
+            "x": -24,
+            "z": 0
+          }
+        ],
+        "time": 0,
+        "vehicles": [
+          {
+            "direction": 1,
+            "phase": 0,
+            "speed": 0.0065
+          },
+          {
+            "direction": -1,
+            "phase": 0.07142857142857142,
+            "speed": 0.0065
+          },
+          {
+            "direction": 1,
+            "phase": 0.14285714285714285,
+            "speed": 0.0065
+          },
+          {
+            "direction": -1,
+            "phase": 0.21428571428571427,
+            "speed": 0.0065
+          },
+          {
+            "direction": 1,
+            "phase": 0.2857142857142857,
+            "speed": 0.0065
+          },
+          {
+            "direction": -1,
+            "phase": 0.35714285714285715,
+            "speed": 0.0065
+          },
+          {
+            "direction": 1,
+            "phase": 0.42857142857142855,
+            "speed": 0.0065
+          },
+          {
+            "direction": -1,
+            "phase": 0.5,
+            "speed": 0.0065
+          },
+          {
+            "direction": 1,
+            "phase": 0.5714285714285714,
+            "speed": 0.0065
+          },
+          {
+            "direction": -1,
+            "phase": 0.6428571428571429,
+            "speed": 0.0065
+          },
+          {
+            "direction": 1,
+            "phase": 0.7142857142857143,
+            "speed": 0.0065
+          },
+          {
+            "direction": -1,
+            "phase": 0.7857142857142857,
+            "speed": 0.0065
+          },
+          {
+            "direction": 1,
+            "phase": 0.8571428571428571,
+            "speed": 0.0065
+          },
+          {
+            "direction": -1,
+            "phase": 0.9285714285714286,
+            "speed": 0.0065
+          }
+        ]
+      },
+      "motionB": {
+        "pedestrians": [
+          {
+            "rotation": 1.5707963267948966,
+            "walking": false,
+            "x": 24,
+            "z": 0
+          },
+          {
+            "rotation": -1.5707963267948966,
+            "walking": false,
+            "x": -24,
+            "z": 0
+          }
+        ],
+        "time": 0,
+        "vehicles": [
+          {
+            "direction": 1,
+            "phase": 0,
+            "speed": 0.0065
+          },
+          {
+            "direction": -1,
+            "phase": 0.07142857142857142,
+            "speed": 0.0065
+          },
+          {
+            "direction": 1,
+            "phase": 0.14285714285714285,
+            "speed": 0.0065
+          },
+          {
+            "direction": -1,
+            "phase": 0.21428571428571427,
+            "speed": 0.0065
+          },
+          {
+            "direction": 1,
+            "phase": 0.2857142857142857,
+            "speed": 0.0065
+          },
+          {
+            "direction": -1,
+            "phase": 0.35714285714285715,
+            "speed": 0.0065
+          },
+          {
+            "direction": 1,
+            "phase": 0.42857142857142855,
+            "speed": 0.0065
+          },
+          {
+            "direction": -1,
+            "phase": 0.5,
+            "speed": 0.0065
+          },
+          {
+            "direction": 1,
+            "phase": 0.5714285714285714,
+            "speed": 0.0065
+          },
+          {
+            "direction": -1,
+            "phase": 0.6428571428571429,
+            "speed": 0.0065
+          },
+          {
+            "direction": 1,
+            "phase": 0.7142857142857143,
+            "speed": 0.0065
+          },
+          {
+            "direction": -1,
+            "phase": 0.7857142857142857,
+            "speed": 0.0065
+          },
+          {
+            "direction": 1,
+            "phase": 0.8571428571428571,
+            "speed": 0.0065
+          },
+          {
+            "direction": -1,
+            "phase": 0.9285714285714286,
+            "speed": 0.0065
+          }
+        ]
+      }
+    },
+    "before-mobile-sustained": {
+      "sampleWindows": 8,
+      "windowSpacingSeconds": 2.1,
+      "metrics": {
+        "fps": {
+          "min": 120,
+          "median": 120.0,
+          "max": 120
+        },
+        "frameP50Ms": {
+          "min": 8.299999952316284,
+          "median": 8.300000071525574,
+          "max": 8.300000071525574
+        },
+        "frameP95Ms": {
+          "min": 8.899999976158142,
+          "median": 9.400000035762787,
+          "max": 10
+        },
+        "frameP99Ms": {
+          "min": 10,
+          "median": 10.250000059604645,
+          "max": 10.5
+        },
+        "calls": {
+          "min": 710,
+          "median": 716.0,
+          "max": 716
+        },
+        "triangles": {
+          "min": 106992,
+          "median": 107064.0,
+          "max": 107064
+        },
+        "geometries": {
+          "min": 672,
+          "median": 672.0,
+          "max": 672
+        },
+        "textures": {
+          "min": 167,
+          "median": 167.0,
+          "max": 167
+        },
+        "heapUsedBytes": {
+          "min": 35011848,
+          "median": 57953049.5,
+          "max": 61149917
+        }
+      },
+      "lastSample": {
+        "calls": 710,
+        "documentHidden": false,
+        "dpr": 1,
+        "fps": 120,
+        "frameMaxMs": 11.5,
+        "frameP50Ms": 8.299999952316284,
+        "frameP95Ms": 10,
+        "frameP99Ms": 10.5,
+        "geometries": 672,
+        "heapUsedBytes": 56317894,
+        "loading": [
+          {
+            "domInteractiveMs": 78.5,
+            "loadEndMs": 112.10000002384186
+          }
+        ],
+        "navigation": {
+          "longTaskMs": {
+            "count": 1,
+            "max": 111,
+            "p50": 111,
+            "p95": 111,
+            "p99": 111,
+            "total": 111
+          },
+          "sideTextureCreateMs": {
+            "count": 208,
+            "max": 2.299999952316284,
+            "p50": 0.10000002384185792,
+            "p95": 0.30000007152557373,
+            "p99": 0.5,
+            "total": 28.700000882148743
+          },
+          "sideTexturePaintMs": {
+            "count": 428,
+            "max": 2.100000023841858,
+            "p50": 0.09999990463256836,
+            "p95": 0.20000004768371585,
+            "p99": 0.30000007152557373,
+            "total": 32.80000126361847
+          }
+        },
+        "reflectionBakeMs": null,
+        "resourceTransferBytes": 3000,
+        "samples": 241,
+        "textures": 167,
+        "triangles": 106992
+      }
+    },
+    "final-mobile-sustained": {
+      "sampleWindows": 8,
+      "windowSpacingSeconds": 2.1,
+      "metrics": {
+        "fps": {
+          "min": 120,
+          "median": 120.0,
+          "max": 120
+        },
+        "frameP50Ms": {
+          "min": 8.299999952316284,
+          "median": 8.299999952316284,
+          "max": 8.300000071525574
+        },
+        "frameP95Ms": {
+          "min": 8.800000071525574,
+          "median": 9.299999952316284,
+          "max": 10.100000023841858
+        },
+        "frameP99Ms": {
+          "min": 10.100000023841858,
+          "median": 10.350000023841858,
+          "max": 10.399999976158142
+        },
+        "calls": {
+          "min": 728,
+          "median": 728.0,
+          "max": 734
+        },
+        "triangles": {
+          "min": 152746,
+          "median": 152746.0,
+          "max": 152818
+        },
+        "geometries": {
+          "min": 588,
+          "median": 588.0,
+          "max": 588
+        },
+        "textures": {
+          "min": 167,
+          "median": 167.0,
+          "max": 167
+        },
+        "heapUsedBytes": {
+          "min": 30157575,
+          "median": 31798291.0,
+          "max": 37017360
+        }
+      },
+      "lastSample": {
+        "calls": 728,
+        "documentHidden": false,
+        "dpr": 1,
+        "fps": 120,
+        "frameMaxMs": 11.299999952316284,
+        "frameP50Ms": 8.299999952316284,
+        "frameP95Ms": 9.299999952316284,
+        "frameP99Ms": 10.200000047683716,
+        "geometries": 588,
+        "heapUsedBytes": 33015299,
+        "loading": [
+          {
+            "domInteractiveMs": 91.89999997615814,
+            "loadEndMs": 112.5
+          }
+        ],
+        "navigation": {
+          "longTaskMs": {
+            "count": 1,
+            "max": 128,
+            "p50": 128,
+            "p95": 128,
+            "p99": 128,
+            "total": 128
+          },
+          "sideTextureCreateMs": {
+            "count": 208,
+            "max": 1.600000023841858,
+            "p50": 0.10000002384185792,
+            "p95": 0.30000007152557373,
+            "p99": 0.3999999761581421,
+            "total": 28.200000047683716
+          },
+          "sideTexturePaintMs": {
+            "count": 428,
+            "max": 1.600000023841858,
+            "p50": 0.09999990463256836,
+            "p95": 0.20000004768371585,
+            "p99": 0.2999999523162842,
+            "total": 31.200000166893005
+          }
+        },
+        "reflectionBakeMs": null,
+        "resourceTransferBytes": 3000,
+        "samples": 241,
+        "textures": 167,
+        "triangles": 152746
+      }
+    },
+    "before-stress-sustained": {
+      "sampleWindows": 10,
+      "windowSpacingSeconds": 2.1,
+      "metrics": {
+        "fps": {
+          "min": 120,
+          "median": 120.0,
+          "max": 120
+        },
+        "frameP50Ms": {
+          "min": 8.300000071525574,
+          "median": 8.300000071525574,
+          "max": 8.300000071525574
+        },
+        "frameP95Ms": {
+          "min": 8.400000095367432,
+          "median": 9.950000047683716,
+          "max": 10.200000047683716
+        },
+        "frameP99Ms": {
+          "min": 9.700000047683716,
+          "median": 10.300000071525574,
+          "max": 10.399999976158142
+        },
+        "calls": {
+          "min": 1424,
+          "median": 1424.0,
+          "max": 1424
+        },
+        "triangles": {
+          "min": 162070,
+          "median": 162070.0,
+          "max": 162070
+        },
+        "geometries": {
+          "min": 1372,
+          "median": 1372.0,
+          "max": 1372
+        },
+        "textures": {
+          "min": 670,
+          "median": 670.0,
+          "max": 670
+        },
+        "heapUsedBytes": {
+          "min": 47261863,
+          "median": 62783051.5,
+          "max": 70829917
+        }
+      },
+      "lastSample": {
+        "calls": 1424,
+        "documentHidden": false,
+        "dpr": 1,
+        "fps": 120,
+        "frameMaxMs": 10.300000071525574,
+        "frameP50Ms": 8.300000071525574,
+        "frameP95Ms": 9.900000095367432,
+        "frameP99Ms": 10.299999952316284,
+        "geometries": 1372,
+        "heapUsedBytes": 63466855,
+        "loading": [
+          {
+            "domInteractiveMs": 68.30000007152557,
+            "loadEndMs": 83.60000002384186
+          }
+        ],
+        "navigation": {
+          "longTaskMs": {
+            "count": 2,
+            "max": 144,
+            "p50": 144,
+            "p95": 144,
+            "p99": 144,
+            "total": 232
+          },
+          "sideTextureCreateMs": {
+            "count": 512,
+            "max": 1.7000000476837158,
+            "p50": 0.10000002384185792,
+            "p95": 0.30000007152557373,
+            "p99": 0.5,
+            "total": 71.99999964237213
+          },
+          "sideTexturePaintMs": {
+            "count": 512,
+            "max": 0.8999999761581421,
+            "p50": 0.09999990463256836,
+            "p95": 0.20000004768371585,
+            "p99": 0.2999999523162842,
+            "total": 37.09999918937683
+          }
+        },
+        "reflectionBakeMs": null,
+        "resourceTransferBytes": 2100,
+        "samples": 240,
+        "textures": 670,
+        "triangles": 162070
+      }
+    },
+    "stress-repeat": {
+      "build": "a-4ZfDR2twe7xblYlkZRL",
+      "camera": {
+        "blocked": false,
+        "cameraMode": "overview",
+        "destination": [
+          0,
+          150.83499999999998,
+          -9
+        ],
+        "districtBuildingId": null,
+        "exploded": false,
+        "face": "front",
+        "floorCenter": [
+          744.3690453633151,
+          186.8865698587152
+        ],
+        "listingId": null,
+        "position": [
+          72.00897857838459,
+          317.0095659501184,
+          544.9152198337279
+        ],
+        "preview": false,
+        "projection": {
+          "amount": 0.6452691737251363,
+          "facadeWidth": 13.765742372802908,
+          "logo": 1.7207177966003635,
+          "name": 0.631826065939196,
+          "rank": 0.6452691737251363,
+          "subtitle": 0.3091914790766278
+        },
+        "rank": 1,
+        "safeViewport": {
+          "bottom": 825,
+          "left": 210,
+          "right": 1280,
+          "top": 156
+        },
+        "size": {
+          "height": 900,
+          "left": 0,
+          "top": 0,
+          "width": 1440
+        },
+        "target": [
+          0,
+          150.83499999999998,
+          -9
+        ],
+        "time": "day",
+        "towerId": "companies"
+      },
+      "perf": {
+        "calls": 1436,
+        "documentHidden": false,
+        "dpr": 1,
+        "fps": 120,
+        "frameMaxMs": 13.300000071525574,
+        "frameP50Ms": 8.300000071525574,
+        "frameP95Ms": 10.299999952316284,
+        "frameP99Ms": 11,
+        "geometries": 1288,
+        "heapUsedBytes": 68718180,
+        "loading": [
+          {
+            "domInteractiveMs": 73.19999992847443,
+            "loadEndMs": 91.09999990463255
+          }
+        ],
+        "navigation": {
+          "longTaskMs": {
+            "count": 2,
+            "max": 162,
+            "p50": 162,
+            "p95": 162,
+            "p99": 162,
+            "total": 269
+          },
+          "sideTextureCreateMs": {
+            "count": 512,
+            "max": 5.400000095367432,
+            "p50": 0.10000002384185792,
+            "p95": 0.2999999523162842,
+            "p99": 0.3999999761581421,
+            "total": 63.80000054836273
+          },
+          "sideTexturePaintMs": {
+            "count": 512,
+            "max": 5.400000095367432,
+            "p50": 0.09999990463256836,
+            "p95": 0.20000004768371585,
+            "p99": 0.2999999523162842,
+            "total": 38.19999969005585
+          }
+        },
+        "reflectionBakeMs": 66.69999992847443,
+        "resourceTransferBytes": 2100,
+        "samples": 240,
+        "textures": 669,
+        "triangles": 261958
+      }
+    }
+  }
+}

@@ -5,6 +5,8 @@ import { worldMaterials } from "@/world/materials/world-materials";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { swimmerPose } from "./rooftop-life";
 
+import { SoftBox } from "@/world/geometry/SoftBox";
+
 export function RooftopPool() {
   const water = useRef<PlaneGeometry>(null), swimmer = useRef<Group>(null);
   const waterMaterial = useRef<MeshStandardMaterial>(null);
@@ -16,6 +18,7 @@ export function RooftopPool() {
     if (positions) {
       for (let i = 0; i < positions.count; i++) positions.setZ(i, reduced ? 0 : Math.sin(positions.getX(i) * 10 + t * 0.8) * Math.cos(positions.getY(i) * 12 + t * 0.7) * 0.004);
       positions.needsUpdate = true;
+      water.current?.computeVertexNormals();
     }
     if (swimmer.current) {
       const pose = swimmerPose(t);
@@ -29,9 +32,9 @@ export function RooftopPool() {
       <meshStandardMaterial ref={waterMaterial} color="#32b7d2" emissive="#168ca5" emissiveIntensity={0} metalness={0.22} roughness={0.18} transparent opacity={0.85} />
     </mesh>
     <group ref={swimmer} position={[1.4, 0.335, 1.8]}>
-      <mesh><boxGeometry args={[0.13, 0.065, 0.3]} /><meshStandardMaterial color="#183857" /></mesh>
+      <mesh><SoftBox args={[0.13, 0.065, 0.3]} radius={.02} /><meshStandardMaterial color="#183857" /></mesh>
       <mesh position={[0, 0.025, 0.2]}><sphereGeometry args={[0.065, 8, 6]} /><meshStandardMaterial color="#bd8e69" /></mesh>
-      {[-1, 1].map(side => <mesh key={side} position={[side * 0.1, 0.015, 0.06]} rotation={[0, side * 0.5, 0]}><boxGeometry args={[0.05, 0.04, 0.22]} /><meshStandardMaterial color="#bd8e69" /></mesh>)}
+      {[-1, 1].map(side => <mesh key={side} position={[side * 0.1, 0.015, 0.06]} rotation={[0, side * 0.5, 0]}><SoftBox args={[0.05, 0.04, 0.22]} radius={.012} /><meshStandardMaterial color="#bd8e69" /></mesh>)}
     </group>
   </>;
 }

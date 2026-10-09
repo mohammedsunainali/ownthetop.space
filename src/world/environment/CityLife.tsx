@@ -9,15 +9,25 @@ import { plazaPerson } from "./plaza-life";
 import { createTraffic, crossingPerson, stepTraffic, vehicleArchetypes, vehicleHeading } from "./traffic-flow";
 import { TrafficCrossings } from "./TrafficCrossings";
 
-const carBody = new BoxGeometry(1, 1, 1);
-const carRoof = carBody;
+import { softBox } from "@/world/geometry/soft-box";
+
+const carBody = softBox(1, 1, 1, .12);
+const carRoof = softBox(1, 1, 1, .18);
+const roofPanel = softBox(1, 1, 1, .12);
 const lampGeometry = new BoxGeometry(0.07, 0.045, 0.025);
-const wheelGeometry = new CylinderGeometry(0.075, 0.075, 0.035, 8);
-const personGeometry = new CylinderGeometry(0.075, 0.065, 0.22, 6);
-const limbGeometry = new BoxGeometry(0.037, 0.18, 0.043);
-const skinMaterial = new MeshStandardMaterial({ color: "#dca07b", roughness: 0.85 });
-const headGeometry = new SphereGeometry(0.072, 6, 5);
-const vehicleMaterial = new MeshStandardMaterial({ color: tokens.color.brand.white, roughness: 0.48, metalness: 0.2 });
+const wheelGeometry = new CylinderGeometry(0.075, 0.075, 0.035, 12);
+const personGeometry = softBox(.15, .22, .11, .028);
+const limbGeometry = softBox(0.037, 0.18, 0.043, .012).clone();
+limbGeometry.translate(0, -.09, 0);
+const skinMaterial = new MeshStandardMaterial({ color: "#ffffff", roughness: 0.85 });
+const headGeometry = new SphereGeometry(0.079, 10, 7);
+const hairGeometry = new SphereGeometry(.081, 10, 5, 0, Math.PI * 2, 0, Math.PI / 2);
+const tireMaterial = new MeshStandardMaterial({ color: "#26323e", roughness: .9 });
+const cabinMaterial = new MeshStandardMaterial({ color: "#234858", roughness: .26, metalness: .22 });
+const hairMaterial = new MeshStandardMaterial({ color: "#ffffff", roughness: .92 });
+const skinPalette = ["#dca07b", "#986342", "#efc5a0", "#b67e55"];
+const hairPalette = ["#342c29", "#62503d", "#bda371", "#57596a"];
+const vehicleMaterial = new MeshStandardMaterial({ color: tokens.color.brand.white, roughness: 0.52, metalness: 0.12 });
 const waterMaterial = new MeshStandardMaterial({ color: tokens.color.sky.water, roughness: 0.22, metalness: 0.34, transparent: true, opacity: 0.78 });
 const fountainMaterial = new MeshStandardMaterial({ color: tokens.color.brand.lightBlue, roughness: 0.12, transparent: true, opacity: 0.7 });
 const carCount = 14;
@@ -29,6 +39,8 @@ export function CityLife({ mobile, night = false }: { mobile: boolean; night?: b
   const reducedMotion = useReducedMotion();
   const bodies = useRef<InstancedMesh>(null);
   const roofs = useRef<InstancedMesh>(null);
+  const roofPanels = useRef<InstancedMesh>(null);
+  const hair = useRef<InstancedMesh>(null);
   const people = useRef<InstancedMesh>(null);
   const heads = useRef<InstancedMesh>(null);
   const wheels = useRef<InstancedMesh>(null);
@@ -46,6 +58,7 @@ export function CityLife({ mobile, night = false }: { mobile: boolean; night?: b
   const lampOffsets = useMemo(()=>vehicleArchetypes.map(spec=>[-1,1].flatMap(side=>[new Matrix4().makeTranslation(side*spec.width*.3,.14,spec.length/2+.015),new Matrix4().makeTranslation(side*spec.width*.3,.14,-spec.length/2-.015)])),[]);
   const wheelMatrix = useRef(new Matrix4());
   const limbMatrix = useRef(new Matrix4());
+  const panelOffsets = useMemo(() => vehicleArchetypes.map(spec => new Matrix4().makeScale(spec.cabin[0] * .92, .025, spec.cabin[2] * .88).setPosition(0,.075+spec.height+spec.cabin[1],spec.cabinZ)), []);
   const totalPeople = activePeople + parkPeople + 2 + Math.floor(activeCars / 6);
   const diagnosticElapsed = useRef(0);
   const diagnostics = useMemo(() => typeof window !== "undefined" && new URLSearchParams(window.location.search).get("diagnostics") === "1", []);
@@ -57,25 +70,32 @@ export function CityLife({ mobile, night = false }: { mobile: boolean; night?: b
       const leg = limb < 2, side = limb % 2 === 0 ? -1 : 1;
       const swing = walking ? Math.sin(t * 7 + index) * 0.48 * side * (leg ? 1 : -1) : 0;
       limbMatrix.current.makeRotationX(seated && leg ? -Math.PI / 2 : swing);
-      limbMatrix.current.setPosition(side * (leg ? 0.04 : 0.1), leg ? (seated ? -0.12 : -0.2) : -0.025, seated && leg ? 0.1 : 0);
+      limbMatrix.current.setPosition(side * (leg ? 0.04 : 0.1), leg ? (seated ? -0.11 : -0.11) : 0.09, seated && leg ? 0.02 : 0);
       wheelMatrix.current.multiplyMatrices(matrix.current, limbMatrix.current);
       limbs.current?.setMatrixAt(index * 4 + limb, wheelMatrix.current);
     }
     matrix.current.setPosition(x, y + 0.36, z);
     heads.current?.setMatrixAt(index, matrix.current);
+    hair.current?.setMatrixAt(index, matrix.current);
   }
 
   useLayoutEffect(() => {
     for (let i = 0; i < activeCars; i++) {
       const color = new Color(carPalette[i % carPalette.length]);
       bodies.current?.setColorAt(i, color);
+      roofPanels.current?.setColorAt(i, color);
     }
-    for (let i = 0; i < totalPeople; i++) people.current?.setColorAt(i, new Color(carPalette[i % carPalette.length]));
+    for (let i = 0; i < totalPeople; i++) {
+      people.current?.setColorAt(i, new Color(carPalette[i % carPalette.length]));
+      heads.current?.setColorAt(i, new Color(skinPalette[i % skinPalette.length]));
+      hair.current?.setColorAt(i, new Color(hairPalette[i % hairPalette.length]));
+    }
+    for (const mesh of [roofPanels.current, heads.current, hair.current]) if (mesh?.instanceColor) mesh.instanceColor.needsUpdate = true;
     if (bodies.current?.instanceColor) bodies.current.instanceColor.needsUpdate = true;
     if (people.current?.instanceColor) people.current.instanceColor.needsUpdate = true;
     // Route envelope avoids stale first-frame bounds without rescanning instances per frame.
     const radius = Math.max(districtLayout.road.x, districtLayout.road.z) * 1.04 + 1;
-    for (const mesh of [bodies.current, roofs.current, wheels.current, people.current, heads.current, limbs.current, headlights.current, taillights.current]) if (mesh) mesh.boundingSphere = new Sphere(new Vector3(), radius);
+    for (const mesh of [bodies.current, roofs.current, roofPanels.current, hair.current, wheels.current, people.current, heads.current, limbs.current, headlights.current, taillights.current]) if (mesh) mesh.boundingSphere = new Sphere(new Vector3(), radius);
   }, [activeCars, totalPeople]);
 
   useFrame(({ clock, gl }, delta) => {
@@ -99,8 +119,11 @@ export function CityLife({ mobile, night = false }: { mobile: boolean; night?: b
       carPosition.current.set(0,.075+spec.height+spec.cabin[1]/2,spec.cabinZ).applyMatrix4(baseMatrix.current);
       matrix.current.setPosition(carPosition.current);
       roofs.current?.setMatrixAt(i, matrix.current);
+      wheelMatrix.current.multiplyMatrices(baseMatrix.current, panelOffsets[model]);
+      roofPanels.current?.setMatrixAt(i, wheelMatrix.current);
       for (let wheel = 0; wheel < 4; wheel++) {
         wheelMatrix.current.multiplyMatrices(baseMatrix.current, wheelOffsets[model][wheel]);
+        if (spec.kind === "scooter" && wheel >= 2) wheelMatrix.current.makeScale(0,0,0);
         wheels.current?.setMatrixAt(i * 4 + wheel, wheelMatrix.current);
       }
       for (let side = 0; side < 2; side++) {
@@ -117,7 +140,7 @@ export function CityLife({ mobile, night = false }: { mobile: boolean; night?: b
     }
     for (let i = 0; i < parkPeople; i++) {
       const person = plazaPerson(t, i);
-      placePerson(activePeople + i, person.x, person.y, person.z, person.rotation, t, !reducedMotion && !person.seated, person.seated);
+      placePerson(activePeople + i, person.x, person.y, person.z, person.rotation, t, !reducedMotion && !person.seated && t % 20 < 17, person.seated);
     }
     for (let i = 0; i < 2; i++) {
       const person = crossingPerson(t, i);
@@ -125,6 +148,8 @@ export function CityLife({ mobile, night = false }: { mobile: boolean; night?: b
     }
     if (bodies.current) bodies.current.instanceMatrix.needsUpdate = true;
     if (roofs.current) roofs.current.instanceMatrix.needsUpdate = true;
+    if (roofPanels.current) roofPanels.current.instanceMatrix.needsUpdate = true;
+    if (hair.current) hair.current.instanceMatrix.needsUpdate = true;
     if (people.current) people.current.instanceMatrix.needsUpdate = true;
     if (heads.current) heads.current.instanceMatrix.needsUpdate = true;
     if (limbs.current) limbs.current.instanceMatrix.needsUpdate = true;
@@ -141,12 +166,14 @@ export function CityLife({ mobile, night = false }: { mobile: boolean; night?: b
   return <group>
     <TrafficCrossings />
     <instancedMesh ref={bodies} args={[carBody, vehicleMaterial, activeCars]} frustumCulled />
-    <instancedMesh ref={roofs} args={[carRoof, worldMaterials.frame, activeCars]} frustumCulled />
-    <instancedMesh ref={wheels} args={[wheelGeometry, worldMaterials.frame, activeCars * 4]} frustumCulled />
+    <instancedMesh ref={roofs} args={[carRoof, cabinMaterial, activeCars]} frustumCulled />
+    <instancedMesh ref={roofPanels} args={[roofPanel, vehicleMaterial, activeCars]} frustumCulled />
+    <instancedMesh ref={wheels} args={[wheelGeometry, tireMaterial, activeCars * 4]} frustumCulled />
     <instancedMesh ref={headlights} args={[lampGeometry, undefined, activeCars * 2]} visible={night} frustumCulled><meshBasicMaterial color="#ffedc3" toneMapped={false} /></instancedMesh>
     <instancedMesh ref={taillights} args={[lampGeometry, undefined, activeCars * 2]} visible={night} frustumCulled><meshBasicMaterial color="#ff6658" toneMapped={false} /></instancedMesh>
     <instancedMesh ref={people} args={[personGeometry, vehicleMaterial, totalPeople]} frustumCulled />
     <instancedMesh ref={heads} args={[headGeometry, skinMaterial, totalPeople]} frustumCulled />
+    <instancedMesh ref={hair} args={[hairGeometry, hairMaterial, totalPeople]} frustumCulled />
     <instancedMesh ref={limbs} args={[limbGeometry, worldMaterials.frame, totalPeople * 4]} frustumCulled />
     <group position={districtLayout.park.center}>
       <mesh material={worldMaterials.podium} position={[0, 0.015, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={[4.7, 1.8, 1]}><ringGeometry args={[0.87, 1, 48]} /></mesh>

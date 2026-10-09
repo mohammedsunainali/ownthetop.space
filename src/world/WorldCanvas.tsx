@@ -56,7 +56,7 @@ export function WorldCanvas({ onSceneReady, introReady }: { onSceneReady: () => 
       <Canvas
         onPointerMissed={event=>{if(event.button===0)useWorldStore.getState().resetWorld();}}
         dpr={mobile ? [1, 1.25] : [1, 1.75]}
-        shadows={mobile ? false : "basic"}
+        shadows={mobile ? false : "percentage"}
         camera={{ position: [15, 8.5, 18], fov: 42, near: 0.1, far: 600 }}
         gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
       >
