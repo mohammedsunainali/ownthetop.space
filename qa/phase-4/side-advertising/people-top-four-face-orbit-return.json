@@ -1,0 +1,55 @@
+{
+  "build": "I1e1M49khMlaXtEma0dv0",
+  "metadataCorrection": "Capture helper retained an older build binding; corrected against the verified production restart/reload sequence. Original helper value: DjHgVHFkXCcSpSPzyjwnk",
+  "fixture": "24/14/14",
+  "camera": {
+    "blocked": false,
+    "cameraMode": "selectedFloor",
+    "destination": [
+      13,
+      19.019999999999996,
+      8
+    ],
+    "exploded": false,
+    "face": "front",
+    "floorCenter": [
+      448.89702493647104,
+      459.9510312923131
+    ],
+    "listingId": "people-01",
+    "position": [
+      13.386119442062602,
+      19.4947611823447,
+      20.37985302070164
+    ],
+    "preview": false,
+    "projection": {
+      "amount": 34.60461788342071,
+      "facadeWidth": 738.2318481796418,
+      "logo": 92.27898102245524,
+      "name": 33.88368834418278,
+      "rank": 34.60461788342071,
+      "subtitle": 16.58137940247242
+    },
+    "rank": 1,
+    "safeViewport": {
+      "bottom": 825,
+      "left": 16,
+      "right": 898,
+      "top": 75
+    },
+    "size": {
+      "height": 900,
+      "left": 0,
+      "top": 0,
+      "width": 1440
+    },
+    "target": [
+      12.99999999999999,
+      19.019999999999975,
+      7.999999999999995
+    ],
+    "time": "day",
+    "towerId": "people"
+  }
+}

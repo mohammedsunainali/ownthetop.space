@@ -1,0 +1,18 @@
+{
+  "buildId": "a6KCXgDgP7eS9AaH2JrL5",
+  "url": "http://127.0.0.1:3002/?diagnostics=1",
+  "capturedAt": "2026-10-09T16:12:12.026Z",
+  "state": {
+    "canvas": {
+      "engine": "three.js r186",
+      "ottCamera": "{\"cameraMode\":\"overview\",\"districtBuildingId\":null,\"towerId\":\"companies\",\"face\":\"front\",\"listingId\":null,\"rank\":1,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":210,\"right\":1280,\"top\":298.0703125,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[13.722930316982342,50.20330073149779,105.06100243832589],\"target\":[0,18.534999999999997,-0.5],\"destination\":[0,18.534999999999997,-0.5],\"floorCenter\":[753.3577960892468,404.1580628125553],\"projection\":{\"facadeWidth\":65.78510638477677,\"logo\":8.223138298097096,\"name\":3.019433593832527,\"subtitle\":1.477595162939322,\"rank\":3.0836768617864108,\"amount\":3.0836768617864108},\"blocked\":true}",
+      "ottPerf": "{\"fps\":120,\"calls\":806,\"triangles\":141006,\"geometries\":752,\"textures\":169,\"samples\":241,\"frameP50Ms\":8.300000071525574,\"frameP95Ms\":9.600000023841858,\"frameP99Ms\":11.700000047683716,\"frameMaxMs\":13.799999952316284,\"documentHidden\":false,\"dpr\":1,\"navigation\":{\"sideTexturePaintMs\":{\"count\":214,\"p50\":0.09999990463256836,\"p95\":0.20000004768371582,\"p99\":0.3999999761581421,\"max\":4.399999976158142,\"total\":20.999999284744263},\"sideTextureCreateMs\":{\"count\":104,\"p50\":0.10000002384185791,\"p95\":0.3999999761581421,\"p99\":0.5999999046325684,\"max\":4.799999952316284,\"total\":19.699999570846558},\"longTaskMs\":{\"count\":1,\"p50\":183,\"p95\":183,\"p99\":183,\"max\":183,\"total\":183}}}",
+      "ottTraffic": "{\"time\":34.46850000000007,\"vehicles\":[{\"phase\":0.22117354999953287,\"speed\":0.0065,\"direction\":1},{\"phase\":0.8264496291390904,\"speed\":0.0072,\"direction\":-1},{\"phase\":0.411578548526605,\"speed\":0.007899999999999999,\"direction\":1},{\"phase\":0.9931121642861782,\"speed\":0.0065,\"direction\":-1},{\"phase\":0.5140847108696751,\"speed\":0.0072,\"direction\":1},{\"phase\":0.0884214514734023,\"speed\":0.007899999999999999,\"direction\":-1},{\"phase\":0.6410620473319402,\"speed\":0.0065,\"direction\":1},{\"phase\":0.2550210577105061,\"speed\":0.0072,\"direction\":-1},{\"phase\":0.8401499770980783,\"speed\":0.007899999999999999,\"direction\":1},{\"phase\":0.4216835928575855,\"speed\":0.0065,\"direction\":-1},{\"phase\":0.9592646565751899,\"speed\":0.0072,\"direction\":1},{\"phase\":0.516992880044779,\"speed\":0.007899999999999999,\"direction\":-1},{\"phase\":0.07499896759927793,\"speed\":0.0065,\"direction\":1},{\"phase\":0.6835924862819529,\"speed\":0.0072,\"direction\":-1}],\"pedestrians\":[{\"x\":29.7,\"z\":0,\"rotation\":-1.5707963267948966,\"walking\":false},{\"x\":-24,\"z\":0,\"rotation\":-1.5707963267948966,\"walking\":false}]}"
+    },
+    "speechCount": 0,
+    "viewport": [
+      1440,
+      900
+    ]
+  }
+}

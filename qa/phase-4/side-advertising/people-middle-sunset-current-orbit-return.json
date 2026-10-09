@@ -1,0 +1,55 @@
+{
+  "build": "ymOqohnE5YlrotBeoR4mU",
+  "metadataCorrection": "Original capture helper retained DjHgVHFkXCcSpSPzyjwnk in a prior REPL closure; the verified server restart and browser reload for this recording used ymOqohnE5YlrotBeoR4mU. Image and camera data are unchanged.",
+  "fixture": "24/14/14",
+  "camera": {
+    "blocked": false,
+    "cameraMode": "selectedFloor",
+    "destination": [
+      13,
+      10.92,
+      8
+    ],
+    "exploded": false,
+    "face": "front",
+    "floorCenter": [
+      453.1922548779205,
+      460.018947839585
+    ],
+    "listingId": "people-07",
+    "position": [
+      13.179351207108366,
+      11.39230589961677,
+      20.32051262868192
+    ],
+    "preview": false,
+    "projection": {
+      "amount": 34.84455640750989,
+      "facadeWidth": 743.3505366935444,
+      "logo": 92.91881708669304,
+      "name": 34.11862814902011,
+      "rank": 34.84455640750989,
+      "subtitle": 16.69634994526516
+    },
+    "rank": 7,
+    "safeViewport": {
+      "bottom": 825,
+      "left": 16,
+      "right": 898,
+      "top": 75
+    },
+    "size": {
+      "height": 900,
+      "left": 0,
+      "top": 0,
+      "width": 1440
+    },
+    "target": [
+      12.99999999999999,
+      10.92000000000001,
+      7.999999999999995
+    ],
+    "time": "sunset",
+    "towerId": "people"
+  }
+}

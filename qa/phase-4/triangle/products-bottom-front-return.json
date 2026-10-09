@@ -1,0 +1,52 @@
+{
+  "build": "-8gxjcSKbyyPzLxov4G_E",
+  "fixture": "24/14/14",
+  "camera": {
+    "cameraMode": "selectedFloor",
+    "destination": [
+      -13,
+      1.47,
+      8
+    ],
+    "exploded": false,
+    "floorCenter": [
+      448.2706775861509,
+      480.1994048713056
+    ],
+    "listingId": "products-14",
+    "position": [
+      -12.572946844039512,
+      2.958891365037081,
+      20.397841560396976
+    ],
+    "preview": false,
+    "projection": {
+      "amount": 33.45268880176982,
+      "facadeWidth": 728.8415602768573,
+      "logo": 91.10519503460716,
+      "name": 33.45268880176982,
+      "rank": 34.164448137977686,
+      "subtitle": 16.370464732780974
+    },
+    "rank": 14,
+    "safeViewport": {
+      "bottom": 825,
+      "left": 16,
+      "right": 898,
+      "top": 75
+    },
+    "size": {
+      "height": 900,
+      "left": 0,
+      "top": 0,
+      "width": 1440
+    },
+    "target": [
+      -12.99999999999999,
+      1.4700000000000013,
+      7.999999999999995
+    ],
+    "time": "day",
+    "towerId": "products"
+  }
+}

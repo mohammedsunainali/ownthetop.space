@@ -1,0 +1,17 @@
+{
+  "build": "0ZUgcIyQxKWGBWlMvEBm4",
+  "fixture": "24/14/14",
+  "mode": "production",
+  "browser": "Codex IAB",
+  "camera": "{\"cameraMode\":\"overview\",\"towerId\":\"companies\",\"listingId\":null,\"rank\":1,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":210,\"right\":1280,\"top\":298.046875,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[12.823611888740352,48.12554672156513,98.64687641103073],\"target\":[0,18.531017299709656,0.00009336063840830208],\"destination\":[0,18.534999999999997,0],\"floorCenter\":[740.9232253370618,408.92430008507915],\"projection\":{\"facadeWidth\":76.43184268744884,\"logo\":9.553980335931104,\"name\":3.5081021545997024,\"subtitle\":1.7167308416126204,\"rank\":3.582742625974164,\"amount\":3.582742625974164}}",
+  "canvasPixels": [
+    1440,
+    900
+  ],
+  "profile": null,
+  "renderer": "{\"fps\":75,\"calls\":389,\"triangles\":39620,\"geometries\":363,\"textures\":65,\"samples\":150}",
+  "viewport": [
+    1440,
+    900
+  ]
+}

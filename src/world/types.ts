@@ -5,4 +5,5 @@ export interface TowerVisualConfig {
   position: [number, number, number];
   accent: "blue" | "lavender" | "teal";
   scale: number;
+  rotation: number;
 }

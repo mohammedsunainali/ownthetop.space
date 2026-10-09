@@ -1,0 +1,55 @@
+{
+  "build": "ymOqohnE5YlrotBeoR4mU",
+  "metadataCorrection": "Capture helper retained an older build binding; corrected against the verified production restart/reload sequence. Original helper value: DjHgVHFkXCcSpSPzyjwnk",
+  "fixture": "24/14/14",
+  "camera": {
+    "blocked": false,
+    "cameraMode": "selectedFloor",
+    "destination": [
+      -13,
+      10.92,
+      8
+    ],
+    "exploded": false,
+    "face": "front",
+    "floorCenter": [
+      475.76798743479816,
+      460.2601282130957
+    ],
+    "listingId": "products-07",
+    "position": [
+      -13.842674689691895,
+      11.382143876702465,
+      20.027220210607197
+    ],
+    "preview": false,
+    "projection": {
+      "amount": 35.66474257700122,
+      "facadeWidth": 760.8478416426927,
+      "logo": 95.1059802053366,
+      "name": 34.921727106647026,
+      "rank": 35.66474257700122,
+      "subtitle": 17.08935581814642
+    },
+    "rank": 7,
+    "safeViewport": {
+      "bottom": 825,
+      "left": 16,
+      "right": 898,
+      "top": 75
+    },
+    "size": {
+      "height": 900,
+      "left": 0,
+      "top": 0,
+      "width": 1440
+    },
+    "target": [
+      -12.99999999999999,
+      10.92000000000001,
+      7.999999999999995
+    ],
+    "time": "night",
+    "towerId": "products"
+  }
+}

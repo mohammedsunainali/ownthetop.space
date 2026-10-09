@@ -1,0 +1,13 @@
+{
+  "build": "VaoRUFRKXwtQvVeLCaLTw",
+  "fixture": "24/14/14",
+  "mode": "production",
+  "browser": "Codex IAB",
+  "camera": "{\"safeViewport\":{\"left\":210,\"right\":1280,\"top\":298.046875,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[9.611064714318001,61.284076220151874,96.92485288245821],\"target\":[-3.425227490016126,31.200324979380763,-3.354317920112135],\"destination\":[-3.426387350506561,31.212268223401516,-3.357750111454603],\"floorCenter\":[751.0868151517325,456.5323854200245],\"projection\":{\"facadeWidth\":75.38614579870358,\"logo\":9.423268224837948,\"name\":3.460106301307684,\"subtitle\":1.6932435091505686,\"rank\":3.5337255843142303,\"amount\":3.5337255843142303}}",
+  "profile": "Northstar Foundry floor profile",
+  "renderer": "{\"fps\":75,\"calls\":389,\"triangles\":39620,\"geometries\":363,\"textures\":65,\"samples\":150}",
+  "viewport": [
+    1440,
+    900
+  ]
+}

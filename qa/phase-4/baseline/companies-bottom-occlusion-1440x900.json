@@ -1,0 +1,13 @@
+{
+  "sourceCheckpoint": "39432a0ea193b5123094f275c96b63d829d71bc2",
+  "buildId": "ygohx-tHiFjUbVU-CrD6TA",
+  "fixture": "24/14/14",
+  "mode": "production",
+  "browser": "Codex IAB",
+  "camera": "{\"safeViewport\":{\"left\":16,\"right\":898,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[2.7087186314422182,1.9481163143501203,12.74436896963469],\"target\":[2.2738802142425487,1.4716038272087821,0.32041419250151093],\"destination\":[2.2738802142425514,1.4699999999999998,0.3204141925015106],\"floorCenter\":[414.4978029998496,-3566.987427254283],\"projection\":{\"facadeWidth\":822.9591233516409,\"logo\":102.86989041895511,\"name\":36.16519585041391,\"subtitle\":18.484433434655998,\"rank\":38.57620890710817,\"amount\":37.77253788821008}}",
+  "renderer": "{\"fps\":120,\"calls\":162,\"triangles\":37078,\"geometries\":367,\"textures\":67,\"samples\":241}",
+  "viewport": [
+    1440,
+    900
+  ]
+}

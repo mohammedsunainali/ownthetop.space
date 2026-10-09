@@ -1,6 +1,16 @@
 @import "../../design-system/v1/tokens/tokens.css";
 @import "tailwindcss";
 
+.crown-panel input { display:block; width:100%; min-height:44px; margin:8px 0; padding:10px; border:1px solid #b6c4d8; border-radius:10px; background:#f5f9ff; color:#091b3b; }
+.character-speech { position:relative; display:flex; align-items:start; gap:6px; width:210px; max-width:calc(100vw - 24px); padding:11px 12px; border:1px solid #142a4722; border-radius:16px; background:#fffaf1; color:#142a47; font-size:13px; line-height:1.4; box-shadow:0 5px 16px #142a472b; pointer-events:auto; }
+.character-speech::after { content:""; position:absolute; left:calc(50% - 7px); bottom:-9px; border-left:7px solid transparent; border-right:7px solid transparent; border-top:10px solid #fffaf1; }
+.character-speech { animation:speech-enter 160ms ease-out; }
+.character-speech button { flex:none; width:24px; height:24px; border-radius:50%; }
+.character-speech--closing { opacity:0; transition:opacity 150ms ease-out; }
+.character-talk { white-space:nowrap; pointer-events:auto; padding:7px 11px; border-radius:12px; background:#fffaf1; color:#142a47; box-shadow:0 3px 10px #142a4722; font-size:12px; }
+@keyframes speech-enter { from { opacity:0; scale:.92; } to { opacity:1; scale:1; } }
+@media (prefers-reduced-motion:reduce) { .character-speech { animation:none; } .character-speech--closing { transition:none; } }
+
 @font-face { font-family: Poppins; src: url("/fonts/Poppins-400-Latin.woff2") format("woff2"); font-style: normal; font-weight: 400; font-display: swap; }
 @font-face { font-family: Poppins; src: url("/fonts/Poppins-500-Latin.woff2") format("woff2"); font-style: normal; font-weight: 500; font-display: swap; }
 @font-face { font-family: Poppins; src: url("/fonts/Poppins-600-Latin.woff2") format("woff2"); font-style: normal; font-weight: 600; font-display: swap; }
@@ -88,6 +98,7 @@ button { cursor: pointer; }
 
 .world-section { position: relative; min-height: min(850px, 88vh); border-top: 1px solid var(--line); background: var(--sky); overflow: hidden; }
 .world-canvas { position: absolute; inset: 0; }
+.profile-share { margin-top: 10px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: transparent; color: var(--color-brand-navy); font: inherit; cursor: pointer; }
 .world-canvas canvas { touch-action: none; }
 @media (hover: hover) and (pointer: fine) {
   .world-canvas canvas { cursor: grab; }
@@ -114,6 +125,8 @@ button { cursor: pointer; }
 .fallback-tower h2 { margin: 0 0 10px; font-size: 1.1rem; }
 .fallback-tower button { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-height: 44px; padding: 8px; border: 0; border-bottom: 1px solid var(--line); background: transparent; color: var(--ink); text-align: left; font-size: .77rem; }
 .fallback-tower button:hover, .fallback-tower button[aria-current="true"] { background: var(--color-brand-soft-white); }
+.app-shell--focus .webgl-fallback { padding: 120px 430px 110px 18px; }
+@media (max-width: 900px) { .app-shell--focus .webgl-fallback { padding: 120px 12px 60vh; } .app-shell--focus .fallback-grid { grid-template-columns: 1fr; } }
 
 .metrics-panel { position: absolute; z-index: 2; top: 22px; left: 22px; display: grid; gap: 8px; pointer-events: none; }
 .metric-chip { min-width: 130px; display: grid; grid-template-columns: 42px 1fr; align-items: center; gap: 4px; padding: 9px 12px; border: 1px solid rgba(255,255,255,0.74); border-radius: 13px; background: rgba(255,255,255,0.78); box-shadow: 0 12px 32px rgba(28,61,94,0.08); backdrop-filter: blur(14px); }
@@ -197,7 +210,7 @@ button { cursor: pointer; }
 .app-shell--night .site-header .brand { justify-self: start; }
 .phase-badge { background: color-mix(in srgb, var(--color-brand-white) 76%, transparent); backdrop-filter: blur(12px); }
 .world-hero { position: absolute; z-index: 4; top: 64px; left: 50%; width: min(760px, calc(100% - 340px)); transform: translateX(-50%); }
-.claim-panel { padding: 11px 16px 9px; border-radius: var(--radius-xl, 20px); background: color-mix(in srgb, var(--color-brand-white) 79%, transparent); box-shadow: 0 16px 48px color-mix(in srgb, var(--color-brand-navy) 12%, transparent); backdrop-filter: blur(22px); }
+.claim-panel { padding: 11px 16px 9px; border-radius: var(--radius-xl, 20px); background: color-mix(in srgb, var(--color-brand-white) 94%, transparent); box-shadow: 0 16px 48px color-mix(in srgb, var(--color-brand-navy) 12%, transparent); }
 .claim-headline { display: flex; align-items: end; justify-content: center; gap: 12px; }
 .claim-panel__intro { text-align: center; }
 .claim-panel__intro h1 { display: inline; margin: 0; font-size: clamp(1.25rem, 2.2vw, 2.1rem); line-height: 1.1; letter-spacing: -.05em; font-weight: 750; }
@@ -404,6 +417,14 @@ button { cursor: pointer; }
 }
 
 /* Development-only, isolated Floor Advertising V2 approval fixture. */
+@media (min-width: 601px) and (max-width: 900px) {
+  .app-shell--focus .world-controls { top: auto; left: 7px; right: 7px; bottom: 7px; width: calc(100% - 14px); height: 52px; display: flex; flex-wrap: nowrap; overflow-x: auto; transform: none; }
+  .app-shell--focus .world-controls__group, .app-shell--focus .world-controls__pair { display: contents; }
+  .app-shell--focus .world-controls__group > span { display: none; }
+  .app-shell--focus .world-controls button, .app-shell--focus .world-controls select { flex: 0 0 auto; width: auto; min-width: 44px; white-space: nowrap; }
+  .app-shell--focus .profile-drawer--detail { left: 7px; right: 7px; bottom: 66px; width: auto; max-height: min(42dvh, 360px); }
+}
+
 .floor-v2-fixture { position: relative; width: 100vw; height: 100dvh; overflow: hidden; background: #8ecbf0; color: #10234a; }
 .floor-v2-fixture__stage { position: absolute; inset: 0; }
 .floor-v2-fixture__stage canvas { touch-action: none; }

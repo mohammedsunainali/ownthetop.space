@@ -1,0 +1,130 @@
+{
+  "buildId": "6xSLFNdLCXcHD9uTYChzZ",
+  "viewport": [
+    1440,
+    900
+  ],
+  "input": "0.04 page floor step followed immediately by 0.005 page trailing wheel",
+  "camera": {
+    "blocked": false,
+    "cameraMode": "selectedFloor",
+    "destination": [
+      0,
+      25.769999999999996,
+      -9
+    ],
+    "exploded": false,
+    "face": "front",
+    "floorCenter": [
+      447.9221116123476,
+      460.0303253891654
+    ],
+    "listingId": "companies-06",
+    "position": [
+      0.4337742839803336,
+      26.24617763593225,
+      3.393550880681465
+    ],
+    "preview": false,
+    "projection": {
+      "amount": 34.54598624454818,
+      "facadeWidth": 736.9810398836945,
+      "logo": 92.1226299854618,
+      "name": 33.826278197786756,
+      "rank": 34.54598624454818,
+      "subtitle": 16.55328507551267
+    },
+    "rank": 6,
+    "safeViewport": {
+      "bottom": 825,
+      "left": 16,
+      "right": 898,
+      "top": 75
+    },
+    "size": {
+      "height": 900,
+      "left": 0,
+      "top": 0,
+      "width": 1440
+    },
+    "target": [
+      0,
+      25.770831270823027,
+      -8.999999976619977
+    ],
+    "time": "day",
+    "towerId": "companies"
+  },
+  "perf": {
+    "calls": 181,
+    "documentHidden": false,
+    "dpr": 1,
+    "fps": 120,
+    "frameMaxMs": 9.299999952316284,
+    "frameP50Ms": 8.300000071525574,
+    "frameP95Ms": 8.5,
+    "frameP99Ms": 9,
+    "geometries": 656,
+    "navigation": {
+      "inputToCameraFrameMs": {
+        "count": 13,
+        "max": 7.100000023841858,
+        "p50": 6,
+        "p95": 7.100000023841858,
+        "p99": 7.100000023841858,
+        "total": 77.40000021457672
+      },
+      "longTaskMs": {
+        "count": 1,
+        "max": 107,
+        "p50": 107,
+        "p95": 107,
+        "p99": 107,
+        "total": 107
+      },
+      "sideTextureCreateMs": {
+        "count": 260,
+        "max": 1.899999976158142,
+        "p50": 0.10000002384185792,
+        "p95": 0.30000007152557373,
+        "p99": 0.5,
+        "total": 34.59999930858612
+      },
+      "sideTexturePaintMs": {
+        "count": 512,
+        "max": 0.3999999761581421,
+        "p50": 0.09999990463256836,
+        "p95": 0.20000004768371585,
+        "p99": 0.30000007152557373,
+        "total": 36.7999986410141
+      },
+      "sightlineSearchMs": {
+        "count": 29,
+        "max": 0.20000004768371585,
+        "p50": 0.09999990463256836,
+        "p95": 0.20000004768371585,
+        "p99": 0.20000004768371585,
+        "total": 2
+      },
+      "wheelDeltaPixels": {
+        "count": 14,
+        "max": 540,
+        "p50": 540,
+        "p95": 540,
+        "p99": 540,
+        "total": 6561
+      },
+      "wheelHandlerMs": {
+        "count": 14,
+        "max": 0.20000004768371585,
+        "p50": 0.10000002384185792,
+        "p95": 0.20000004768371585,
+        "p99": 0.20000004768371585,
+        "total": 1.4000003337860107
+      }
+    },
+    "samples": 240,
+    "textures": 173,
+    "triangles": 69720
+  }
+}

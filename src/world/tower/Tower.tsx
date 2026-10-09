@@ -25,8 +25,8 @@ export function Tower({ tower, listings }: TowerProps) {
   const height = getTowerHeight(listings.length,floorsExploded);
 
   return (
-    <group position={visual.position} scale={visual.scale}>
-      <TowerShell height={height} floorCount={listings.length} premium={tower.id === "companies"} focused={selectedTowerId === tower.id && cameraMode !== "overview"} onSelect={() => selectTower(tower.id)} />
+    <group position={visual.position} rotation={[0, visual.rotation, 0]} scale={visual.scale}>
+      <TowerShell towerId={tower.id} height={height} floorCount={listings.length} premium={tower.id === "companies"} focused={selectedTowerId === tower.id && cameraMode !== "overview"} onSelect={() => selectTower(tower.id)} />
       <RankedFloors listings={listings} accent={visual.accent} selectedListingId={selectedListingId} focused={selectedTowerId === tower.id && cameraMode !== "overview"} focusedRank={selectedTowerId === tower.id ? towerTravelY !== null ? getNearestFloorRank(towerTravelY, listings.length, floorsExploded) : floorPreview?.towerId === tower.id ? floorPreview.media.rank : selectedListingId || cameraMode === "topFloor" || cameraMode === "rooftop" ? undefined : getNearestFloorRank(height * 0.72, listings.length, floorsExploded) : undefined} exploded={floorsExploded} onSelect={(selected) => selectListing(selected.id, selected.towerId)} />
       {rulerVisible && (selectedTowerId ?? "companies") === tower.id ? <HeightRuler floorCount={listings.length} /> : null}
     </group>

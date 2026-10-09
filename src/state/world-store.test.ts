@@ -1,8 +1,47 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { scheduledWorldTime, useWorldStore } from "@/state/world-store";
-import { allListings } from "@/mock";
+import { allListings, listingsByTower, regressionListingsByTower } from "@/mock";
+import { createStressListings } from "@/mock/stress-floors";
 
 describe("Phase 2 world interaction state", () => {
+  it("closes the drawer without losing rank and reopens it on navigation",()=>{
+    const inventory=listingsByTower.companies;
+    const state=useWorldStore.getState();
+    state.selectListing(inventory[11].id,"companies");state.closeProfile();
+    expect(useWorldStore.getState()).toMatchObject({selectedListingId:inventory[11].id,profileVisible:false,cameraMode:"selectedFloor"});
+    state.travelFloors(inventory,1);
+    expect(useWorldStore.getState()).toMatchObject({selectedListingId:inventory[12].id,profileVisible:true});
+  });
+  it("leaves temporary preview honestly when navigating the real demo inventory",()=>{
+    const state=useWorldStore.getState();
+    state.showFloorPreview({towerId:"companies",category:"technology",url:"preview.example",media:{id:"temporary",name:"Preview",description:"Only a preview",logoUrl:null,hiring:false,rank:24,totalPaidMinor:10000}});
+    state.travelFloors(listingsByTower.companies,1);
+    expect(useWorldStore.getState()).toMatchObject({floorPreview:null,selectedListingId:listingsByTower.companies[1].id});
+  });
+  it("offers an explicit focused wheel mode and resets it predictably",()=>{
+    const state=useWorldStore.getState();state.resetWorld();state.toggleFocusedInputMode();
+    expect(useWorldStore.getState().focusedInputMode).toBe("zoom");state.resetWorld();
+    expect(useWorldStore.getState().focusedInputMode).toBe("floors");
+  });
+  it("keeps exact floor identity synchronized through traversal, reversal and bounds", () => {
+    for (const inventory of [listingsByTower.companies, regressionListingsByTower.companies, createStressListings()]) {
+      const state=useWorldStore.getState();
+      state.selectListing(inventory[0].id,"companies");
+      state.travelFloors(inventory,11);
+      expect(useWorldStore.getState().selectedListingId).toBe(inventory.find(item=>item.rank===12)!.id);
+      state.travelFloors(inventory,-11);
+      expect(useWorldStore.getState().selectedListingId).toBe(inventory[0].id);
+      for(let i=0;i<300;i++)state.travelFloors(inventory,1);
+      expect(useWorldStore.getState().selectedListingId).toBe(inventory.at(-1)!.id);
+      state.travelFloors(inventory,-999);
+      expect(useWorldStore.getState()).toMatchObject({selectedListingId:inventory[0].id,cameraMode:"selectedFloor",towerTravelY:null,floorPreview:null});
+    }
+    const state=useWorldStore.getState();
+    state.selectTower("products"); state.travelFloors(listingsByTower.products,1);
+    expect(useWorldStore.getState()).toMatchObject({selectedTowerId:"products",selectedListingId:listingsByTower.products[1].id});
+    state.resetWorld();
+    expect(useWorldStore.getState().selectedListingId).toBeNull();
+  });
   beforeEach(() => useWorldStore.setState({ selectedListingId: null, selectedTowerId: null, cameraMode: "overview", worldTime: "day" }));
   it("maps tower, floor and reset to camera modes", () => {
     for (const [towerId, expectedMode] of [["companies", "companiesTower"], ["products", "productsTower"], ["people", "peopleTower"]] as const) {

@@ -1,0 +1,12 @@
+{
+  "build": "zQMHzuYc315RPEFfnxvkg",
+  "fixture": "24/14/14",
+  "camera": "{\"cameraMode\":\"overview\",\"towerId\":\"companies\",\"face\":\"front\",\"listingId\":null,\"rank\":1,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":210,\"right\":1280,\"top\":298.046875,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[13.722545347203035,50.20241233969935,105.05804113233114],\"target\":[0,18.534999999999997,-0.5],\"destination\":[0,18.534999999999997,-0.5],\"floorCenter\":[753.3580265057911,404.14200532472876],\"projection\":{\"facadeWidth\":65.78692438087018,\"logo\":8.223365547608772,\"name\":3.019517037012596,\"subtitle\":1.4776359968359511,\"rank\":3.0837620803532895,\"amount\":3.0837620803532895},\"blocked\":true}",
+  "hidden": false,
+  "renderer": "{\"fps\":75,\"calls\":642,\"triangles\":97308,\"geometries\":616,\"textures\":169,\"samples\":150,\"frameP50Ms\":13.300000071525574,\"frameP95Ms\":15.299999952316284,\"frameP99Ms\":15.300000071525574,\"frameMaxMs\":15.5,\"documentHidden\":false,\"dpr\":1}",
+  "url": "http://127.0.0.1:3002/?diagnostics=1",
+  "viewport": [
+    1440,
+    900
+  ]
+}

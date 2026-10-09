@@ -1,0 +1,11 @@
+{
+  "build": "ymOqohnE5YlrotBeoR4mU",
+  "fixture": "24/14/14",
+  "camera": "{\"cameraMode\":\"selectedFloor\",\"towerId\":\"people\",\"face\":\"front\",\"listingId\":\"people-07\",\"rank\":7,\"preview\":false,\"exploded\":false,\"time\":\"sunset\",\"safeViewport\":{\"left\":16,\"right\":898,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[13.433775039621317,11.395811868652752,20.393579595307905],\"target\":[12.999999717935516,10.920464395064743,7.999999837916192],\"destination\":[13,10.92,8],\"floorCenter\":[447.9221559547894,459.98802544943425],\"projection\":{\"facadeWidth\":736.9799727506871,\"logo\":92.12249659383589,\"name\":33.82622921804912,\"subtitle\":16.553261106704888,\"rank\":34.54593622268846,\"amount\":34.54593622268846},\"blocked\":false}",
+  "hidden": false,
+  "renderer": "{\"fps\":75,\"calls\":205,\"triangles\":70826,\"geometries\":617,\"textures\":173,\"samples\":150,\"frameP50Ms\":13.300000071525574,\"frameP95Ms\":15.299999952316284,\"frameP99Ms\":15.399999976158142,\"frameMaxMs\":15.400000095367432,\"documentHidden\":false,\"dpr\":1}",
+  "viewport": [
+    1440,
+    900
+  ]
+}

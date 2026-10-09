@@ -1,6 +1,7 @@
 import type { TowerId } from "@/domain/tower";
 import type { TowerVisualConfig } from "@/world/types";
 import { RECTANGULAR_TOWER as building } from "@/world/tower/rectangular-layout";
+import { districtTowers } from "@/world/environment/district-layout";
 
 export const FLOOR_HEIGHT = building.floorHeight;
 export const FLOOR_GAP = building.slabHeight;
@@ -14,19 +15,21 @@ export const HELIPAD_LOCAL_ANCHOR = [2.15, HELIPAD_LEVEL_OFFSET + 0.248, -1.75] 
 export function getCrownVerticalScale(floorCount: number): number { void floorCount; return 1; }
 export function getCrownHeight(floorCount: number): number { void floorCount; return CROWN_UNSCALED_HEIGHT; }
 export function getHelipadWorldPosition(floorCount: number, exploded=false): [number, number, number] {
-  const tower = towerVisuals.companies;
-  return [
-    tower.position[0] + HELIPAD_LOCAL_ANCHOR[0] * tower.scale,
-    tower.position[1] + (getTowerHeight(floorCount,exploded) + HELIPAD_LOCAL_ANCHOR[1]) * tower.scale,
-    tower.position[2] + HELIPAD_LOCAL_ANCHOR[2] * tower.scale,
-  ];
+  return towerLocalToWorld("companies", [HELIPAD_LOCAL_ANCHOR[0], getTowerHeight(floorCount,exploded) + HELIPAD_LOCAL_ANCHOR[1], HELIPAD_LOCAL_ANCHOR[2]]);
 }
 
 export const towerVisuals: Record<TowerId, TowerVisualConfig> = {
-  companies: { id: "companies", position: [0, 0, 0.4], accent: "blue", scale: 1 },
-  products: { id: "products", position: [-8.8, 0, 0], accent: "lavender", scale: 1 },
-  people: { id: "people", position: [8.8, 0, 0], accent: "teal", scale: 1 },
+  companies: { id: "companies", ...districtTowers.companies, accent: "blue", scale: 1 },
+  products: { id: "products", ...districtTowers.products, accent: "lavender", scale: 1 },
+  people: { id: "people", ...districtTowers.people, accent: "teal", scale: 1 },
 };
+
+export function towerLocalToWorld(towerId: TowerId, point: readonly [number, number, number]): [number, number, number] {
+  const tower = towerVisuals[towerId], c = Math.cos(tower.rotation), s = Math.sin(tower.rotation);
+  return [tower.position[0] + (point[0] * c + point[2] * s) * tower.scale,
+    tower.position[1] + point[1] * tower.scale,
+    tower.position[2] + (-point[0] * s + point[2] * c) * tower.scale];
+}
 
 // Geometry scales from normalized floor position. Paid-floor count remains listings.length.
 export function getFloorFootprint(rank: number, floorCount: number): number {

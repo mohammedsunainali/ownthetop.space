@@ -3,9 +3,10 @@
 import { useSyncExternalStore } from "react";
 import { allListings, listingsByTower, regressionListingsByTower } from "@/mock";
 import { getArchitecturalHeightFeet } from "@/world/tower/tower-layout";
+import {currentStressFixture} from "@/mock/fixture-mode";
 
 export function MetricsPanel() {
-  const stressMode = useSyncExternalStore(() => () => {}, () => process.env.NODE_ENV === "development" && new URLSearchParams(window.location.search).get("stressFloors") === "220", () => false);
+  const stressMode = useSyncExternalStore(() => () => {}, currentStressFixture, () => false);
   const legacy = useSyncExternalStore(() => () => {}, () => new URLSearchParams(window.location.search).get("regression") === "legacy", () => false);
   const inventory=legacy?regressionListingsByTower:listingsByTower;
   const companyCount = stressMode ? 220 : inventory.companies.length;

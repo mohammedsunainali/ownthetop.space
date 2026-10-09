@@ -1,0 +1,18 @@
+{
+  "buildId": "jMEqKUQnpVQUcmsviJyGu",
+  "fixture": "220",
+  "lighting": "day",
+  "state": {
+    "canvas": [
+      {
+        "engine": "three.js r186",
+        "ottCamera": "{\"cameraMode\":\"selectedFloor\",\"districtBuildingId\":null,\"towerId\":\"companies\",\"face\":\"front\",\"listingId\":\"stress-company-6\",\"rank\":6,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":16,\"right\":738,\"top\":75,\"bottom\":645},\"size\":{\"width\":1280,\"height\":720,\"top\":-33.5,\"left\":0},\"position\":[0.42576979628054246,290.8347130014394,3.1648513223008745],\"target\":[0,290.36813825424514,-9],\"destination\":[0,290.37,-9],\"floorCenter\":[369.5701997293915,367.9552765127816],\"projection\":{\"facadeWidth\":603.2129634827418,\"logo\":75.40162043534272,\"name\":27.686532503602404,\"subtitle\":13.548728671975644,\"rank\":28.27560766325352,\"amount\":28.27560766325352},\"blocked\":false}",
+        "ottPerf": "{\"fps\":120,\"calls\":105,\"triangles\":29352,\"geometries\":1345,\"textures\":648,\"samples\":240,\"frameP50Ms\":8.299999952316284,\"frameP95Ms\":9,\"frameP99Ms\":10.399999976158142,\"frameMaxMs\":12.299999952316284,\"documentHidden\":false,\"dpr\":1.75,\"navigation\":{\"sideTexturePaintMs\":{\"count\":512,\"p50\":0.09999990463256836,\"p95\":0.20000004768371582,\"p99\":0.20000004768371582,\"max\":8.299999952316284,\"total\":40.600000500679016},\"sideTextureCreateMs\":{\"count\":512,\"p50\":0.10000002384185791,\"p95\":0.20000004768371582,\"p99\":0.3999999761581421,\"max\":8.399999976158142,\"total\":72.6000007390976},\"longTaskMs\":{\"count\":4,\"p50\":126,\"p95\":216,\"p99\":216,\"max\":216,\"total\":477},\"sightlineSearchMs\":{\"count\":35,\"p50\":0.10000002384185791,\"p95\":0.30000007152557373,\"p99\":0.30000007152557373,\"max\":0.30000007152557373,\"total\":3.2999998331069946},\"wheelHandlerMs\":{\"count\":15,\"p50\":0.10000002384185791,\"p95\":0.20000004768371582,\"p99\":0.20000004768371582,\"max\":0.20000004768371582,\"total\":1.5999999046325684},\"wheelDeltaPixels\":{\"count\":15,\"p50\":216,\"p95\":216,\"p99\":216,\"max\":216,\"total\":2840.399999141693},\"inputToCameraFrameMs\":{\"count\":13,\"p50\":7.600000023841858,\"p95\":11.699999928474426,\"p99\":11.699999928474426,\"max\":11.699999928474426,\"total\":102.69999992847443}}}"
+      }
+    ],
+    "viewport": [
+      1280,
+      720
+    ]
+  }
+}

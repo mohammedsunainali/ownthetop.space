@@ -1,0 +1,117 @@
+{
+  "duration" : 21.055,
+  "frames" : [
+    {
+      "actual" : 0.035000000000000003,
+      "requested" : 0,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 1.155,
+      "requested" : 1,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 2.6333333333333333,
+      "requested" : 2,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 2.6333333333333333,
+      "requested" : 3,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 3.6850000000000001,
+      "requested" : 4,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 5.0366666666666671,
+      "requested" : 5,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 6.4283333333333337,
+      "requested" : 6,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 7.4366666666666665,
+      "requested" : 7,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 7.4366666666666665,
+      "requested" : 8,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 8.9283333333333328,
+      "requested" : 9,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 10.001666666666667,
+      "requested" : 10,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 11.346666666666666,
+      "requested" : 11,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 11.346666666666666,
+      "requested" : 12,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 12.681666666666667,
+      "requested" : 13,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 13.788333333333334,
+      "requested" : 14,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 15.071666666666667,
+      "requested" : 15,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 16.489999999999998,
+      "requested" : 16,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 17.471666666666668,
+      "requested" : 17,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 17.471666666666668,
+      "requested" : 18,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 18.828333333333333,
+      "requested" : 19,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 19.943333333333332,
+      "requested" : 20,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 19.943333333333332,
+      "requested" : 21,
+      "sheet" : "reference-1-page-2.png"
+    }
+  ],
+  "samplingSeconds" : 1,
+  "source" : "qa\/phase-4\/side-advertising\/companies-middle-current-orbit.mp4"
+}

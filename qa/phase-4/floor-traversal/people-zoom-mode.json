@@ -1,0 +1,13 @@
+{
+  "build": "ljSuyJh39teHSIdpA1YfY",
+  "fixture": "24/14/14",
+  "mode": "production",
+  "browser": "Codex IAB",
+  "camera": "{\"safeViewport\":{\"left\":16,\"right\":898,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[11.403635039293677,10.513653873151098,9.53774493781374],\"target\":[11.067036846333437,2.81998751017561,-0.0793462896216702],\"destination\":[11.067053728629134,2.82,-0.07934688050201967],\"floorCenter\":[460.12004147240515,603.8030299782953],\"projection\":{\"facadeWidth\":704.2095575025743,\"logo\":88.02619468782179,\"name\":32.322118361934564,\"subtitle\":15.817206857967976,\"rank\":33.00982300793317,\"amount\":29.57129977794013}}",
+  "profile": "Skyline Creator 03 floor profile",
+  "renderer": "{\"fps\":75,\"calls\":129,\"triangles\":35510,\"geometries\":379,\"textures\":68,\"samples\":150}",
+  "viewport": [
+    1440,
+    900
+  ]
+}

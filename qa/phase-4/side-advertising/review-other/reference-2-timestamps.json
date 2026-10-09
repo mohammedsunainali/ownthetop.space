@@ -1,0 +1,117 @@
+{
+  "duration" : 21.058333333333334,
+  "frames" : [
+    {
+      "actual" : 0.051666666666666666,
+      "requested" : 0,
+      "sheet" : "reference-2-page-1.png"
+    },
+    {
+      "actual" : 1.0333333333333334,
+      "requested" : 1,
+      "sheet" : "reference-2-page-1.png"
+    },
+    {
+      "actual" : 2.0049999999999999,
+      "requested" : 2,
+      "sheet" : "reference-2-page-1.png"
+    },
+    {
+      "actual" : 3.3199999999999998,
+      "requested" : 3,
+      "sheet" : "reference-2-page-1.png"
+    },
+    {
+      "actual" : 4.6150000000000002,
+      "requested" : 4,
+      "sheet" : "reference-2-page-1.png"
+    },
+    {
+      "actual" : 4.6150000000000002,
+      "requested" : 5,
+      "sheet" : "reference-2-page-1.png"
+    },
+    {
+      "actual" : 5.6950000000000003,
+      "requested" : 6,
+      "sheet" : "reference-2-page-1.png"
+    },
+    {
+      "actual" : 7.0049999999999999,
+      "requested" : 7,
+      "sheet" : "reference-2-page-1.png"
+    },
+    {
+      "actual" : 7.9866666666666664,
+      "requested" : 8,
+      "sheet" : "reference-2-page-1.png"
+    },
+    {
+      "actual" : 9.2333333333333325,
+      "requested" : 9,
+      "sheet" : "reference-2-page-1.png"
+    },
+    {
+      "actual" : 10.478333333333333,
+      "requested" : 10,
+      "sheet" : "reference-2-page-1.png"
+    },
+    {
+      "actual" : 11.458333333333334,
+      "requested" : 11,
+      "sheet" : "reference-2-page-1.png"
+    },
+    {
+      "actual" : 11.458333333333334,
+      "requested" : 12,
+      "sheet" : "reference-2-page-2.png"
+    },
+    {
+      "actual" : 12.776666666666667,
+      "requested" : 13,
+      "sheet" : "reference-2-page-2.png"
+    },
+    {
+      "actual" : 13.823333333333334,
+      "requested" : 14,
+      "sheet" : "reference-2-page-2.png"
+    },
+    {
+      "actual" : 15.074999999999999,
+      "requested" : 15,
+      "sheet" : "reference-2-page-2.png"
+    },
+    {
+      "actual" : 16.356666666666666,
+      "requested" : 16,
+      "sheet" : "reference-2-page-2.png"
+    },
+    {
+      "actual" : 17.373333333333335,
+      "requested" : 17,
+      "sheet" : "reference-2-page-2.png"
+    },
+    {
+      "actual" : 17.373333333333335,
+      "requested" : 18,
+      "sheet" : "reference-2-page-2.png"
+    },
+    {
+      "actual" : 18.626666666666665,
+      "requested" : 19,
+      "sheet" : "reference-2-page-2.png"
+    },
+    {
+      "actual" : 19.606666666666666,
+      "requested" : 20,
+      "sheet" : "reference-2-page-2.png"
+    },
+    {
+      "actual" : 20.888333333333332,
+      "requested" : 21,
+      "sheet" : "reference-2-page-2.png"
+    }
+  ],
+  "samplingSeconds" : 1,
+  "source" : "qa\/phase-4\/side-advertising\/people-top-four-face-orbit.mp4"
+}

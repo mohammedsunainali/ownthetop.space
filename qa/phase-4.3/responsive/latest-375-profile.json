@@ -1,0 +1,19 @@
+{
+  "buildId": "a6KCXgDgP7eS9AaH2JrL5",
+  "url": "http://127.0.0.1:3002/?diagnostics=1",
+  "capturedAt": "2026-10-09T16:32:14.393Z",
+  "state": {
+    "canvas": {
+      "engine": "three.js r186",
+      "ottCamera": "{\"cameraMode\":\"selectedFloor\",\"districtBuildingId\":null,\"towerId\":\"companies\",\"face\":\"front\",\"listingId\":\"companies-01\",\"rank\":1,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":16,\"right\":359,\"top\":75,\"bottom\":388.9609375},\"size\":{\"width\":375,\"height\":812,\"top\":0,\"left\":0},\"position\":[0.8986034120348881,33.50472381553752,16.67438305540317],\"target\":[0,32.52000000213859,-8.999999999999984],\"destination\":[0,32.519999999999996,-9],\"floorCenter\":[183.95212453925276,235.86313536541678],\"projection\":{\"facadeWidth\":287.68407321590195,\"logo\":35.96050915198774,\"name\":12.64236649874569,\"subtitle\":6.4616539882477975,\"rank\":13.485190931995405,\"amount\":13.204249454245499},\"blocked\":false}",
+      "ottPerf": "{\"fps\":120,\"calls\":267,\"triangles\":59650,\"geometries\":725,\"textures\":171,\"samples\":241,\"frameP50Ms\":8.300000071525574,\"frameP95Ms\":9.299999952316284,\"frameP99Ms\":9.399999976158142,\"frameMaxMs\":9.5,\"documentHidden\":false,\"dpr\":1,\"navigation\":{\"sideTexturePaintMs\":{\"count\":452,\"p50\":0.10000002384185791,\"p95\":0.3999999761581421,\"p99\":1.100000023841858,\"max\":5.600000023841858,\"total\":61.69999957084656},\"sideTextureCreateMs\":{\"count\":220,\"p50\":0.10000002384185791,\"p95\":0.7000000476837158,\"p99\":1.7000000476837158,\"max\":6.099999904632568,\"total\":58.0999995470047},\"longTaskMs\":{\"count\":3,\"p50\":129,\"p95\":195,\"p99\":195,\"max\":195,\"total\":376},\"sightlineSearchMs\":{\"count\":6,\"p50\":0.19999992847442627,\"p95\":0.20000004768371582,\"p99\":0.20000004768371582,\"max\":0.20000004768371582,\"total\":0.7999999523162842}}}",
+      "ottTraffic": "{\"time\":468.7830000000587,\"vehicles\":[{\"phase\":0.08040174999922312,\"speed\":0.0065,\"direction\":1},{\"phase\":0.05380959404799479,\"speed\":0.0072,\"direction\":-1},{\"phase\":0.3833423993133316,\"speed\":0.007899999999999999,\"direction\":1},{\"phase\":0.3481696785722048,\"speed\":0.0065,\"direction\":-1},{\"phase\":0.6604761202377367,\"speed\":0.0072,\"direction\":1},{\"phase\":0.6166576006866427,\"speed\":0.007899999999999999,\"direction\":-1},{\"phase\":0.9375446071420606,\"speed\":0.0065,\"direction\":1}],\"pedestrians\":[{\"x\":29.7,\"z\":0,\"rotation\":-1.5707963267948966,\"walking\":false},{\"x\":-24.84197142847587,\"z\":0,\"rotation\":1.5707963267948966,\"walking\":true}]}"
+    },
+    "profile": "Northstar Foundry",
+    "speechCount": 0,
+    "viewport": [
+      375,
+      812
+    ]
+  }
+}

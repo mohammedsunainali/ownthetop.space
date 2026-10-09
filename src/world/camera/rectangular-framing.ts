@@ -1,5 +1,10 @@
 import { Box3, Vector3 } from "three";
 
+/** Classify the actual DOM overlay, independently of the GPU quality breakpoint. */
+export function isBottomOverlay(rect: { left: number; right: number }, viewportWidth: number): boolean {
+  return rect.left < viewportWidth * 0.2 && rect.right - rect.left > viewportWidth * 0.6;
+}
+
 /** Fit actual projected bounds inside a usable viewport, with depth clearance. */
 export function fitRectangularBounds(bounds:Box3, direction:Vector3, width:number, height:number, usableWidth:number, usableHeight:number, fov=42, occupiedBounds:readonly Box3[]=[bounds]) {
   const forward=direction.clone().normalize();

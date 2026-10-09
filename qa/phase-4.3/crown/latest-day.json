@@ -1,0 +1,19 @@
+{
+  "buildId": "a6KCXgDgP7eS9AaH2JrL5",
+  "url": "http://127.0.0.1:3002/?diagnostics=1",
+  "capturedAt": "2026-10-09T16:30:00.583Z",
+  "state": {
+    "canvas": {
+      "engine": "three.js r186",
+      "ottCamera": "{\"cameraMode\":\"rooftop\",\"districtBuildingId\":null,\"towerId\":\"companies\",\"face\":\"front\",\"listingId\":null,\"rank\":1,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":16,\"right\":898,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[4.889335920985292,43.14878217006524,4.974638411224191],\"target\":[0,34.76665179398482,-8.998247012557501],\"destination\":[0,34.769999999999996,-9],\"floorCenter\":[403.50523171598604,666.1690830193584],\"projection\":{\"facadeWidth\":436.9145560432424,\"logo\":54.6143195054053,\"name\":20.053695443391007,\"subtitle\":9.813510536127517,\"rank\":20.480369814526984,\"amount\":20.480369814526984},\"blocked\":true}",
+      "ottPerf": "{\"fps\":120,\"calls\":292,\"triangles\":93144,\"geometries\":756,\"textures\":173,\"samples\":241,\"frameP50Ms\":8.300000071525574,\"frameP95Ms\":9.600000023841858,\"frameP99Ms\":11.099999904632568,\"frameMaxMs\":13,\"documentHidden\":false,\"dpr\":1,\"navigation\":{\"sideTexturePaintMs\":{\"count\":444,\"p50\":0.10000002384185791,\"p95\":0.3999999761581421,\"p99\":1.100000023841858,\"max\":5.600000023841858,\"total\":59.5999995470047},\"sideTextureCreateMs\":{\"count\":216,\"p50\":0.10000002384185791,\"p95\":0.7000000476837158,\"p99\":1.7000000476837158,\"max\":6.099999904632568,\"total\":56.19999957084656},\"longTaskMs\":{\"count\":2,\"p50\":195,\"p95\":195,\"p99\":195,\"max\":195,\"total\":247}}}",
+      "ottTraffic": "{\"time\":334.98910000002974,\"vehicles\":[{\"phase\":0.16454027131672433,\"speed\":0.0065,\"direction\":1},{\"phase\":0.6631042549881005,\"speed\":0.0072,\"direction\":-1},{\"phase\":0.4751889743140749,\"speed\":0.005782575012363277,\"direction\":1},{\"phase\":0.09533490273185707,\"speed\":0.0065,\"direction\":-1},{\"phase\":0.4935214249702744,\"speed\":0.006346827111746206,\"direction\":1},{\"phase\":0.11293830577419728,\"speed\":0.006495025922742008,\"direction\":-1},{\"phase\":0.5146227743232856,\"speed\":0.0065,\"direction\":1},{\"phase\":0.13194174981449258,\"speed\":0.006495058919084077,\"direction\":-1},{\"phase\":0.9482953104242848,\"speed\":0.005151107442440493,\"direction\":1},{\"phase\":0.530349469697394,\"speed\":0.0065,\"direction\":-1},{\"phase\":0.9658216595308926,\"speed\":0.003479747916710968,\"direction\":1},{\"phase\":0.5479528727397356,\"speed\":0.006495025922743074,\"direction\":-1},{\"phase\":0.9833220415061681,\"speed\":0.001350469612741989,\"direction\":1},{\"phase\":0.5669563167800318,\"speed\":0.006495058919084787,\"direction\":-1}],\"pedestrians\":[{\"x\":24,\"z\":0,\"rotation\":1.5707963267948966,\"walking\":false},{\"x\":-29.7,\"z\":0,\"rotation\":1.5707963267948966,\"walking\":false}]}"
+    },
+    "profile": "Explore the Crown",
+    "speechCount": 0,
+    "viewport": [
+      1440,
+      900
+    ]
+  }
+}

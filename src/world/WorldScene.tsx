@@ -8,6 +8,7 @@ import { Tower } from "@/world/tower/Tower";
 import { RendererDiagnostics } from "@/world/RendererDiagnostics";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
+import { WorldAudio } from "./audio/WorldAudio";
 
 function SceneReadySignal({ onReady }: { onReady: () => void }) {
   const sent = useRef(false);
@@ -27,7 +28,8 @@ export function WorldScene({ listingsByTower, onSceneReady, introReady }: { list
       {towers.map((tower) => (
         <Tower key={tower.id} tower={tower} listings={listingsByTower[tower.id]} />
       ))}
-      <CameraController selectedListing={selectedListing} floorCounts={floorCounts} introReady={introReady} />
+      <CameraController selectedListing={selectedListing} listingsByTower={listingsByTower} floorCounts={floorCounts} introReady={introReady} />
+      <WorldAudio companiesFloorCount={floorCounts.companies} />
       <SceneReadySignal onReady={onSceneReady} />
       {process.env.NODE_ENV === "development" || typeof window!=="undefined" && new URLSearchParams(window.location.search).get("diagnostics")==="1" ? <RendererDiagnostics /> : null}
     </>

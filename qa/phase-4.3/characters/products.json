@@ -1,0 +1,18 @@
+{
+  "buildId": "DTa5MFqxQgAhgEdCLDcyh",
+  "fixture": "default",
+  "lighting": "day",
+  "state": {
+    "canvas": [
+      {
+        "engine": "three.js r186",
+        "ottCamera": "{\"cameraMode\":\"rooftop\",\"districtBuildingId\":null,\"towerId\":\"products\",\"face\":\"front\",\"listingId\":null,\"rank\":1,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":16,\"right\":1280,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[-8.112294056229862,29.641471217829782,21.965199670800516],\"target\":[-12.997049706560825,21.26766631359136,7.9980709619820765],\"destination\":[-13,21.27,8],\"floorCenter\":[594.2003861129053,666.4814618030696],\"projection\":{\"facadeWidth\":437.2492620278487,\"logo\":54.65615775348109,\"name\":20.06905792510634,\"subtitle\":9.821028346328633,\"rank\":20.49605915755541,\"amount\":20.49605915755541},\"blocked\":true}",
+        "ottPerf": "{\"fps\":120,\"calls\":323,\"triangles\":95302,\"geometries\":710,\"textures\":173,\"samples\":241,\"frameP50Ms\":8.300000071525574,\"frameP95Ms\":9.5,\"frameP99Ms\":10.599999904632568,\"frameMaxMs\":12.899999976158142,\"documentHidden\":false,\"dpr\":1,\"navigation\":{\"sideTexturePaintMs\":{\"count\":444,\"p50\":0.10000002384185791,\"p95\":0.20000004768371582,\"p99\":0.3999999761581421,\"max\":1.899999976158142,\"total\":37.299999952316284},\"sideTextureCreateMs\":{\"count\":216,\"p50\":0.10000002384185791,\"p95\":0.30000007152557373,\"p99\":0.5,\"max\":2.100000023841858,\"total\":31.799999952316284},\"longTaskMs\":{\"count\":1,\"p50\":442,\"p95\":442,\"p99\":442,\"max\":442,\"total\":442},\"sightlineSearchMs\":{\"count\":4,\"p50\":0.10000002384185791,\"p95\":0.20000004768371582,\"p99\":0.20000004768371582,\"max\":0.20000004768371582,\"total\":0.5}}}"
+      }
+    ],
+    "viewport": [
+      1440,
+      900
+    ]
+  }
+}

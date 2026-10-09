@@ -1,0 +1,52 @@
+{
+  "build": "-8gxjcSKbyyPzLxov4G_E",
+  "fixture": "24/14/14",
+  "camera": {
+    "cameraMode": "selectedFloor",
+    "destination": [
+      13,
+      1.47,
+      8
+    ],
+    "exploded": false,
+    "floorCenter": [
+      456.75608727616617,
+      520.7119859740756
+    ],
+    "listingId": "people-14",
+    "position": [
+      13.012287213123688,
+      5.1922284125927005,
+      20.278694138470783
+    ],
+    "preview": false,
+    "projection": {
+      "amount": 31.494957663582703,
+      "facadeWidth": 701.1051445110585,
+      "logo": 87.63814306388231,
+      "name": 32.17963065626929,
+      "rank": 32.86430364895587,
+      "subtitle": 15.747478831791351
+    },
+    "rank": 14,
+    "safeViewport": {
+      "bottom": 825,
+      "left": 16,
+      "right": 898,
+      "top": 75
+    },
+    "size": {
+      "height": 900,
+      "left": 0,
+      "top": 0,
+      "width": 1440
+    },
+    "target": [
+      12.99999999999999,
+      1.4700000000000013,
+      7.999999999999995
+    ],
+    "time": "day",
+    "towerId": "people"
+  }
+}

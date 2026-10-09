@@ -1,0 +1,18 @@
+{
+  "buildId": "a6KCXgDgP7eS9AaH2JrL5",
+  "url": "http://127.0.0.1:3002/?diagnostics=1",
+  "capturedAt": "2026-10-09T16:33:48.002Z",
+  "state": {
+    "canvas": {
+      "engine": "three.js r186",
+      "ottCamera": "{\"cameraMode\":\"overview\",\"districtBuildingId\":null,\"towerId\":\"companies\",\"face\":\"front\",\"listingId\":null,\"rank\":1,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":210,\"right\":1568,\"top\":298.0703125,\"bottom\":1042},\"size\":{\"width\":1728,\"height\":1117,\"top\":0,\"left\":0},\"position\":[12.19195604302467,46.673216216475154,93.28520726709374],\"target\":[0,18.538096246605527,-0.5018818803108347],\"destination\":[0,18.534999999999997,-0.5],\"floorCenter\":[900.6461649072666,450.7165052579059],\"projection\":{\"facadeWidth\":91.7257108381488,\"logo\":11.4657138547686,\"name\":4.210066806047845,\"subtitle\":2.0602454582787324,\"rank\":4.299642695538225,\"amount\":4.299642695538225},\"blocked\":false}",
+      "ottPerf": "{\"fps\":112,\"calls\":779,\"triangles\":141238,\"geometries\":717,\"textures\":169,\"samples\":225,\"frameP50Ms\":8.5,\"frameP95Ms\":12.100000023841858,\"frameP99Ms\":13.200000047683716,\"frameMaxMs\":13.700000047683716,\"documentHidden\":false,\"dpr\":1,\"navigation\":{\"sideTexturePaintMs\":{\"count\":460,\"p50\":0.10000002384185791,\"p95\":0.3999999761581421,\"p99\":1.399999976158142,\"max\":5.600000023841858,\"total\":63.5999995470047},\"sideTextureCreateMs\":{\"count\":224,\"p50\":0.10000002384185791,\"p95\":0.7000000476837158,\"p99\":1.7000000476837158,\"max\":6.099999904632568,\"total\":60.09999942779541},\"longTaskMs\":{\"count\":3,\"p50\":129,\"p95\":195,\"p99\":195,\"max\":195,\"total\":376},\"sightlineSearchMs\":{\"count\":12,\"p50\":0.10000002384185791,\"p95\":0.20000004768371582,\"p99\":0.20000004768371582,\"max\":0.20000004768371582,\"total\":1.1999999284744263}}}",
+      "ottTraffic": "{\"time\":562.3374000000906,\"vehicles\":[{\"phase\":0.20017529999953365,\"speed\":0.0065,\"direction\":1},{\"phase\":0.857884048810267,\"speed\":0.0072,\"direction\":-1},{\"phase\":0.38604730590656544,\"speed\":0.007899999999999999,\"direction\":1},{\"phase\":0.014110414286175654,\"speed\":0.0065,\"direction\":-1},{\"phase\":0.5074257828637638,\"speed\":0.0072,\"direction\":1},{\"phase\":0.11395269409343767,\"speed\":0.007899999999999999,\"direction\":-1},{\"phase\":0.6287467285709578,\"speed\":0.0065,\"direction\":1},{\"phase\":0.27828850285052154,\"speed\":0.0072,\"direction\":-1},{\"phase\":0.8146187344780413,\"speed\":0.007899999999999999,\"direction\":1},{\"phase\":0.44268498560069114,\"speed\":0.0065,\"direction\":-1},{\"phase\":0.9359972114352046,\"speed\":0.0072,\"direction\":1},{\"phase\":0.5425241226648159,\"speed\":0.007899999999999999,\"direction\":-1},{\"phase\":0.05731815714237376,\"speed\":0.0065,\"direction\":1},{\"phase\":0.7068599314219381,\"speed\":0.0072,\"direction\":-1}],\"pedestrians\":[{\"x\":24,\"z\":0,\"rotation\":1.5707963267948966,\"walking\":false},{\"x\":-24,\"z\":0,\"rotation\":-1.5707963267948966,\"walking\":false}]}"
+    },
+    "speechCount": 0,
+    "viewport": [
+      1728,
+      1117
+    ]
+  }
+}

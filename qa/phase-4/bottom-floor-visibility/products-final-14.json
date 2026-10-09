@@ -1,0 +1,13 @@
+{
+  "build": "ljSuyJh39teHSIdpA1YfY",
+  "fixture": "24/14/14",
+  "mode": "production",
+  "browser": "Codex IAB",
+  "camera": "{\"safeViewport\":{\"left\":16,\"right\":898,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[-6.184837934814741,9.237087686883022,9.637157122033523],\"target\":[-6.524925400470337,1.4712709364187573,-0.07962761098353821],\"destination\":[-6.524917849370137,1.47,-0.0796278752720452],\"floorCenter\":[462.22759625960515,602.0535871866596],\"projection\":{\"facadeWidth\":696.1441847575201,\"logo\":87.01802309469001,\"name\":31.951930355081487,\"subtitle\":15.636051024827111,\"rank\":32.63175866050875,\"amount\":31.951930355081487}}",
+  "profile": "Summit Tool 04 floor profile",
+  "renderer": "{\"fps\":75,\"calls\":140,\"triangles\":36416,\"geometries\":377,\"textures\":67,\"samples\":150}",
+  "viewport": [
+    1440,
+    900
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "build": "0ZUgcIyQxKWGBWlMvEBm4",
+  "fixture": "24/14/14",
+  "mode": "production",
+  "browser": "Codex IAB",
+  "camera": "{\"cameraMode\":\"selectedFloor\",\"towerId\":\"companies\",\"listingId\":\"companies-12\",\"rank\":12,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":16,\"right\":898,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[0.5639544363740853,18.28961747743724,16.512983896402424],\"target\":[0,17.671614742440585,0.3999999999999996],\"destination\":[0,17.669999999999998,0.3999999999999999],\"floorCenter\":[450.4422557406077,457.31251666409815],\"projection\":{\"facadeWidth\":538.8643891894229,\"logo\":67.35804864867787,\"name\":24.733033488186404,\"subtitle\":12.103399366559303,\"rank\":25.259268243254198,\"amount\":25.259268243254198}}",
+  "canvasPixels": [
+    1440,
+    900
+  ],
+  "profile": "Atlas Grove floor profile",
+  "renderer": "{\"fps\":75,\"calls\":237,\"triangles\":37230,\"geometries\":381,\"textures\":69,\"samples\":150}",
+  "viewport": [
+    1440,
+    900
+  ]
+}

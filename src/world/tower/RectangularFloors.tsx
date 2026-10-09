@@ -7,6 +7,7 @@ import { useWorldStore } from "@/state/world-store";
 import { getFloorY } from "@/world/tower/tower-layout";
 import { visibleFloorSigns } from "@/world/tower/floor-signs";
 import { RectangularAdvertisementPair } from "@/world/tower/RectangularAdvertisement";
+import { SideAdvertisements } from "@/world/tower/SideAdvertisements";
 import { RECTANGULAR_TOWER as building } from "@/world/tower/rectangular-layout";
 import { worldMaterials } from "@/world/materials/world-materials";
 
@@ -42,6 +43,7 @@ export function RectangularFloors({listings,accent,selectedListingId,focused,foc
     <instancedMesh ref={windows} args={[windowGeometry,worldMaterials.windowLight,listings.length*6]} />
     {[...listings.filter(item=>item.rank!==activePreview?.rank),...(activePreview?[activePreview]:[])].map(listing=><group key={listing.id} position={[0,elevation(listing.rank),0]} onClick={event=>{event.stopPropagation();const current=listings.find(item=>item.id===listing.id);if(current)onSelect(current);}}>
       <RectangularAdvertisementPair listing={listing} detailed={signs.some(item=>item.id===listing.id)||listing===activePreview}/>
+      <SideAdvertisements listing={listing} detailed={signs.some(item=>item.id===listing.id)||listing===activePreview}/>
     </group>)}
   </group>;
 }

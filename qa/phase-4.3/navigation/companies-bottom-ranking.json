@@ -1,0 +1,19 @@
+{
+  "buildId": "a6KCXgDgP7eS9AaH2JrL5",
+  "url": "http://127.0.0.1:3002/?diagnostics=1",
+  "capturedAt": "2026-10-09T16:16:05.724Z",
+  "state": {
+    "canvas": {
+      "engine": "three.js r186",
+      "ottCamera": "{\"cameraMode\":\"selectedFloor\",\"districtBuildingId\":null,\"towerId\":\"companies\",\"face\":\"ranking\",\"listingId\":\"companies-24\",\"rank\":24,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":16,\"right\":898,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[11.916784862588159,1.9452567835564851,-5.576472360357489],\"target\":[0,1.4700000016225474,-8.99999999999999],\"destination\":[0,1.47,-9],\"floorCenter\":[581.7429336177643,466.63148353504744],\"projection\":{\"facadeWidth\":480.5511737679932,\"logo\":75.08612090124893,\"name\":null,\"subtitle\":null,\"rank\":33.03789319654953,\"amount\":33.03789319654953},\"blocked\":false}",
+      "ottPerf": "{\"fps\":120,\"calls\":151,\"triangles\":72748,\"geometries\":756,\"textures\":171,\"samples\":240,\"frameP50Ms\":8.299999952316284,\"frameP95Ms\":9.600000023841858,\"frameP99Ms\":10.700000047683716,\"frameMaxMs\":13.799999952316284,\"documentHidden\":false,\"dpr\":1,\"navigation\":{\"sideTexturePaintMs\":{\"count\":464,\"p50\":0.09999990463256836,\"p95\":0.20000004768371582,\"p99\":0.30000007152557373,\"max\":4.399999976158142,\"total\":40.299999952316284},\"sideTextureCreateMs\":{\"count\":228,\"p50\":0.10000002384185791,\"p95\":0.30000007152557373,\"p99\":0.5,\"max\":4.799999952316284,\"total\":36.49999988079071},\"longTaskMs\":{\"count\":1,\"p50\":183,\"p95\":183,\"p99\":183,\"max\":183,\"total\":183},\"sightlineSearchMs\":{\"count\":71,\"p50\":0.10000002384185791,\"p95\":0.20000004768371582,\"p99\":0.30000007152557373,\"max\":0.30000007152557373,\"total\":7.799999475479126},\"wheelHandlerMs\":{\"count\":14,\"p50\":0.10000002384185791,\"p95\":0.20000004768371582,\"p99\":0.20000004768371582,\"max\":0.20000004768371582,\"total\":1.9000000953674316},\"wheelDeltaPixels\":{\"count\":14,\"p50\":540,\"p95\":540,\"p99\":540,\"max\":540,\"total\":6561},\"inputToCameraFrameMs\":{\"count\":13,\"p50\":6.599999904632568,\"p95\":8.199999928474426,\"p99\":8.199999928474426,\"max\":8.199999928474426,\"total\":87.70000004768372}}}",
+      "ottTraffic": "{\"time\":267.84320000006505,\"vehicles\":[{\"phase\":0.7281253272800576,\"speed\":0.0065,\"direction\":1},{\"phase\":0.14615178913879934,\"speed\":0.0072,\"direction\":-1},{\"phase\":0.04308128874281092,\"speed\":0.007899999999999999,\"direction\":1},{\"phase\":0.5154970423086214,\"speed\":0,\"direction\":-1},{\"phase\":0.09748361119101667,\"speed\":0.006499999999999728,\"direction\":1},{\"phase\":0.5266530910433536,\"speed\":0.000501421532660333,\"direction\":-1},{\"phase\":0.11820861119101633,\"speed\":0.0065,\"direction\":1},{\"phase\":0.5747232177102539,\"speed\":0.0072,\"direction\":-1},{\"phase\":0.48450328326901104,\"speed\":0,\"direction\":1},{\"phase\":0.9667923999882677,\"speed\":0.0065,\"direction\":-1},{\"phase\":0.5324873998418909,\"speed\":0.0065000000000004395,\"direction\":1},{\"phase\":0.9853768473255089,\"speed\":0.0064829003978278225,\"direction\":-1},{\"phase\":0.5532123998418914,\"speed\":0.0065,\"direction\":1},{\"phase\":0.0050539562137785765,\"speed\":0.006503831941722148,\"direction\":-1}],\"pedestrians\":[{\"x\":29.7,\"z\":0,\"rotation\":-1.5707963267948966,\"walking\":false},{\"x\":-26.372502857036913,\"z\":0,\"rotation\":1.5707963267948966,\"walking\":true}]}"
+    },
+    "profile": "Skyline Venture 04",
+    "speechCount": 0,
+    "viewport": [
+      1440,
+      900
+    ]
+  }
+}

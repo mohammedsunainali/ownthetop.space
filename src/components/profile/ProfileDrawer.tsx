@@ -1,19 +1,24 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useSyncExternalStore } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
+import { floorShareUrl } from "@/domain/floor-share";
 import { formatMinorUnits } from "@/domain/money";
 import { allListings, regressionListings } from "@/mock";
 import { createStressListings } from "@/mock/stress-floors";
 import { useWorldStore } from "@/state/world-store";
 import { initialsForName, isSafeLogoUrl } from "@/world/tower/floor-signs";
+import {currentStressFixture} from "@/mock/fixture-mode";
 
 export function ProfileDrawer() {
+  const [shared, setShared] = useState<{ id: string; url: string; copied: boolean } | null>(null);
   const selectedListingId = useWorldStore((state) => state.selectedListingId);
-  const fixture = useSyncExternalStore(()=>()=>{},()=>process.env.NODE_ENV==="development"&&new URLSearchParams(window.location.search).get("stressFloors")==="220"?"stress":new URLSearchParams(window.location.search).get("regression")==="legacy"?"legacy":"demo",()=>"demo");
+  const profileVisible = useWorldStore((state) => state.profileVisible);
+  const fixture = useSyncExternalStore(()=>()=>{},()=>currentStressFixture()?"stress":new URLSearchParams(window.location.search).get("regression")==="legacy"?"legacy":"demo",()=>"demo");
   const inventory=useMemo(()=>fixture==="stress"?createStressListings():fixture==="legacy"?regressionListings:allListings,[fixture]);
   const selected = inventory.find((listing) => listing.id === selectedListingId);
 
+  if(selected && !profileVisible)return null;
   if (!selected) {
     return (
       <aside className="profile-drawer profile-drawer--empty" aria-live="polite">
@@ -36,7 +41,7 @@ export function ProfileDrawer() {
       <div className="profile-drawer__topline">
         <div className="profile-mark" aria-hidden="true">{safeLogo ? <Image src={safeLogo} alt="" width={72} height={72} unoptimized /> : initialsForName(selected.name)}</div>
         <span className="profile-rank">Rank #{selected.rank}</span>
-        <button className="profile-close" type="button" aria-label="Close profile" onClick={() => useWorldStore.getState().selectTower(selected.towerId)}>×</button>
+        <button className="profile-close" type="button" aria-label="Close profile" onClick={() => useWorldStore.getState().closeProfile()}>×</button>
       </div>
       <h2>{selected.name}</h2>
       <p className="profile-price">{selected.hiring ? `Claimed floor at ${amount}` : `${amount} cumulative`}</p>
@@ -46,6 +51,12 @@ export function ProfileDrawer() {
       </div>
       {selected.description ? <p className="profile-description">{selected.description}</p> : null}
       <a className="profile-url" href={selected.url} target="_blank" rel="noopener noreferrer">Visit website ↗</a>
+      <button className="profile-share" type="button" onClick={async () => {
+        const url = floorShareUrl(window.location.href, selected);
+        try { await navigator.clipboard.writeText(url); setShared({ id: selected.id, url, copied: true }); }
+        catch { setShared({ id: selected.id, url, copied: false }); }
+      }}>Copy floor link</button>
+      {shared?.id === selected.id && (shared.copied ? <p role="status">Floor link copied. This is a synthetic demo listing.</p> : <label>Floor link<input aria-label="Shareable floor link" readOnly value={shared.url} /></label>)}
       <dl className="profile-details">
         <div><dt>Category</dt><dd>{selected.category}</dd></div>
         {selected.location ? <div><dt>Location</dt><dd>{selected.location}</dd></div> : null}

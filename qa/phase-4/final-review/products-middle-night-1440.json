@@ -1,0 +1,12 @@
+{
+  "build": "ymOqohnE5YlrotBeoR4mU",
+  "metadataCorrection": "Capture helper retained an older build binding; corrected against the verified production restart/reload sequence. Original helper value: BHAhvC7pMYGvWFIx2HR2j",
+  "fixture": "24/14/14",
+  "camera": "{\"cameraMode\":\"selectedFloor\",\"towerId\":\"products\",\"face\":\"front\",\"listingId\":\"products-07\",\"rank\":7,\"preview\":false,\"exploded\":false,\"time\":\"night\",\"safeViewport\":{\"left\":16,\"right\":898,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[-12.56622450131374,11.395813071278415,20.393579022036267],\"target\":[-12.999999794434402,10.920465620819805,7.999999867428811],\"destination\":[-13,10.92,8],\"floorCenter\":[447.92209956266095,459.98816702682046],\"projection\":{\"facadeWidth\":736.9800086287875,\"logo\":92.12250107859843,\"name\":33.82623086479786,\"subtitle\":16.553261912560654,\"rank\":34.545937904474414,\"amount\":34.545937904474414},\"blocked\":false}",
+  "hidden": false,
+  "renderer": "{\"fps\":75,\"calls\":233,\"triangles\":73208,\"geometries\":617,\"textures\":173,\"samples\":151,\"frameP50Ms\":13.300000071525574,\"frameP95Ms\":15.299999952316284,\"frameP99Ms\":15.399999976158142,\"frameMaxMs\":15.5,\"documentHidden\":false,\"dpr\":1}",
+  "viewport": [
+    1440,
+    900
+  ]
+}

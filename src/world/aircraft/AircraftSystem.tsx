@@ -20,15 +20,15 @@ export type HelicopterPhase = "CRUISE" | "APPROACH" | "ALIGN" | "HOVER" | "DESCE
 export function helicopterPose(seconds: number, floorCount: number, exploded=false): { phase: HelicopterPhase; position: Vector3 } {
   const [padX, padY, padZ] = getHelipadWorldPosition(floorCount,exploded);
   const segments: { phase: HelicopterPhase; duration: number; from: [number, number, number]; to: [number, number, number] }[] = [
-    { phase: "CRUISE", duration: 4, from: [12, padY + 3, -6], to: [8, padY + 2.2, 5] },
-    { phase: "APPROACH", duration: 4, from: [8, padY + 2.2, 5], to: [3, padY + 1.5, padZ + 2] },
-    { phase: "ALIGN", duration: 3, from: [3, padY + 1.5, padZ + 2], to: [padX, padY + 1.2, padZ] },
+    { phase: "CRUISE", duration: 4, from: [padX + 10, padY + 3, padZ - 4], to: [padX + 6, padY + 2.2, padZ + 7] },
+    { phase: "APPROACH", duration: 4, from: [padX + 6, padY + 2.2, padZ + 7], to: [padX + 0.85, padY + 1.5, padZ + 2] },
+    { phase: "ALIGN", duration: 3, from: [padX + 0.85, padY + 1.5, padZ + 2], to: [padX, padY + 1.2, padZ] },
     { phase: "HOVER", duration: 2, from: [padX, padY + 1.2, padZ], to: [padX, padY + 1.2, padZ] },
     { phase: "DESCEND", duration: 3, from: [padX, padY + 1.2, padZ], to: [padX, padY, padZ] },
     { phase: "LAND", duration: 1, from: [padX, padY, padZ], to: [padX, padY, padZ] },
     { phase: "IDLE", duration: 3, from: [padX, padY, padZ], to: [padX, padY, padZ] },
     { phase: "ASCEND", duration: 3, from: [padX, padY, padZ], to: [padX, padY + 1.4, padZ] },
-    { phase: "DEPART", duration: 6, from: [padX, padY + 1.4, padZ], to: [12, padY + 3, -6] },
+    { phase: "DEPART", duration: 6, from: [padX, padY + 1.4, padZ], to: [padX + 10, padY + 3, padZ - 4] },
   ];
   const cycle = segments.reduce((sum, item) => sum + item.duration, 0);
   let elapsed = ((seconds % cycle) + cycle) % cycle;
@@ -106,7 +106,7 @@ export function AircraftSystem({ mobile, companiesFloorCount, sideTowerFloorCoun
     });
   });
   return <group>
-    {aircraftConfigurations.map((item, index) => <group key={index} ref={(group) => { refs.current[index] = group; }} position={[item.radius, item.altitude, 0]} visible={!mobile || index < 3}>
+    {aircraftConfigurations.map((item, index) => <group key={index} ref={(group) => { refs.current[index] = group; }} position={index === 2 ? helicopterPose(0, companiesFloorCount, exploded).position : curves[index].getPoint(item.offset)} visible={!mobile || index < 3}>
       <AircraftShape kind={item.kind} index={index} rotorRef={item.kind === "helicopter" ? (group) => { rotor.current = group; } : undefined} bannerRef={item.kind === "plane" ? (group) => { banners.current[index] = group; } : undefined} />
     </group>)}
   </group>;

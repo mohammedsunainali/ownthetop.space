@@ -1,0 +1,10 @@
+{
+  "build": "j_OpaNzs9jK8UkrGUZ_Cl",
+  "viewport": [
+    1728,
+    1117
+  ],
+  "fixture": "24/14/14",
+  "time": "day",
+  "camera": "{\"cameraMode\":\"rooftop\",\"towerId\":\"companies\",\"face\":\"front\",\"listingId\":null,\"rank\":1,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":16,\"right\":1568,\"top\":75,\"bottom\":1042},\"size\":{\"width\":1728,\"height\":1117,\"top\":0,\"left\":0},\"position\":[4.733973982220125,42.88240536578657,4.536252512120454],\"target\":[0,34.76736383305987,-8.999664646521303],\"destination\":[0,34.769999999999996,-9],\"floorCenter\":[723.3306728761976,836.0495182772846],\"projection\":{\"facadeWidth\":560.9848811148413,\"logo\":70.12311013935516,\"name\":25.748329504294475,\"subtitle\":12.600246353165382,\"rank\":26.29616630225819,\"amount\":26.29616630225819},\"blocked\":false}"
+}
