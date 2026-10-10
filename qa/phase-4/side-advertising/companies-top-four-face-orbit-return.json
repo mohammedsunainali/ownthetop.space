@@ -1,0 +1,55 @@
+{
+  "build": "I1e1M49khMlaXtEma0dv0",
+  "metadataCorrection": "Capture helper retained an older build binding; corrected against the verified production restart/reload sequence. Original helper value: DjHgVHFkXCcSpSPzyjwnk",
+  "fixture": "24/14/14",
+  "camera": {
+    "blocked": false,
+    "cameraMode": "selectedFloor",
+    "destination": [
+      0,
+      32.519999999999996,
+      -9
+    ],
+    "exploded": false,
+    "face": "front",
+    "floorCenter": [
+      450.2546562004057,
+      459.9733242978707
+    ],
+    "listingId": "companies-01",
+    "position": [
+      0.32021732744617987,
+      32.9939637959277,
+      3.3609232182566604
+    ],
+    "preview": false,
+    "projection": {
+      "amount": 33.96101386250287,
+      "facadeWidth": 739.9165573447433,
+      "logo": 92.48956966809293,
+      "name": 32.515864336438916,
+      "rank": 34.683588625534846,
+      "subtitle": 16.619219549735448
+    },
+    "rank": 1,
+    "safeViewport": {
+      "bottom": 825,
+      "left": 16,
+      "right": 898,
+      "top": 75
+    },
+    "size": {
+      "height": 900,
+      "left": 0,
+      "top": 0,
+      "width": 1440
+    },
+    "target": [
+      0,
+      32.51999999999994,
+      -8.999999999999986
+    ],
+    "time": "day",
+    "towerId": "companies"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "build": "ymOqohnE5YlrotBeoR4mU",
+  "metadataCorrection": "Capture helper retained an older build binding; corrected against the verified production restart/reload sequence. Original helper value: BHAhvC7pMYGvWFIx2HR2j",
+  "fixture": "24/14/14",
+  "camera": "{\"cameraMode\":\"selectedFloor\",\"towerId\":\"companies\",\"face\":\"front\",\"listingId\":\"companies-12\",\"rank\":12,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":16,\"right\":898,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[0.4337764709061869,18.14534560993579,3.3935899935225873],\"target\":[0,17.66999805652578,-8.999991807368643],\"destination\":[0,17.669999999999998,-9],\"floorCenter\":[447.92212799633415,459.9342453018248],\"projection\":{\"facadeWidth\":736.9805090678192,\"logo\":92.1225636334774,\"name\":33.82625383416748,\"subtitle\":16.55327315289047,\"rank\":34.54596136255403,\"amount\":34.54596136255403},\"blocked\":false}",
+  "hidden": false,
+  "renderer": "{\"fps\":75,\"calls\":170,\"triangles\":70982,\"geometries\":642,\"textures\":170,\"samples\":150,\"frameP50Ms\":13.300000071525574,\"frameP95Ms\":15.200000047683716,\"frameP99Ms\":15.300000071525574,\"frameMaxMs\":15.399999976158142,\"documentHidden\":false,\"dpr\":1}",
+  "viewport": [
+    1440,
+    900
+  ]
+}

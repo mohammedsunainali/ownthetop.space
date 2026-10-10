@@ -4,9 +4,10 @@ import { getFloorY } from "@/world/tower/tower-layout";
 
 describe("Phase 1 mock world", () => {
   it("contains the required stable listing counts", () => {
-    expect(companies).toHaveLength(20);
-    expect(products).toHaveLength(10);
-    expect(people).toHaveLength(10);
+    expect(companies).toHaveLength(50);
+    expect(products).toHaveLength(20);
+    expect(people).toHaveLength(20);
+    expect(companies.length + products.length + people.length).toBe(90);
   });
 
   it.each([

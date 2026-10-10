@@ -1,0 +1,13 @@
+{
+  "build": "VaoRUFRKXwtQvVeLCaLTw",
+  "fixture": "24/14/14",
+  "mode": "production",
+  "browser": "Codex IAB",
+  "camera": "{\"safeViewport\":{\"left\":16,\"right\":898,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[2.7012254549586765,18.13991728007409,12.530278212979201],\"target\":[2.273880214241731,17.671616100906554,0.3204141925009701],\"destination\":[2.2738802142425514,17.669999999999998,0.3204141925015106],\"floorCenter\":[444.26885734000973,460.1694358480883],\"projection\":{\"facadeWidth\":743.4067535786029,\"logo\":92.92584419732536,\"name\":34.121208416205405,\"subtitle\":16.6976126292069,\"rank\":34.84719157399701,\"amount\":34.84719157399701}}",
+  "profile": "Atlas Grove floor profile",
+  "renderer": "{\"fps\":75,\"calls\":213,\"triangles\":37094,\"geometries\":381,\"textures\":69,\"samples\":150}",
+  "viewport": [
+    1440,
+    900
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "duration" : 43.136666666666663,
+  "frames" : [
+    {
+      "actual" : 0,
+      "requested" : 0,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 1.1066666666666667,
+      "requested" : 1,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 2.4283333333333332,
+      "requested" : 2,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 2.4283333333333332,
+      "requested" : 3,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 3.9483333333333333,
+      "requested" : 4,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 5.1083333333333334,
+      "requested" : 5,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 6.3483333333333336,
+      "requested" : 6,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 7.3366666666666669,
+      "requested" : 7,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 7.3366666666666669,
+      "requested" : 8,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 8.8300000000000001,
+      "requested" : 9,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 10.109999999999999,
+      "requested" : 10,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 11.109999999999999,
+      "requested" : 11,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 12.191666666666666,
+      "requested" : 12,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 13.618333333333334,
+      "requested" : 13,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 13.618333333333334,
+      "requested" : 14,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 14.871666666666666,
+      "requested" : 15,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 15.938333333333333,
+      "requested" : 16,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 16.993333333333332,
+      "requested" : 17,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 18.02,
+      "requested" : 18,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 19.246666666666666,
+      "requested" : 19,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 20.579999999999998,
+      "requested" : 20,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 20.579999999999998,
+      "requested" : 21,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 21.835000000000001,
+      "requested" : 22,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 22.928333333333335,
+      "requested" : 23,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 23.901666666666667,
+      "requested" : 24,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 25.303333333333335,
+      "requested" : 25,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 25.303333333333335,
+      "requested" : 26,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 26.703333333333333,
+      "requested" : 27,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 27.823333333333334,
+      "requested" : 28,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 29.143333333333334,
+      "requested" : 29,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 30.198333333333334,
+      "requested" : 30,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 31.278333333333332,
+      "requested" : 31,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 32.278333333333336,
+      "requested" : 32,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 33.265000000000001,
+      "requested" : 33,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 34.560000000000002,
+      "requested" : 34,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 34.560000000000002,
+      "requested" : 35,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 35.613333333333337,
+      "requested" : 36,
+      "sheet" : "reference-1-page-4.png"
+    },
+    {
+      "actual" : 36.613333333333337,
+      "requested" : 37,
+      "sheet" : "reference-1-page-4.png"
+    },
+    {
+      "actual" : 37.920000000000002,
+      "requested" : 38,
+      "sheet" : "reference-1-page-4.png"
+    },
+    {
+      "actual" : 39.028333333333336,
+      "requested" : 39,
+      "sheet" : "reference-1-page-4.png"
+    },
+    {
+      "actual" : 40.094999999999999,
+      "requested" : 40,
+      "sheet" : "reference-1-page-4.png"
+    },
+    {
+      "actual" : 41.534999999999997,
+      "requested" : 41,
+      "sheet" : "reference-1-page-4.png"
+    },
+    {
+      "actual" : 41.534999999999997,
+      "requested" : 42,
+      "sheet" : "reference-1-page-4.png"
+    },
+    {
+      "actual" : 42.895000000000003,
+      "requested" : 43,
+      "sheet" : "reference-1-page-4.png"
+    }
+  ],
+  "samplingSeconds" : 1,
+  "source" : "\/Users\/mohammedsunainali\/Desktop\/Screen Recording 2026-10-08 at 10.38.37 AM.mov"
+}

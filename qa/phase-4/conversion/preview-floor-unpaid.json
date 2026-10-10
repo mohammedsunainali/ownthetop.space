@@ -1,0 +1,13 @@
+{
+  "build": "ljSuyJh39teHSIdpA1YfY",
+  "fixture": "24/14/14",
+  "mode": "production",
+  "browser": "Codex IAB",
+  "camera": "{\"safeViewport\":{\"left\":16,\"right\":1280,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[0.8074882707509166,4.087139401012356,10.823912909907525],\"target\":[0.44183487510012487,1.4769277341810803,0.3835750492467534],\"destination\":[0.44267662529133817,1.47,0.38450631811480307],\"floorCenter\":[157.94055137366522,-31519.224349149576],\"projection\":{\"facadeWidth\":6869.510186336691,\"logo\":858.6887732920864,\"name\":315.29978394318795,\"subtitle\":154.29563895092176,\"rank\":322.0082899845324,\"amount\":322.0082899845324}}",
+  "profile": null,
+  "renderer": "{\"fps\":75,\"calls\":182,\"triangles\":37790,\"geometries\":381,\"textures\":69,\"samples\":150}",
+  "viewport": [
+    1440,
+    900
+  ]
+}

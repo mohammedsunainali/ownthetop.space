@@ -1,0 +1,18 @@
+{
+  "buildId": "jMEqKUQnpVQUcmsviJyGu",
+  "fixture": "default",
+  "lighting": "night",
+  "state": {
+    "canvas": [
+      {
+        "engine": "three.js r186",
+        "ottCamera": "{\"cameraMode\":\"rooftop\",\"districtBuildingId\":null,\"towerId\":\"companies\",\"face\":\"front\",\"listingId\":null,\"rank\":1,\"preview\":false,\"exploded\":false,\"time\":\"night\",\"safeViewport\":{\"left\":16,\"right\":738,\"top\":75,\"bottom\":645},\"size\":{\"width\":1280,\"height\":720,\"top\":-86,\"left\":0},\"position\":[5.1011726942154,43.51427881563581,5.575838482236122],\"target\":[0,34.76932471828228,-8.999646449362448],\"destination\":[0,34.769999999999996,-9],\"floorCenter\":[336.0211400251562,525.6270407064609],\"projection\":{\"facadeWidth\":334.2692269508831,\"logo\":41.783653368860385,\"name\":15.342435221378423,\"subtitle\":7.5080002147171,\"rank\":15.668870013322643,\"amount\":15.668870013322643},\"blocked\":true}",
+        "ottPerf": "{\"fps\":120,\"calls\":286,\"triangles\":91290,\"geometries\":715,\"textures\":173,\"samples\":240,\"frameP50Ms\":8.300000071525574,\"frameP95Ms\":9.799999952316284,\"frameP99Ms\":12.399999976158142,\"frameMaxMs\":14,\"documentHidden\":false,\"dpr\":1.75,\"navigation\":{\"sideTexturePaintMs\":{\"count\":444,\"p50\":0.10000002384185791,\"p95\":0.30000007152557373,\"p99\":2,\"max\":3.899999976158142,\"total\":57.50000011920929},\"sideTextureCreateMs\":{\"count\":216,\"p50\":0.10000002384185791,\"p95\":1,\"p99\":2.200000047683716,\"max\":3.899999976158142,\"total\":52.10000038146973},\"longTaskMs\":{\"count\":1,\"p50\":194,\"p95\":194,\"p99\":194,\"max\":194,\"total\":194}}}"
+      }
+    ],
+    "viewport": [
+      1280,
+      720
+    ]
+  }
+}

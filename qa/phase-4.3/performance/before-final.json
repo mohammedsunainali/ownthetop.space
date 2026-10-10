@@ -1,0 +1,109 @@
+{
+  "buildId": "EPujRf26jQK4TFAbg2i4v",
+  "camera": {
+    "blocked": false,
+    "cameraMode": "selectedFloor",
+    "destination": [
+      0,
+      25.769999999999996,
+      -9
+    ],
+    "exploded": false,
+    "face": "front",
+    "floorCenter": [
+      447.9154611142623,
+      459.62407605940086
+    ],
+    "listingId": "companies-06",
+    "position": [
+      0.4341443986292699,
+      26.24268674426719,
+      3.3942843401093636
+    ],
+    "preview": false,
+    "projection": {
+      "amount": 34.54385329036208,
+      "facadeWidth": 736.9355368610576,
+      "logo": 92.1169421076322,
+      "name": 33.82418968014619,
+      "rank": 34.54385329036208,
+      "subtitle": 16.55226303496516
+    },
+    "rank": 6,
+    "safeViewport": {
+      "bottom": 825,
+      "left": 16,
+      "right": 898,
+      "top": 75
+    },
+    "size": {
+      "height": 900,
+      "left": 0,
+      "top": 0,
+      "width": 1440
+    },
+    "target": [
+      0,
+      25.767311784917027,
+      -8.999999999996076
+    ],
+    "time": "day",
+    "towerId": "companies"
+  },
+  "perf": {
+    "calls": 181,
+    "documentHidden": false,
+    "dpr": 1,
+    "fps": 71,
+    "frameMaxMs": 62.20000004768371,
+    "frameP50Ms": 10.700000047683716,
+    "frameP95Ms": 29,
+    "frameP99Ms": 41.5,
+    "geometries": 656,
+    "navigation": {
+      "inputToCameraFrameMs": {
+        "count": 13,
+        "max": 176.5,
+        "p50": 28.799999952316284,
+        "p95": 176.5,
+        "p99": 176.5,
+        "total": 528.3999999761581
+      },
+      "longTaskMs": {
+        "count": 70,
+        "max": 208,
+        "p50": 67,
+        "p95": 135,
+        "p99": 208,
+        "total": 5429
+      },
+      "sightlineSearchMs": {
+        "count": 29,
+        "max": 4.100000023841858,
+        "p50": 0.30000007152557373,
+        "p95": 2.5,
+        "p99": 4.100000023841858,
+        "total": 15.5
+      },
+      "wheelDeltaPixels": {
+        "count": 13,
+        "max": 540,
+        "p50": 540,
+        "p95": 540,
+        "p99": 540,
+        "total": 7020
+      },
+      "wheelHandlerMs": {
+        "count": 13,
+        "max": 0.3999999761581421,
+        "p50": 0.20000004768371585,
+        "p95": 0.3999999761581421,
+        "p99": 0.3999999761581421,
+        "total": 3.0999996662139893
+      }
+    },
+    "samples": 143,
+    "textures": 173,
+    "triangles": 69720
+  }
+}

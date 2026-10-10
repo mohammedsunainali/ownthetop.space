@@ -1,0 +1,94 @@
+{
+  "buildId": "grvGe-rN8TjVx4_-WgVCR",
+  "fixture": "default",
+  "camera": {
+    "blocked": false,
+    "cameraMode": "overview",
+    "destination": [
+      0,
+      18.534999999999997,
+      -0.5
+    ],
+    "exploded": false,
+    "face": "front",
+    "floorCenter": [
+      900.6462170478958,
+      450.7371817027774
+    ],
+    "listingId": null,
+    "position": [
+      12.1962404553551,
+      46.680173485188625,
+      93.31722623448556
+    ],
+    "preview": false,
+    "projection": {
+      "amount": 4.298237567147869,
+      "facadeWidth": 91.6957347658212,
+      "logo": 11.46196684572765,
+      "name": 4.208690951165622,
+      "rank": 4.298237567147869,
+      "subtitle": 2.059572167591687
+    },
+    "rank": 1,
+    "safeViewport": {
+      "bottom": 1042,
+      "left": 210,
+      "right": 1568,
+      "top": 298.0703125
+    },
+    "size": {
+      "height": 1117,
+      "left": 0,
+      "top": 0,
+      "width": 1728
+    },
+    "target": [
+      0,
+      18.53500393704241,
+      -0.5000020612787502
+    ],
+    "time": "day",
+    "towerId": "companies"
+  },
+  "perf": {
+    "calls": 707,
+    "documentHidden": false,
+    "dpr": 1,
+    "fps": 120,
+    "frameMaxMs": 12.700000047683716,
+    "frameP50Ms": 8.300000071525574,
+    "frameP95Ms": 9.399999976158142,
+    "frameP99Ms": 9.700000047683716,
+    "geometries": 659,
+    "navigation": {
+      "longTaskMs": {
+        "count": 1,
+        "max": 143,
+        "p50": 143,
+        "p95": 143,
+        "p99": 143,
+        "total": 143
+      },
+      "sideTextureCreateMs": {
+        "count": 224,
+        "max": 4.800000071525574,
+        "p50": 0.10000002384185792,
+        "p95": 0.30000007152557373,
+        "p99": 0.5999999046325684,
+        "total": 35.19999933242798
+      },
+      "sideTexturePaintMs": {
+        "count": 460,
+        "max": 4.399999976158142,
+        "p50": 0.09999990463256836,
+        "p95": 0.20000004768371585,
+        "p99": 0.3999999761581421,
+        "total": 39.59999942779541
+      }
+    },
+    "samples": 240,
+    "textures": 169,
+    "triangles": 137588
+  }
+}

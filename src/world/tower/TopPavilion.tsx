@@ -1,10 +1,11 @@
-import { BoxGeometry, CanvasTexture, DoubleSide, InstancedMesh, Matrix4, MeshStandardMaterial, Quaternion, SRGBColorSpace, Vector3 } from "three";
-import { useLayoutEffect, useMemo, useRef } from "react";
-import { useState } from "react";
+import { BoxGeometry, CanvasTexture, DoubleSide, FrontSide, InstancedMesh, Matrix4, MeshPhysicalMaterial, MeshStandardMaterial, Quaternion, SRGBColorSpace, Vector3, type Group } from "three";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import { tokens } from "@/design/tokens";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { worldMaterials } from "@/world/materials/world-materials";
-import { getCrownVerticalScale, HELIPAD_LEVEL_OFFSET } from "@/world/tower/tower-layout";
+import { getCrownVerticalScale, HELIPAD_LOCAL_ANCHOR } from "@/world/tower/tower-layout";
 
 /** Non-ranked tiers continue the paid tower's three-wing plan. */
 export const CROWN_TIERS = [
@@ -17,6 +18,7 @@ const crownFrame = new MeshStandardMaterial({ color: tokens.color.brand.lightBlu
 
 const skyGlass = new MeshStandardMaterial({ color: tokens.color.brand.lightBlue, transparent: true, opacity: 0.52, metalness: 0.32, roughness: 0.13, depthWrite: false, side: DoubleSide, emissive: tokens.color.brand.blue, emissiveIntensity: 0.08 });
 const crownGlass = new MeshStandardMaterial({ color: tokens.color.brand.blue, transparent: true, opacity: 0.68, metalness: 0.48, roughness: 0.14, depthWrite: false, side: DoubleSide, emissive: tokens.color.brand.blue, emissiveIntensity: 0.12 });
+const loungeGlass = new MeshPhysicalMaterial({ color: tokens.color.brand.lightBlue, transparent: true, opacity: 0.3, transmission: 0.58, thickness: 0.08, roughness: 0.08, metalness: 0.08, depthWrite: false, side: DoubleSide, emissive: tokens.color.brand.blue, emissiveIntensity: 0.09 });
 const unitBox = new BoxGeometry(1, 1, 1);
 
 function CrownEnvelope() {
@@ -53,32 +55,70 @@ function CrownEnvelope() {
 }
 
 function Pennant() {
+  const flag = useRef<Group>(null);
+  const reducedMotion = useReducedMotion();
   const texture = useMemo(() => {
     const canvas = document.createElement("canvas");
-    canvas.width = 512; canvas.height = 128;
+    canvas.width = 1024; canvas.height = 256;
     const context = canvas.getContext("2d");
     if (context) {
-      context.fillStyle = tokens.color.brand.navy; context.fillRect(0, 0, 512, 128);
-      context.fillStyle = tokens.color.brand.white; context.font = "bold 48px Arial";
-      context.fillText("OwnTheTop.space", 22, 78);
+      context.fillStyle = tokens.color.brand.navy; context.fillRect(0, 0, 1024, 256);
+      context.fillStyle = tokens.color.brand.white; context.font = "800 82px Montserrat, system-ui, sans-serif";
+      context.textAlign = "center"; context.textBaseline = "middle";
+      context.fillText("OwnTheTop.space", 512, 128, 920);
     }
     const map = new CanvasTexture(canvas); map.colorSpace = SRGBColorSpace;
     return map;
   }, []);
+  useFrame(({ clock }) => { if (flag.current && !reducedMotion) flag.current.rotation.y = Math.sin(clock.elapsedTime * 1.4) * 0.035; });
   return <group position={[0.13, 5.13, 0]}>
-    <mesh material={worldMaterials.frame} position={[0, 0.12, 0]}><cylinderGeometry args={[0.012, 0.012, 0.38, 6]} /></mesh>
-    <mesh position={[0.27, 0.21, 0]}><planeGeometry args={[0.52, 0.13]} /><meshBasicMaterial map={texture} side={DoubleSide} /></mesh>
+    <mesh material={worldMaterials.frame} position={[0, 0.17, 0]}><cylinderGeometry args={[0.014, 0.014, 0.52, 6]} /></mesh>
+    <group ref={flag} position={[0.7, 0.28, 0]}>
+      <mesh position={[0, 0, 0.003]}><planeGeometry args={[1.38, 0.35, 8, 1]} /><meshBasicMaterial map={texture} side={FrontSide} /></mesh>
+      <mesh position={[0, 0, -0.003]} rotation={[0, Math.PI, 0]}><planeGeometry args={[1.38, 0.35, 8, 1]} /><meshBasicMaterial map={texture} side={FrontSide} /></mesh>
+    </group>
   </group>;
 }
 
 function SkyCat() {
   const [speaking, setSpeaking] = useState(false);
+  useEffect(() => {
+    if (!speaking) return;
+    const timeout = window.setTimeout(() => setSpeaking(false), 2800);
+    return () => window.clearTimeout(timeout);
+  }, [speaking]);
   return <group position={[0.12, 2.47, 0.32]} onClick={(event) => { event.stopPropagation(); setSpeaking(true); }}>
     <mesh material={worldMaterials.frame} position={[0, 0.07, 0]}><sphereGeometry args={[0.065, 8, 6]} /></mesh>
     <mesh material={worldMaterials.frame} position={[0, 0.13, 0.025]}><sphereGeometry args={[0.045, 8, 6]} /></mesh>
     {[-1, 1].map((side) => <mesh key={side} material={worldMaterials.frame} position={[side * 0.027, 0.177, 0.026]}><coneGeometry args={[0.018, 0.045, 4]} /></mesh>)}
     <mesh material={worldMaterials.frame} position={[-0.075, 0.1, -0.02]} rotation={[0, 0, -0.5]}><cylinderGeometry args={[0.01, 0.012, 0.14, 5]} /></mesh>
-    {speaking && <Html position={[0, 0.3, 0]} className="cat-easter-egg"><button type="button" onClick={(event) => { event.stopPropagation(); setSpeaking(false); }}>Bro! Leave me alone. ×</button></Html>}
+    {speaking && <Html position={[0, 0.3, 0]} className="cat-easter-egg"><div role="status">Bro! Leave me alone.</div></Html>}
+  </group>;
+}
+
+function PremiumSkyLounge() {
+  const sign = useMemo(() => {
+    const canvas = document.createElement("canvas"); canvas.width = 1024; canvas.height = 192;
+    const context = canvas.getContext("2d");
+    if (context) {
+      context.fillStyle = tokens.color.brand.navy; context.fillRect(0, 0, 1024, 192);
+      context.strokeStyle = tokens.color.brand.summitGold; context.lineWidth = 10; context.strokeRect(5, 5, 1014, 182);
+      context.fillStyle = tokens.color.brand.white; context.textAlign = "center"; context.font = "800 66px Montserrat, system-ui, sans-serif";
+      context.fillText("OWN THE TOP FLOOR", 512, 122);
+    }
+    const map = new CanvasTexture(canvas); map.colorSpace = SRGBColorSpace; return map;
+  }, []);
+  return <group position={[0, 0.45, 0]}>
+    {[0, 2.094, 4.188].map((angle) => <group key={angle} rotation={[0, angle, 0]}>
+      <mesh material={loungeGlass} position={[0, 0.12, 0.55]}><boxGeometry args={[0.82, 0.72, 1.12]} /></mesh>
+      <mesh material={worldMaterials.podium} position={[0, -0.25, 0.55]}><boxGeometry args={[0.9, 0.07, 1.2]} /></mesh>
+      <mesh position={[0, 0.08, 1.129]}><planeGeometry args={[0.78, 0.2]} /><meshBasicMaterial map={sign} side={FrontSide} toneMapped={false} /></mesh>
+      <mesh position={[0, 0.08, 1.121]} rotation={[0, Math.PI, 0]}><planeGeometry args={[0.78, 0.2]} /><meshBasicMaterial map={sign} side={FrontSide} toneMapped={false} /></mesh>
+      <mesh material={worldMaterials.summit} position={[-0.2, -0.08, 0.62]}><boxGeometry args={[0.28, 0.16, 0.22]} /></mesh>
+      <mesh material={worldMaterials.frame} position={[0.14, -0.1, 0.62]}><cylinderGeometry args={[0.09, 0.09, 0.12, 12]} /></mesh>
+      <mesh material={worldMaterials.leaf} position={[0.27, 0.05, 0.46]}><icosahedronGeometry args={[0.11, 1]} /></mesh>
+      <mesh material={worldMaterials.frame} position={[-0.32, 0.03, 0.42]}><capsuleGeometry args={[0.045, 0.2, 3, 6]} /></mesh>
+    </group>)}
   </group>;
 }
 
@@ -86,6 +126,7 @@ function SkyCat() {
 export function TopPavilion({ y, floorCount }: { y: number; floorCount: number; focused: boolean }) {
   return <group position={[0, y, 0]} scale={[1, getCrownVerticalScale(floorCount), 1]}>
     <CrownEnvelope />
+    <PremiumSkyLounge />
     {CROWN_TIERS.map((tier, index) => <group key={tier.base} position={[0, tier.base, 0]}>
       <mesh material={worldMaterials.frame} position={[0, tier.height / 2, 0]} castShadow><cylinderGeometry args={[0.29 - index * 0.04, 0.38 - index * 0.035, tier.height, 6]} /></mesh>
     </group>)}
@@ -99,12 +140,12 @@ export function TopPavilion({ y, floorCount }: { y: number; floorCount: number; 
     </group>
     <SkyCat />
     {/* The pad is a braced cantilever off an upper shoulder, below the glass level. */}
-    <group position={[0, HELIPAD_LEVEL_OFFSET, 0.9]}>
-      <mesh material={worldMaterials.podium} position={[0, -0.08, 0.22]} castShadow><boxGeometry args={[0.98, 0.12, 1.05]} /></mesh>
-      <mesh material={worldMaterials.frame} position={[0, -0.21, 0.48]} rotation={[0.38, 0, 0]}><boxGeometry args={[0.4, 0.36, 0.08]} /></mesh>
-      <mesh material={worldMaterials.sign} position={[0, -0.005, 0.46]} rotation={[-Math.PI / 2, 0, 0]}><circleGeometry args={[0.42, 24]} /></mesh>
-      <mesh material={worldMaterials.summit} position={[0, 0.002, 0.46]} rotation={[-Math.PI / 2, 0, 0]}><ringGeometry args={[0.31, 0.34, 24]} /></mesh>
-      <mesh position={[0, 0.008, 0.46]} rotation={[-Math.PI / 2, 0, 0]}><planeGeometry args={[0.22, 0.3]} /><meshBasicMaterial color={tokens.color.brand.white} side={DoubleSide} /></mesh>
+    <group position={HELIPAD_LOCAL_ANCHOR}>
+      <mesh material={worldMaterials.podium} position={[0, -0.328, -0.24]} castShadow><boxGeometry args={[0.98, 0.12, 1.05]} /></mesh>
+      <mesh material={worldMaterials.frame} position={[0, -0.458, 0.02]} rotation={[0.38, 0, 0]}><boxGeometry args={[0.4, 0.36, 0.08]} /></mesh>
+      <mesh material={worldMaterials.sign} position={[0, -0.253, 0]} rotation={[-Math.PI / 2, 0, 0]}><circleGeometry args={[0.42, 24]} /></mesh>
+      <mesh material={worldMaterials.summit} position={[0, -0.246, 0]} rotation={[-Math.PI / 2, 0, 0]}><ringGeometry args={[0.31, 0.34, 24]} /></mesh>
+      <mesh position={[0, -0.24, 0]} rotation={[-Math.PI / 2, 0, 0]}><planeGeometry args={[0.22, 0.3]} /><meshBasicMaterial color={tokens.color.brand.white} side={DoubleSide} /></mesh>
     </group>
     <mesh material={crownFrame} position={[0, 3.62, 0]} castShadow><cylinderGeometry args={[0.16, 0.23, 0.68, 6]} /></mesh>
     <mesh material={worldMaterials.crown} position={[0, 4.18, 0]} castShadow><cylinderGeometry args={[0.09, 0.16, 0.52, 8]} /></mesh>

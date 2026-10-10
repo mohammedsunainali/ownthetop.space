@@ -1,0 +1,17 @@
+{
+  "build": "0ZUgcIyQxKWGBWlMvEBm4",
+  "fixture": "24/14/14",
+  "mode": "production",
+  "browser": "Codex IAB",
+  "camera": "{\"cameraMode\":\"selectedFloor\",\"towerId\":\"companies\",\"listingId\":\"companies-24\",\"rank\":24,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":16,\"right\":898,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[-0.42551486069482736,4.510389232905794,-11.75756744842495],\"target\":[0,1.4717261963109216,0.39999999999999947],\"destination\":[0,1.47,0.3999999999999999],\"floorCenter\":[463.2080021926216,407.14916426936634],\"projection\":{\"facadeWidth\":510.3117608594504,\"logo\":63.7889701074313,\"name\":23.42251246132243,\"subtitle\":11.462080566179061,\"rank\":23.920863790286738,\"amount\":22.924161132358122}}",
+  "canvasPixels": [
+    1440,
+    900
+  ],
+  "profile": "Skyline Venture 04 floor profile",
+  "renderer": "{\"fps\":120,\"calls\":161,\"triangles\":37096,\"geometries\":367,\"textures\":67,\"samples\":241}",
+  "viewport": [
+    1440,
+    900
+  ]
+}

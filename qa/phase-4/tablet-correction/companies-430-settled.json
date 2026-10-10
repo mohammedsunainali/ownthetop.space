@@ -1,0 +1,17 @@
+{
+  "build": "0ZUgcIyQxKWGBWlMvEBm4",
+  "fixture": "24/14/14",
+  "mode": "production",
+  "browser": "Codex IAB",
+  "camera": "{\"cameraMode\":\"selectedFloor\",\"towerId\":\"companies\",\"listingId\":\"companies-01\",\"rank\":1,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":16,\"right\":414,\"top\":75,\"bottom\":490},\"size\":{\"width\":430,\"height\":932,\"top\":0,\"left\":0},\"position\":[0.7461070735197306,33.33761252735001,21.717344957698955],\"target\":[0,32.51999999999767,0.3999999999999333],\"destination\":[0,32.519999999999996,0.3999999999999999],\"floorCenter\":[210.0596158578473,287.90657766051794],\"projection\":{\"facadeWidth\":405.97161653686425,\"logo\":50.74645206710803,\"name\":17.840549554842667,\"subtitle\":9.118503105808474,\"rank\":19.02991952516551,\"amount\":18.63346286839123}}",
+  "canvasPixels": [
+    430,
+    932
+  ],
+  "profile": "Northstar Foundry floor profile",
+  "renderer": "{\"fps\":75,\"calls\":172,\"triangles\":16204,\"geometries\":377,\"textures\":67,\"samples\":150}",
+  "viewport": [
+    430,
+    932
+  ]
+}

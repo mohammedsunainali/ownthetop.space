@@ -1,0 +1,17 @@
+{
+  "build": "0ZUgcIyQxKWGBWlMvEBm4",
+  "fixture": "24/14/14",
+  "mode": "production",
+  "browser": "Codex IAB",
+  "camera": "{\"cameraMode\":\"selectedFloor\",\"towerId\":\"people\",\"listingId\":\"people-14\",\"rank\":14,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":16,\"right\":898,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[9.123169048710995,7.009364884497609,9.23340139174225],\"target\":[8.799999999999985,1.4700001756352141,2.80811458132536e-97],\"destination\":[8.8,1.47,0],\"floorCenter\":[446.70859079876647,601.2008256522157],\"projection\":{\"facadeWidth\":845.6550107790267,\"logo\":105.70687634737834,\"name\":38.81424365880299,\"subtitle\":18.994204343669544,\"rank\":39.64007863026688,\"amount\":37.98840868733909}}",
+  "canvasPixels": [
+    1440,
+    900
+  ],
+  "profile": "Skyline Creator 04 floor profile",
+  "renderer": "{\"fps\":120,\"calls\":109,\"triangles\":34688,\"geometries\":377,\"textures\":67,\"samples\":241}",
+  "viewport": [
+    1440,
+    900
+  ]
+}

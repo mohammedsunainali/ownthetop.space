@@ -1,0 +1,11 @@
+{
+  "build": "BHAhvC7pMYGvWFIx2HR2j",
+  "fixture": "24/14/14",
+  "camera": "{\"cameraMode\":\"overview\",\"towerId\":\"companies\",\"face\":\"front\",\"listingId\":null,\"rank\":1,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":210,\"right\":1568,\"top\":298.046875,\"bottom\":1042},\"size\":{\"width\":1728,\"height\":1117,\"top\":0,\"left\":0},\"position\":[13.147123460591056,48.87451567828708,101.13171892762358],\"target\":[0,18.534999999999997,0],\"destination\":[0,18.534999999999997,0],\"floorCenter\":[900.633572038823,465.30004193669515],\"projection\":{\"facadeWidth\":84.80030017303059,\"logo\":10.600037521628824,\"name\":3.8922012774730836,\"subtitle\":1.9046942421676791,\"rank\":3.975014070610809,\"amount\":3.975014070610809},\"blocked\":false}",
+  "hidden": false,
+  "renderer": "{\"fps\":75,\"calls\":641,\"triangles\":70956,\"geometries\":620,\"textures\":169,\"samples\":150,\"frameP50Ms\":13.300000071525574,\"frameP95Ms\":14.300000071525574,\"frameP99Ms\":14.300000071525574,\"frameMaxMs\":14.400000095367432,\"documentHidden\":false,\"dpr\":1}",
+  "viewport": [
+    1728,
+    1117
+  ]
+}

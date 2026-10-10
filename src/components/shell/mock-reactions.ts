@@ -1,3 +1,4 @@
+import { skylineAudio } from "@/world/audio/audio-engine";
 const PRESET_DOLLARS = [1, 2, 5, 10, 25, 50, 75, 100, 125, 150, 200, 250, 500, 1000, 2500, 5000, 10000];
 
 export function nextMockAmount(currentMinor: number, direction: -1 | 1): number {
@@ -16,26 +17,12 @@ export function mockReaction(amountMinor: number, topMinor: number): { copy: str
   return { copy: "Now we're building.", sound: "build" };
 }
 
-let reactionContext: AudioContext | null = null;
 /** All cues are original, short procedural tones and only play after enabled user input. */
 export function playMockReaction(sound: ReturnType<typeof mockReaction>["sound"]): void {
-  if (typeof window === "undefined") return;
-  reactionContext ??= new AudioContext();
-  const context = reactionContext;
-  const start = context.currentTime;
   const settings = {
     tiny: [330, 250, 0.12], awkward: [300, 120, 0.22], pop: [460, 680, 0.16],
     build: [220, 510, 0.24], tension: [350, 780, 0.3], win: [440, 920, 0.4], huge: [180, 760, 0.48],
   }[sound];
   const [from, to, duration] = settings;
-  const oscillator = context.createOscillator();
-  const gain = context.createGain();
-  oscillator.type = sound === "huge" ? "sawtooth" : "sine";
-  oscillator.frequency.setValueAtTime(from, start);
-  oscillator.frequency.exponentialRampToValueAtTime(to, start + duration);
-  gain.gain.setValueAtTime(0.0001, start);
-  gain.gain.exponentialRampToValueAtTime(0.08, start + 0.015);
-  gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
-  oscillator.connect(gain); gain.connect(context.destination);
-  oscillator.start(start); oscillator.stop(start + duration + 0.01);
+  skylineAudio.cue(from, to, duration);
 }

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Arcboard logo">
+  <rect width="128" height="128" rx="24" fill="#0B55B8"/>
+  <path d="M28 88c7-35 25-52 55-52h17v18H83c-19 0-31 11-37 34Z" fill="#F7FBFF"/>
+  <circle cx="42" cy="88" r="10" fill="#E6B627"/>
+</svg>

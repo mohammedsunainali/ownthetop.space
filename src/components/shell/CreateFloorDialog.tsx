@@ -1,0 +1,101 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { validateFloorContent, validateCheckoutDraft, type CheckoutDraft } from "@/domain/checkout-draft";
+import { saveCheckoutDraft } from "@/components/checkout/draft-transfer";
+export { validateFloorContent } from "@/domain/checkout-draft";
+import { towers } from "@/mock/towers";
+import { listingsByTower } from "@/mock";
+import { useWorldStore } from "@/state/world-store";
+
+const MAX_LOGO_BYTES = 3 * 1024 * 1024;
+const LOGO_TYPES = ["image/png", "image/jpeg", "image/webp"];
+
+export function CreateFloorDialog() {
+  const router = useRouter();
+  const draft = useWorldStore((state) => state.claimDraft);
+  const close = useWorldStore((state) => state.closeClaimDraft);
+  const showPreview = useWorldStore((state) => state.showFloorPreview);
+  const [name, setName] = useState("");
+  const [subtitle, setSubtitle] = useState("");
+  const [hiring, setHiring] = useState(false);
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [logoName, setLogoName] = useState("");
+  const [logoLoading, setLogoLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!draft) return;
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    dialogRef.current?.querySelector<HTMLElement>("input[type=file]")?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { event.preventDefault(); close(); }
+      if (event.key !== "Tab" || !dialogRef.current) return;
+      const controls = [...dialogRef.current.querySelectorAll<HTMLElement>("input:not([disabled]), button:not([disabled])")];
+      const first = controls[0], last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => { document.removeEventListener("keydown", onKey); previousFocus?.focus(); };
+  }, [close, draft]);
+
+  if (!draft) return null;
+  const towerName = towers.find((tower) => tower.id === draft.towerId)?.name ?? "Companies";
+  const readLogo = (file?: File) => {
+    if (!file) return;
+    if (!LOGO_TYPES.includes(file.type)) { setError("Choose a PNG, JPEG, or WebP image."); return; }
+    if (file.size > MAX_LOGO_BYTES) { setError("Logo must be 3 MB or smaller."); return; }
+    const reader = new FileReader();
+    setLogoLoading(true);
+    reader.onload = () => { setLogoLoading(false); if (typeof reader.result === "string") { setLogoUrl(reader.result); setLogoName(file.name); setError(null); } };
+    reader.onerror = () => { setLogoLoading(false); setError("The logo could not be read."); };
+    reader.readAsDataURL(file);
+  };
+  const validatedDraft = (): CheckoutDraft | null => {
+    const validation = validateFloorContent(name, subtitle);
+    if (validation) { setError(validation); return null; }
+    const details: CheckoutDraft = { ...draft, name: name.trim(), subtitle: subtitle.trim(), logoUrl, hiring, currency: "USD" };
+    if (!validateCheckoutDraft(details)) { setError("Check your website, category and proposed amount before continuing."); return null; }
+    return details;
+  };
+  const preview = () => {
+    const details = validatedDraft();
+    if (!details) return;
+    const count = listingsByTower[draft.towerId].length;
+    showPreview({
+      towerId: draft.towerId, category: draft.category, url: draft.url, checkoutDraft: details,
+      media: { id: "temporary-floor-preview", name: name.trim(), description: subtitle.trim(), logoUrl, hiring, rank: Math.min(draft.estimatedRank, count), totalPaidMinor: draft.amountMinor },
+    });
+  };
+  return <div className="create-floor-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) close(); }}>
+    <div ref={dialogRef} className="create-floor-dialog" role="dialog" aria-modal="true" aria-labelledby="create-floor-title" aria-describedby="create-floor-description">
+      <div className="create-floor-heading">
+        <div><span className="eyebrow">Phase 2 preview</span><h2 id="create-floor-title">CREATE YOUR FLOOR</h2><p id="create-floor-description">Make your spot in the skyline yours.</p></div>
+        <button type="button" className="create-floor-close" aria-label="Close Create Your Floor" onClick={close}>×</button>
+      </div>
+      <label className="create-floor-upload">
+        <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" aria-label="Upload logo" onChange={(event) => readLogo(event.target.files?.[0])} />
+        <span className="create-floor-logo">{logoUrl ? <Image src={logoUrl} alt="Selected logo preview" width={64} height={64} unoptimized /> : name.trim().split(/\s+/).map((part) => part[0]).slice(0, 2).join("").toUpperCase() || "LOGO"}</span>
+        <span><strong>{logoName || "Upload a logo"}</strong><small>PNG, JPEG or WebP · up to 3 MB · optional</small></span>
+      </label>
+      <label className="create-floor-field">Display name<input value={name} maxLength={60} onChange={(event) => { setName(event.target.value); setError(null); }} placeholder="Northstar Foundry" required /></label>
+      <label className="create-floor-field">Subtitle<input value={subtitle} maxLength={100} onChange={(event) => { setSubtitle(event.target.value); setError(null); }} placeholder="A short phrase for your floor" required /></label>
+      <label className="create-floor-hiring"><input type="checkbox" checked={hiring} onChange={(event) => setHiring(event.target.checked)} /> We’re hiring</label>
+      <div className="create-floor-summary"><span><small>Website / profile</small><strong>{draft.url}</strong></span><span><small>Tower</small><strong>{towerName}</strong></span><span><small>Category</small><strong>{draft.category}</strong></span></div>
+      {error ? <p className="create-floor-error" role="alert">{error}</p> : null}
+      {logoLoading ? <p role="status">Reading your logo…</p> : null}
+      <p className="create-floor-note">Preview only. No payment has been made and no floor has been claimed.</p>
+      <div className="create-floor-actions"><button type="button" className="primary-button" disabled={logoLoading} onClick={preview}>Preview my floor</button><button type="button" className="checkout-secondary" disabled={logoLoading} onClick={()=>{
+        const details = validatedDraft();
+        if (!details) return;
+        const issue = saveCheckoutDraft(details);
+        if (issue) setError(issue); else { close(); router.push("/checkout"); }
+      }}>Continue to checkout</button></div>
+    </div>
+  </div>;
+}

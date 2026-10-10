@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { getArchitecturalHeightFeet, getFloorFootprint, getFloorY, getTowerHeight, towerVisuals } from "@/world/tower/tower-layout";
 
-describe("Phase 2 procedural tower", () => {
+describe("Phase 3 rectangular procedural tower", () => {
   it("keeps one rank per paid floor with rank one physically highest", () => {
     for (const count of [10, 20, 60]) {
       const positions = Array.from({ length: count }, (_, index) => getFloorY(index + 1, count));
@@ -9,10 +9,10 @@ describe("Phase 2 procedural tower", () => {
       expect(positions[0]).toBe(Math.max(...positions));
     }
   });
-  it("tapers consistently for short and future taller towers", () => {
-    for (const count of [10, 20, 60]) {
-      expect(getFloorFootprint(1, count)).toBeLessThan(getFloorFootprint(count, count));
-      expect(getFloorFootprint(1, count)).toBeGreaterThan(0);
+  it("preserves uninterrupted constant-width facades for arbitrary counts", () => {
+    for (const count of [1, 14, 24, 50, 220]) {
+      expect(getFloorFootprint(1, count)).toBe(getFloorFootprint(count, count));
+      expect(getFloorFootprint(1, count)).toBe(1);
     }
   });
   it("uses one renderer configuration for all three IDs", () => {

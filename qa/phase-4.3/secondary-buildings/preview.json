@@ -1,0 +1,15 @@
+{
+  "buildId": "jMEqKUQnpVQUcmsviJyGu",
+  "viewport": [
+    1280,
+    720
+  ],
+  "cameraMode": "districtBuilding",
+  "buildingId": "district-5-1",
+  "tower": null,
+  "rank": null,
+  "fixture": "default",
+  "lighting": "day",
+  "preview": "Skyline Studio",
+  "note": "Actual DOM preview and storefront visually inspected; metadata dataset selector corrected for later captures"
+}

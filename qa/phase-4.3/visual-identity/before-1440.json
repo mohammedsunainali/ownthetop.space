@@ -1,0 +1,94 @@
+{
+  "buildId": "grvGe-rN8TjVx4_-WgVCR",
+  "fixture": "default",
+  "camera": {
+    "blocked": true,
+    "cameraMode": "overview",
+    "destination": [
+      0,
+      18.534999999999997,
+      -0.5
+    ],
+    "exploded": false,
+    "face": "front",
+    "floorCenter": [
+      753.3566878134701,
+      404.1808703876278
+    ],
+    "listingId": null,
+    "position": [
+      13.721714793235211,
+      50.203793029206274,
+      105.04337956406756
+    ],
+    "preview": false,
+    "projection": {
+      "amount": 3.0841358381599218,
+      "facadeWidth": 65.794897880745,
+      "logo": 8.224362235093125,
+      "name": 3.019883008198257,
+      "rank": 3.0841358381599218,
+      "subtitle": 1.4778150891182955
+    },
+    "rank": 1,
+    "safeViewport": {
+      "bottom": 825,
+      "left": 210,
+      "right": 1280,
+      "top": 298.0703125
+    },
+    "size": {
+      "height": 900,
+      "left": 0,
+      "top": 0,
+      "width": 1440
+    },
+    "target": [
+      0,
+      18.539052259011036,
+      -0.5021216015764598
+    ],
+    "time": "day",
+    "towerId": "companies"
+  },
+  "perf": {
+    "calls": 711,
+    "documentHidden": false,
+    "dpr": 1,
+    "fps": 120,
+    "frameMaxMs": 12.600000023841858,
+    "frameP50Ms": 8.299999952316284,
+    "frameP95Ms": 9.5,
+    "frameP99Ms": 10.300000071525574,
+    "geometries": 659,
+    "navigation": {
+      "longTaskMs": {
+        "count": 1,
+        "max": 143,
+        "p50": 143,
+        "p95": 143,
+        "p99": 143,
+        "total": 143
+      },
+      "sideTextureCreateMs": {
+        "count": 224,
+        "max": 4.800000071525574,
+        "p50": 0.10000002384185792,
+        "p95": 0.30000007152557373,
+        "p99": 0.5999999046325684,
+        "total": 35.19999933242798
+      },
+      "sideTexturePaintMs": {
+        "count": 460,
+        "max": 4.399999976158142,
+        "p50": 0.09999990463256836,
+        "p95": 0.20000004768371585,
+        "p99": 0.3999999761581421,
+        "total": 39.59999942779541
+      }
+    },
+    "samples": 240,
+    "textures": 169,
+    "triangles": 137596
+  }
+}

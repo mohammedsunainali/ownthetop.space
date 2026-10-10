@@ -1,0 +1,12 @@
+{
+  "build": "E8xJC7qwCN2JdJGrOyBq0",
+  "fixture": "24/14/14",
+  "camera": "{\"cameraMode\":\"selectedFloor\",\"towerId\":\"companies\",\"face\":\"front\",\"listingId\":\"companies-01\",\"rank\":1,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":16,\"right\":884,\"top\":75,\"bottom\":582},\"size\":{\"width\":900,\"height\":1024,\"top\":0,\"left\":0},\"position\":[0.4889305026455204,33.05578865092332,4.969442929848427],\"target\":[0,32.519999998011805,-8.999999998720453],\"destination\":[0,32.519999999999996,-9],\"floorCenter\":[441.0595063033537,338.28415260339625],\"projection\":{\"facadeWidth\":725.6139317649206,\"logo\":90.70174147061508,\"name\":31.88733098576311,\"subtitle\":16.297969170501148,\"rank\":34.01315305148065,\"amount\":33.304545696241476},\"blocked\":false}",
+  "hidden": false,
+  "renderer": "{\"fps\":75,\"calls\":233,\"triangles\":89306,\"geometries\":635,\"textures\":171,\"samples\":150,\"frameP50Ms\":13.300000071525574,\"frameP95Ms\":15.299999952316284,\"frameP99Ms\":15.399999976158142,\"frameMaxMs\":15.399999976158142,\"documentHidden\":false,\"dpr\":1}",
+  "url": "http://127.0.0.1:3002/?tower=companies&floor=companies-12&diagnostics=1",
+  "viewport": [
+    900,
+    1024
+  ]
+}

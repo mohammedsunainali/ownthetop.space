@@ -1,0 +1,94 @@
+{
+  "buildId": "grvGe-rN8TjVx4_-WgVCR",
+  "fixture": "default",
+  "camera": {
+    "blocked": true,
+    "cameraMode": "rooftop",
+    "destination": [
+      0,
+      34.769999999999996,
+      -9
+    ],
+    "exploded": false,
+    "face": "front",
+    "floorCenter": [
+      403.43786677539634,
+      666.4968486899727
+    ],
+    "listingId": null,
+    "position": [
+      4.888804760997758,
+      43.15080496662352,
+      4.968019144759783
+    ],
+    "preview": false,
+    "projection": {
+      "amount": 20.485062935373833,
+      "facadeWidth": 437.01467595464175,
+      "logo": 54.62683449433022,
+      "name": 20.05829079088688,
+      "rank": 20.485062935373833,
+      "subtitle": 9.81575932319996
+    },
+    "rank": 1,
+    "safeViewport": {
+      "bottom": 825,
+      "left": 16,
+      "right": 898,
+      "top": 75
+    },
+    "size": {
+      "height": 900,
+      "left": 0,
+      "top": 0,
+      "width": 1440
+    },
+    "target": [
+      0,
+      34.76999635873931,
+      -8.999998093580789
+    ],
+    "time": "night",
+    "towerId": "companies"
+  },
+  "perf": {
+    "calls": 276,
+    "documentHidden": false,
+    "dpr": 1,
+    "fps": 120,
+    "frameMaxMs": 9.400000095367432,
+    "frameP50Ms": 8.300000071525574,
+    "frameP95Ms": 9.299999952316284,
+    "frameP99Ms": 9.399999976158142,
+    "geometries": 687,
+    "navigation": {
+      "longTaskMs": {
+        "count": 1,
+        "max": 143,
+        "p50": 143,
+        "p95": 143,
+        "p99": 143,
+        "total": 143
+      },
+      "sideTextureCreateMs": {
+        "count": 216,
+        "max": 4.800000071525574,
+        "p50": 0.10000002384185792,
+        "p95": 0.30000007152557373,
+        "p99": 0.5999999046325684,
+        "total": 34.29999923706055
+      },
+      "sideTexturePaintMs": {
+        "count": 444,
+        "max": 4.399999976158142,
+        "p50": 0.09999990463256836,
+        "p95": 0.20000004768371585,
+        "p99": 0.3999999761581421,
+        "total": 38.29999923706055
+      }
+    },
+    "samples": 240,
+    "textures": 171,
+    "triangles": 91122
+  }
+}

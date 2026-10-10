@@ -1,0 +1,172 @@
+{
+  "duration" : 32.028333333333336,
+  "frames" : [
+    {
+      "actual" : 0,
+      "requested" : 0,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 1.1716666666666666,
+      "requested" : 1,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 2.2650000000000001,
+      "requested" : 2,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 3.2316666666666665,
+      "requested" : 3,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 4.2216666666666667,
+      "requested" : 4,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 5.2800000000000002,
+      "requested" : 5,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 6.4400000000000004,
+      "requested" : 6,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 7.4883333333333333,
+      "requested" : 7,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 8.4466666666666672,
+      "requested" : 8,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 8.4466666666666672,
+      "requested" : 9,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 9.5966666666666658,
+      "requested" : 10,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 10.795,
+      "requested" : 11,
+      "sheet" : "reference-1-page-1.png"
+    },
+    {
+      "actual" : 11.795,
+      "requested" : 12,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 12.914999999999999,
+      "requested" : 13,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 14.103333333333333,
+      "requested" : 14,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 15.223333333333333,
+      "requested" : 15,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 16.285,
+      "requested" : 16,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 17.438333333333333,
+      "requested" : 17,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 18.526666666666667,
+      "requested" : 18,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 18.526666666666667,
+      "requested" : 19,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 19.516666666666666,
+      "requested" : 20,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 20.710000000000001,
+      "requested" : 21,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 21.893333333333334,
+      "requested" : 22,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 22.858333333333334,
+      "requested" : 23,
+      "sheet" : "reference-1-page-2.png"
+    },
+    {
+      "actual" : 23.911666666666665,
+      "requested" : 24,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 25.039999999999999,
+      "requested" : 25,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 26.225000000000001,
+      "requested" : 26,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 27.191666666666666,
+      "requested" : 27,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 28.321666666666665,
+      "requested" : 28,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 29.379999999999999,
+      "requested" : 29,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 30.406666666666666,
+      "requested" : 30,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 31.536666666666665,
+      "requested" : 31,
+      "sheet" : "reference-1-page-3.png"
+    },
+    {
+      "actual" : 31.536666666666665,
+      "requested" : 32,
+      "sheet" : "reference-1-page-3.png"
+    }
+  ],
+  "samplingSeconds" : 1,
+  "source" : "qa\/phase-4\/rooftop\/helicopter-cycle.mp4"
+}

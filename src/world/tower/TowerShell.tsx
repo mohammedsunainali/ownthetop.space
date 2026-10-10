@@ -1,24 +1,32 @@
 import { worldMaterials } from "@/world/materials/world-materials";
-import { TopPavilion } from "@/world/tower/TopPavilion";
-import { TowerCore } from "@/world/tower/TowerCore";
-import { TowerWing } from "@/world/tower/TowerWing";
+import { RectangularRooftop } from "@/world/tower/RectangularRooftop";
+import type { TowerId } from "@/domain/tower";
+import { TowerEntrance } from "./TowerEntrance";
+
+import { RoundedPlanBox, SoftBox } from "@/world/geometry/SoftBox";
 
 interface TowerShellProps {
+  towerId: TowerId;
   height: number;
   floorCount: number;
   focused: boolean;
   onSelect: () => void;
+  premium?: boolean;
 }
 
-export function TowerShell({ height, floorCount, focused, onSelect }: TowerShellProps) {
+export function TowerShell({ height, floorCount, towerId, onSelect, premium = false }: TowerShellProps) {
   return (
     <group>
-      <mesh position={[0, 0.34, 0]} material={worldMaterials.podium} castShadow receiveShadow onClick={(event) => { event.stopPropagation(); onSelect(); }}>
-        <cylinderGeometry args={[2.55, 2.9, 0.68, 6]} />
+      <mesh position={[0, 0.36, 0]} material={worldMaterials.podium} castShadow receiveShadow onClick={(event) => { event.stopPropagation(); onSelect(); }}>
+        <SoftBox args={[7.2, 0.72, 4.8]} radius={0.24} />
       </mesh>
-      <TowerCore height={height} />
-      {[0, (Math.PI * 2) / 3, (Math.PI * 4) / 3].map((angle) => <TowerWing key={angle} angle={angle} height={height} floorCount={floorCount} />)}
-      <TopPavilion y={height + 0.18} floorCount={floorCount} focused={focused} />
+      <mesh position={[0,0.795,0]} material={worldMaterials.facade}><RoundedPlanBox args={[7.04,0.15,4.64]} radius={0.24}/></mesh>
+      <TowerEntrance towerId={towerId} onSelect={onSelect} />
+      {[-1,1].map(side=><group key={side} position={[side*3.4,height/2,0]}>
+        <mesh material={worldMaterials.rectangularGlass}><boxGeometry args={[0.055,height,4.4]}/></mesh>
+        {[-1.9,-0.95,0,0.95,1.9].map(z=><mesh key={z} position={[side*0.025,0,z]} material={worldMaterials.facade}><SoftBox args={[0.065,height,0.035]} radius={0.008}/></mesh>)}
+      </group>)}
+      <RectangularRooftop y={height} premium={premium} towerId={towerId} floorCount={floorCount} />
     </group>
   );
 }

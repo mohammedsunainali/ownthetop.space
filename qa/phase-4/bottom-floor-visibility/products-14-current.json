@@ -1,0 +1,17 @@
+{
+  "build": "0ZUgcIyQxKWGBWlMvEBm4",
+  "fixture": "24/14/14",
+  "mode": "production",
+  "browser": "Codex IAB",
+  "camera": "{\"cameraMode\":\"selectedFloor\",\"towerId\":\"products\",\"listingId\":\"products-14\",\"rank\":14,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":16,\"right\":898,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[-8.459911069145852,9.236810509547038,9.716826595832893],\"target\":[-8.8,1.4713332923833802,1.061421067389326e-47],\"destination\":[-8.8,1.47,0],\"floorCenter\":[448.47852515682933,602.0569221116634],\"projection\":{\"facadeWidth\":700.2277494964569,\"logo\":87.52846868705711,\"name\":32.13935959602878,\"subtitle\":15.727771717205576,\"rank\":32.82317575764642,\"amount\":32.13935959602878}}",
+  "canvasPixels": [
+    1440,
+    900
+  ],
+  "profile": "Summit Tool 04 floor profile",
+  "renderer": "{\"fps\":120,\"calls\":139,\"triangles\":36414,\"geometries\":377,\"textures\":67,\"samples\":240}",
+  "viewport": [
+    1440,
+    900
+  ]
+}

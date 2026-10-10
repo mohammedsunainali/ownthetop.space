@@ -1,0 +1,18 @@
+{
+  "buildId": "DTa5MFqxQgAhgEdCLDcyh",
+  "fixture": "default",
+  "lighting": "day",
+  "state": {
+    "canvas": [
+      {
+        "engine": "three.js r186",
+        "ottCamera": "{\"cameraMode\":\"rooftop\",\"districtBuildingId\":null,\"towerId\":\"people\",\"face\":\"front\",\"listingId\":null,\"rank\":1,\"preview\":false,\"exploded\":false,\"time\":\"day\",\"safeViewport\":{\"left\":16,\"right\":1280,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[17.881228423958056,29.64137847955694,21.965639230968677],\"target\":[12.996505369333482,21.267660272597606,7.998529461369997],\"destination\":[13,21.27,8],\"floorCenter\":[594.6450563490483,666.5618607690295],\"projection\":{\"facadeWidth\":437.3445465531697,\"logo\":54.668068319146215,\"name\":20.073431335936505,\"subtitle\":9.823168526096586,\"rank\":20.500525619679834,\"amount\":20.500525619679834},\"blocked\":true}",
+        "ottPerf": "{\"fps\":120,\"calls\":351,\"triangles\":96406,\"geometries\":710,\"textures\":173,\"samples\":240,\"frameP50Ms\":8.299999952316284,\"frameP95Ms\":9.5,\"frameP99Ms\":10.800000071525574,\"frameMaxMs\":12.400000095367432,\"documentHidden\":false,\"dpr\":1,\"navigation\":{\"sideTexturePaintMs\":{\"count\":476,\"p50\":0.10000002384185791,\"p95\":0.20000004768371582,\"p99\":0.3999999761581421,\"max\":1.899999976158142,\"total\":39.09999990463257},\"sideTextureCreateMs\":{\"count\":232,\"p50\":0.10000002384185791,\"p95\":0.30000007152557373,\"p99\":0.5,\"max\":2.100000023841858,\"total\":33.39999985694885},\"longTaskMs\":{\"count\":1,\"p50\":442,\"p95\":442,\"p99\":442,\"max\":442,\"total\":442},\"sightlineSearchMs\":{\"count\":9,\"p50\":0.10000002384185791,\"p95\":0.8000000715255737,\"p99\":0.8000000715255737,\"max\":0.8000000715255737,\"total\":2.4000000953674316},\"wheelHandlerMs\":{\"count\":1,\"p50\":0.20000004768371582,\"p95\":0.20000004768371582,\"p99\":0.20000004768371582,\"max\":0.20000004768371582,\"total\":0.20000004768371582},\"wheelDeltaPixels\":{\"count\":1,\"p50\":540,\"p95\":540,\"p99\":540,\"max\":540,\"total\":540},\"inputToCameraFrameMs\":{\"count\":1,\"p50\":8.700000047683716,\"p95\":8.700000047683716,\"p99\":8.700000047683716,\"max\":8.700000047683716,\"total\":8.700000047683716}}}"
+      }
+    ],
+    "viewport": [
+      1440,
+      900
+    ]
+  }
+}

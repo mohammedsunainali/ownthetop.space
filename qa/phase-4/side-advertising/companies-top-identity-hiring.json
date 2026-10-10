@@ -1,0 +1,52 @@
+{
+  "build": "DjHgVHFkXCcSpSPzyjwnk",
+  "fixture": "24/14/14",
+  "camera": {
+    "cameraMode": "selectedFloor",
+    "destination": [
+      0,
+      32.519999999999996,
+      -9
+    ],
+    "exploded": false,
+    "floorCenter": [
+      649.5372198136395,
+      447.88102618895863
+    ],
+    "listingId": "companies-01",
+    "position": [
+      -11.915211347714797,
+      32.99519956479494,
+      -12.423598746213704
+    ],
+    "preview": false,
+    "projection": {
+      "amount": 12.15257539313704,
+      "facadeWidth": 264.77100431004953,
+      "logo": 33.09637553875619,
+      "name": 11.635444525343974,
+      "rank": 12.411140827033572,
+      "subtitle": 5.947004979620253
+    },
+    "rank": 1,
+    "safeViewport": {
+      "bottom": 825,
+      "left": 16,
+      "right": 898,
+      "top": 75
+    },
+    "size": {
+      "height": 900,
+      "left": 0,
+      "top": 0,
+      "width": 1440
+    },
+    "target": [
+      0,
+      32.51999999928383,
+      -8.999999999539115
+    ],
+    "time": "day",
+    "towerId": "companies"
+  }
+}

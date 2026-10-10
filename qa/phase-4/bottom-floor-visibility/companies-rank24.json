@@ -1,0 +1,13 @@
+{
+  "build": "VaoRUFRKXwtQvVeLCaLTw",
+  "fixture": "24/14/14",
+  "mode": "production",
+  "browser": "Codex IAB",
+  "camera": "{\"safeViewport\":{\"left\":16,\"right\":898,\"top\":75,\"bottom\":825},\"size\":{\"width\":1440,\"height\":900,\"top\":0,\"left\":0},\"position\":[2.8241532155250098,6.297368782770518,12.390707132371448],\"target\":[2.4015365835771267,1.471615250679571,0.31594621957480046],\"destination\":[2.4016566971564655,1.4699999999999998,0.3159420155995236],\"floorCenter\":[454.3043800441158,538.4952031523953],\"projection\":{\"facadeWidth\":680.0310304945109,\"logo\":85.00387881181386,\"name\":31.212361751212903,\"subtitle\":15.274134473997803,\"rank\":31.876454554430197,\"amount\":30.548268947995606}}",
+  "profile": "Skyline Venture 04 floor profile",
+  "renderer": "{\"fps\":75,\"calls\":159,\"triangles\":37072,\"geometries\":367,\"textures\":67,\"samples\":150}",
+  "viewport": [
+    1440,
+    900
+  ]
+}

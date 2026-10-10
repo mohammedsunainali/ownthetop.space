@@ -1,36 +1,59 @@
-import { tokens } from "@/design/tokens";
+import { meadowMaterial } from "@/world/materials/meadow-material";
 import { useWorldStore } from "@/state/world-store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useWorldQuality } from "@/hooks/use-world-quality";
 import { CompanionSkyline } from "@/world/environment/CompanionSkyline";
 import { WorldProps } from "@/world/environment/WorldProps";
 import { CityLife } from "@/world/environment/CityLife";
 import { AircraftSystem } from "@/world/aircraft/AircraftSystem";
 import { applyTimeToWorldMaterials } from "@/world/materials/world-materials";
+import { scheduledWorldTime } from "@/state/world-store";
+import { atmosphereTokens } from "@/world/environment/environment-tokens";
+import { getTowerHeight } from "@/world/tower/tower-layout";
+import { CentralPlaza } from "./CentralPlaza";
+import { DistrictStreets } from "./DistrictStreets";
+import { celestialDirection, SkyAtmosphere } from "./SkyAtmosphere";
+import { BirdLife } from "./BirdLife";
+import { StudioReflections } from "./StudioReflections";
 
-export function BasicEnvironment({ tallestFloorCount = 20 }: { tallestFloorCount?: number }) {
-  const time = useWorldStore((state) => state.worldTime);
+export function BasicEnvironment({ tallestFloorCount, companiesFloorCount, sideTowerFloorCount }: { tallestFloorCount: number; companiesFloorCount: number; sideTowerFloorCount: number }) {
+  const timeMode = useWorldStore((state) => state.worldTime);
+  const exploded = useWorldStore((state) => state.floorsExploded);
+  const [localHour, setLocalHour] = useState(() => new Date().getHours());
+  useEffect(() => {
+    if (timeMode !== "auto") return;
+    const update = () => setLocalHour(new Date().getHours());
+    const timer = window.setInterval(update, 60_000);
+    return () => window.clearInterval(timer);
+  }, [timeMode]);
+  const now = new Date();
+  const time = timeMode === "auto" ? scheduledWorldTime(localHour, now.getMinutes()) : timeMode;
   const mobile = useWorldQuality();
-  const palette = tokens.environment[time];
+  const palette = atmosphereTokens[time];
   const night = time === "night";
+  const sunPosition = celestialDirection(time).map(value => value * 4) as [number, number, number];
   useEffect(() => { applyTimeToWorldMaterials(time); }, [time]);
   return <>
     <color attach="background" args={[palette.skyDeep]} />
-    <fog attach="fog" args={[palette.horizon, tallestFloorCount > 40 ? 240 : 27, tallestFloorCount > 40 ? 470 : 74]} />
-    <ambientLight intensity={night ? 0.42 : 0.82} />
-    <hemisphereLight args={[palette.skyMid, tokens.color.brand.navy, night ? 0.45 : 1.1]} />
-    <directionalLight position={time === "sunset" ? [-12, 11, 6] : [11, 18, 12]} intensity={night ? 0.85 : time === "sunset" ? 1.7 : 2.2} color={time === "sunset" ? tokens.color.brand.peach : tokens.color.brand.white} castShadow={!mobile} shadow-mapSize={mobile ? [512, 512] : [1024, 1024]} />
+    <SkyAtmosphere time={time} upper={palette.skyDeep} middle={palette.skyMid} horizon={palette.horizon} />
+    <fog attach="fog" args={[palette.horizon, Math.max(140,getTowerHeight(tallestFloorCount)*3),Math.max(270,getTowerHeight(tallestFloorCount)*5)]} />
+    <StudioReflections mobile={mobile} night={night} />
+    <ambientLight intensity={night ? 0.30 : 0.30} />
+    <hemisphereLight args={[palette.skyMid, "#75916b", night ? 0.58 : 0.88]} />
+    <directionalLight position={sunPosition} intensity={night ? 0.7 : time === "sunset" ? 1.9 : 2.15} color={night ? "#bccfff" : time === "sunset" ? "#ffd0a0" : "#fff2df"} castShadow={!mobile && tallestFloorCount < 80}
+      shadow-mapSize={[1024, 1024]} shadow-bias={-0.0003} shadow-normalBias={0.035}
+      shadow-camera-left={-38} shadow-camera-right={38} shadow-camera-top={42} shadow-camera-bottom={-38}
+      shadow-camera-near={0.1} shadow-camera-far={Math.max(120, getTowerHeight(tallestFloorCount) * 2.5)} />
     <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow position={[0, -0.08, 0]}>
-      <circleGeometry args={[23, 64]} />
-      <meshStandardMaterial color={tokens.color.brand.softWhite} roughness={0.88} />
+      <planeGeometry args={[2000, 2000]} />
+      <primitive object={meadowMaterial(night)} attach="material" dispose={null}/>
     </mesh>
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.13, 0]}>
-      <circleGeometry args={[65, 64]} />
-      <meshStandardMaterial color={palette.water} metalness={0.22} roughness={0.3} />
-    </mesh>
+    <DistrictStreets />
     <CompanionSkyline mobile={mobile} night={night} />
     <WorldProps mobile={mobile} night={night} />
-    <CityLife mobile={mobile} />
-    <AircraftSystem mobile={mobile} />
+    <CentralPlaza />
+    <CityLife mobile={mobile} night={night} />
+    {!night && <BirdLife mobile={mobile} floorCount={tallestFloorCount} exploded={exploded} />}
+    <AircraftSystem mobile={mobile} companiesFloorCount={companiesFloorCount} sideTowerFloorCount={sideTowerFloorCount} />
   </>;
 }
