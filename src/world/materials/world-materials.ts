@@ -23,13 +23,14 @@ export const worldMaterials = {
   selectedSummit: new MeshStandardMaterial({ color: brand.summitGold, emissive: brand.blue, emissiveIntensity: 0.28, metalness: 0.4, roughness: 0.32 }),
   floor: Object.fromEntries((Object.entries(glassByAccent) as [TowerVisualConfig["accent"], string][]).map(([key, color]) => [key, new MeshStandardMaterial({ color, metalness: 0.4, roughness: 0.22 })])) as Record<TowerVisualConfig["accent"], MeshStandardMaterial>,
   cloud: new MeshStandardMaterial({ color: sky.cloud, roughness: 0.95 }),
-  road: new MeshStandardMaterial({ color: brand.navy, roughness: 0.92 }),
-  leaf: new MeshStandardMaterial({ color: brand.teal, roughness: 0.9 }),
+  road: new MeshStandardMaterial({ color: "#4f626c", roughness: 0.92 }),
+  leaf: new MeshStandardMaterial({ color: "#5fa85d", roughness: 0.9 }),
   sign: new MeshStandardMaterial({ color: brand.navy, emissive: brand.blue, emissiveIntensity: 0.08 }),
   aircraftLight: new MeshStandardMaterial({ color: brand.blue, emissive: brand.blue, emissiveIntensity: 0 }),
 };
 
 export function applyTimeToWorldMaterials(time: "day" | "sunset" | "night") {
+  worldMaterials.road.color.set(time === "night" ? "#344b55" : "#4f626c");
   worldMaterials.rectangularGlass.emissiveIntensity=time==="night"?0.24:time==="sunset"?0.12:0.07;
   worldMaterials.windowLight.emissiveIntensity=time==="night"?0.9:time==="sunset"?0.3:0.03;
   for (const material of Object.values(worldMaterials.floor)) {

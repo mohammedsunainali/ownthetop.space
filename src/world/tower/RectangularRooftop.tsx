@@ -11,11 +11,11 @@ import { useCrownStore } from "@/state/crown-store";
 import { useWorldStore } from "@/state/world-store";
 import type { TowerId } from "@/domain/tower";
 import { showroomResidentPose } from "./rooftop-life";
-import { SoftBox } from "@/world/geometry/SoftBox";
+import { RoundedPlanBox, SoftBox } from "@/world/geometry/SoftBox";
 
-const villaGlass = new MeshPhysicalMaterial({color:"#c9eaf0",transparent:true,opacity:0.16,depthWrite:false,metalness:0.02,roughness:0.18,clearcoat:0.35,clearcoatRoughness:0.2});
+const villaGlass = new MeshPhysicalMaterial({color:"#c9eaf0",transparent:true,opacity:0.16,depthWrite:false,metalness:0.02,roughness:0.24,clearcoat:0.25,clearcoatRoughness:0.2});
 const showroomFloor = new MeshStandardMaterial({color:"#EEE4D6",roughness:0.65});
-const showroomSeat = new MeshStandardMaterial({color:"#7764C9",roughness:0.8});
+const showroomSeat = new MeshStandardMaterial({color:"#8a88bd",roughness:0.82});
 
 function ShowroomResident() {
   const ref=useRef<Group>(null), limbs=useRef<(Group|null)[]>([]), reduced=useReducedMotion();
@@ -51,7 +51,7 @@ export function RectangularRooftop({y,premium,towerId,floorCount}:{y:number;prem
   useEffect(()=>()=>billboard.dispose(),[billboard]);
   useFrame(({clock})=>{if(flag.current)flag.current.rotation.y=reduced?0:Math.sin(clock.elapsedTime*1.2)*0.04;if(interiorLight.current)interiorLight.current.intensity=Math.max(0,materials.windowLight.emissiveIntensity-0.03)*14;});
   return <group position={[0,y,0]}>
-    <mesh material={materials.podium} position={[0,0.10,0]} castShadow receiveShadow><SoftBox args={[7.8,0.2,6.6]} radius={0.06}/></mesh>
+    <mesh material={materials.podium} position={[0,0.10,0]} castShadow receiveShadow><RoundedPlanBox args={[7.8,0.2,6.6]} radius={0.28}/></mesh>
     <mesh material={materials.windowLight} position={[0,0.19,3.29]}><boxGeometry args={[7.6,0.035,0.025]}/></mesh>
     {/* Compact villa at the rear-left; terrace and pad occupy independent zones. */}
     <mesh position={[-1.4,1.1,-2.65]} material={villaGlass}><boxGeometry args={[3.5,1.8,0.025]}/></mesh>
@@ -74,11 +74,11 @@ export function RectangularRooftop({y,premium,towerId,floorCount}:{y:number;prem
     {[-.9,0].map(x=><group key={x} position={[x,.43,-2.05]}><mesh material={showroomSeat}><SoftBox args={[.25,.1,.3]} radius={0.035}/></mesh><mesh position={[0,.13,-.12]} material={showroomSeat}><SoftBox args={[.25,.25,.045]} radius={0.014}/></mesh><mesh position={[0,-.08,0]} material={materials.frame}><boxGeometry args={[.1,.16,.14]}/></mesh></group>)}
     <group position={[-.9,.48,-2.05]}><mesh position={[0,.12,0]}><SoftBox args={[.13,.22,.1]} radius={0.023}/><meshStandardMaterial color="#1DA99A"/></mesh><mesh position={[0,.3,0]}><sphereGeometry args={[.07,8,6]}/><meshStandardMaterial color="#bd8e69"/></mesh>{[-1,1].map(side=><group key={side}><mesh position={[side*.035,-.015,.07]} material={materials.frame}><boxGeometry args={[.04,.05,.16]}/></mesh><mesh position={[side*.035,-.09,.135]} material={materials.frame}><boxGeometry args={[.04,.17,.045]}/></mesh></group>)}</group>
     <ShowroomResident />
-    <mesh material={materials.podium} position={[-1.4,2.05,-1.35]} castShadow><SoftBox args={[3.9,0.18,3]} radius={0.045}/></mesh>
+    <mesh material={materials.podium} position={[-1.4,2.05,-1.35]} castShadow><RoundedPlanBox args={[3.9,0.18,3]} radius={0.22}/></mesh>
     {[-3.1,-2.2,-1.3,-0.4,0.3].map(x=><mesh key={x} material={materials.facade} position={[x,1.1,-0.02]}><boxGeometry args={[0.06,1.8,0.10]}/></mesh>)}
     {[-3.45,3.45].map(x=><mesh key={x} material={materials.facade} position={[x,-0.35,-2.4]} rotation={[0,0,x<0?-0.3:0.3]}><boxGeometry args={[0.12,1.1,0.12]}/></mesh>)}
     {premium?<>
-      <mesh material={materials.facade} position={[1.4,0.24,1.8]}><SoftBox args={[2.5,0.12,1.7]} radius={0.035}/></mesh>
+      <mesh material={materials.facade} position={[1.4,0.24,1.8]}><RoundedPlanBox args={[2.5,0.12,1.7]} radius={0.16}/></mesh>
       <RooftopPool />
       <Walker index={0}/><Walker index={1}/>
       {[-0.7,0].map(x=><group key={x} position={[x,0.3,1.2]} rotation={[0,-0.15,0]}><mesh material={materials.podium}><SoftBox args={[0.45,0.12,1]} radius={0.035}/></mesh><mesh material={materials.facade} position={[0,0.15,-0.35]} rotation={[-0.45,0,0]}><SoftBox args={[0.45,0.08,0.45]} radius={0.025}/></mesh></group>)}
@@ -90,7 +90,7 @@ export function RectangularRooftop({y,premium,towerId,floorCount}:{y:number;prem
       </group>
     </>:null}
     <MascotSlot position={[-1.4,0.20,2.6]} towerId={towerId} floorCount={floorCount}/>
-    {[-3.35,-2.3,2.8,3.35].map((x,index)=><group key={x} position={[x,0.33,index<2?2.7:2.9]}><mesh material={materials.podium}><SoftBox args={[0.45,0.25,0.45]} radius={0.045}/></mesh><mesh material={materials.leaf} position={[0,0.3,0]}><icosahedronGeometry args={[0.3,0]}/></mesh></group>)}
+    {[-3.35,-2.3,2.8,3.35].map((x,index)=><group key={x} position={[x,0.33,index<2?2.7:2.9]}><mesh material={materials.podium}><RoundedPlanBox args={[0.45,0.25,0.45]} radius={0.10}/></mesh><mesh material={materials.leaf} position={[0,0.3,0]}><sphereGeometry args={[0.3,8,6]}/></mesh></group>)}
     {[-1,1].map(side=><mesh key={side} material={materials.frame} position={[side*3.78,0.55,0]}><SoftBox args={[0.045,0.055,6.35]} radius={0.012}/></mesh>)}
     <mesh material={materials.frame} position={[0,0.55,3.18]}><SoftBox args={[7.5,0.055,0.045]} radius={0.012}/></mesh>
     {[-3.7,-2.5,-1.25,0,1.25,2.5,3.7].map(x=><mesh key={x} material={materials.frame} position={[x,0.37,3.18]}><boxGeometry args={[0.035,0.36,0.035]}/></mesh>)}

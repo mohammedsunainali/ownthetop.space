@@ -12,12 +12,12 @@ export function MascotSlot({ position,towerId,floorCount }: { position: Vector3T
   const source = nodes.OTT_Mascot_Root;
   const root = useMemo(() => source ? normalizeMascot(source) : null, [source]);
   const [speech,setSpeech]=useState<{index:number;scope:string}|null>(null);
-  const next = useRef(0),trigger=useRef<HTMLButtonElement>(null);
+  const next = useRef(0),trigger=useRef<HTMLButtonElement>(null),returnFocus=useRef(false);
   const mode = useWorldStore(state => state.cameraMode);
   const selectedId=useWorldStore(state=>state.selectedListingId),selectedTower=useWorldStore(state=>state.selectedTowerId);
   const scope=`${mode}:${selectedId??""}:${selectedTower??""}`;
-  const speak=()=>setSpeech({index:next.current++%dialogue[towerId].length,scope});
-  const dismiss=useCallback(()=>{const restore=!!document.activeElement?.closest(".character-speech");setSpeech(null);if(restore)window.requestAnimationFrame(()=>trigger.current?.focus({preventScroll:true}));},[]);
+  const speak=()=>{returnFocus.current=document.activeElement===trigger.current;setSpeech({index:next.current++%dialogue[towerId].length,scope});};
+  const dismiss=useCallback(()=>{const restore=returnFocus.current && (document.activeElement===trigger.current || document.activeElement===document.body);setSpeech(null);if(restore)window.requestAnimationFrame(()=>trigger.current?.focus({preventScroll:true}));},[]);
   if (!root) return null;
   return <group position={position} onClick={event => { event.stopPropagation(); speak(); }}>
     <primitive object={root} dispose={null} />

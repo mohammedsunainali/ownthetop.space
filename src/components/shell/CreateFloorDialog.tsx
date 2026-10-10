@@ -2,6 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { validateFloorContent, validateCheckoutDraft, type CheckoutDraft } from "@/domain/checkout-draft";
+import { saveCheckoutDraft } from "@/components/checkout/draft-transfer";
+export { validateFloorContent } from "@/domain/checkout-draft";
 import { towers } from "@/mock/towers";
 import { listingsByTower } from "@/mock";
 import { useWorldStore } from "@/state/world-store";
@@ -9,13 +13,8 @@ import { useWorldStore } from "@/state/world-store";
 const MAX_LOGO_BYTES = 3 * 1024 * 1024;
 const LOGO_TYPES = ["image/png", "image/jpeg", "image/webp"];
 
-export function validateFloorContent(name: string, subtitle: string): string | null {
-  if (name.trim().length < 2 || name.trim().length > 60) return "Display name must be 2–60 characters.";
-  if (subtitle.trim().length < 3 || subtitle.trim().length > 100) return "Subtitle must be 3–100 characters.";
-  return null;
-}
-
 export function CreateFloorDialog() {
+  const router = useRouter();
   const draft = useWorldStore((state) => state.claimDraft);
   const close = useWorldStore((state) => state.closeClaimDraft);
   const showPreview = useWorldStore((state) => state.showFloorPreview);
@@ -24,6 +23,7 @@ export function CreateFloorDialog() {
   const [hiring, setHiring] = useState(false);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [logoName, setLogoName] = useState("");
+  const [logoLoading, setLogoLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -51,16 +51,24 @@ export function CreateFloorDialog() {
     if (!LOGO_TYPES.includes(file.type)) { setError("Choose a PNG, JPEG, or WebP image."); return; }
     if (file.size > MAX_LOGO_BYTES) { setError("Logo must be 3 MB or smaller."); return; }
     const reader = new FileReader();
-    reader.onload = () => { if (typeof reader.result === "string") { setLogoUrl(reader.result); setLogoName(file.name); setError(null); } };
-    reader.onerror = () => setError("The logo could not be read.");
+    setLogoLoading(true);
+    reader.onload = () => { setLogoLoading(false); if (typeof reader.result === "string") { setLogoUrl(reader.result); setLogoName(file.name); setError(null); } };
+    reader.onerror = () => { setLogoLoading(false); setError("The logo could not be read."); };
     reader.readAsDataURL(file);
   };
-  const preview = () => {
+  const validatedDraft = (): CheckoutDraft | null => {
     const validation = validateFloorContent(name, subtitle);
-    if (validation) { setError(validation); return; }
+    if (validation) { setError(validation); return null; }
+    const details: CheckoutDraft = { ...draft, name: name.trim(), subtitle: subtitle.trim(), logoUrl, hiring, currency: "USD" };
+    if (!validateCheckoutDraft(details)) { setError("Check your website, category and proposed amount before continuing."); return null; }
+    return details;
+  };
+  const preview = () => {
+    const details = validatedDraft();
+    if (!details) return;
     const count = listingsByTower[draft.towerId].length;
     showPreview({
-      towerId: draft.towerId, category: draft.category, url: draft.url,
+      towerId: draft.towerId, category: draft.category, url: draft.url, checkoutDraft: details,
       media: { id: "temporary-floor-preview", name: name.trim(), description: subtitle.trim(), logoUrl, hiring, rank: Math.min(draft.estimatedRank, count), totalPaidMinor: draft.amountMinor },
     });
   };
@@ -80,8 +88,14 @@ export function CreateFloorDialog() {
       <label className="create-floor-hiring"><input type="checkbox" checked={hiring} onChange={(event) => setHiring(event.target.checked)} /> We’re hiring</label>
       <div className="create-floor-summary"><span><small>Website / profile</small><strong>{draft.url}</strong></span><span><small>Tower</small><strong>{towerName}</strong></span><span><small>Category</small><strong>{draft.category}</strong></span></div>
       {error ? <p className="create-floor-error" role="alert">{error}</p> : null}
+      {logoLoading ? <p role="status">Reading your logo…</p> : null}
       <p className="create-floor-note">Preview only. No payment has been made and no floor has been claimed.</p>
-      <div className="create-floor-actions"><button type="button" onClick={close}>Back</button><button type="button" className="primary-button" onClick={preview}>PREVIEW MY FLOOR</button></div>
+      <div className="create-floor-actions"><button type="button" className="primary-button" disabled={logoLoading} onClick={preview}>Preview my floor</button><button type="button" className="checkout-secondary" disabled={logoLoading} onClick={()=>{
+        const details = validatedDraft();
+        if (!details) return;
+        const issue = saveCheckoutDraft(details);
+        if (issue) setError(issue); else { close(); router.push("/checkout"); }
+      }}>Continue to checkout</button></div>
     </div>
   </div>;
 }

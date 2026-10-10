@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import {currentStressFixture} from "@/mock/fixture-mode";
 import { ClaimPanel } from "@/components/shell/ClaimPanel";
 import { CreateFloorDialog } from "@/components/shell/CreateFloorDialog";
+import { FloorPreviewBanner } from "@/components/shell/FloorPreviewBanner";
 import { MetricsPanel } from "@/components/shell/MetricsPanel";
 import { WorldControls } from "@/components/controls/WorldControls";
 import { ProfileDrawer } from "@/components/profile/ProfileDrawer";
@@ -32,8 +33,6 @@ export function AppShell() {
   const worldTime = useWorldStore((state) => state.worldTime);
   const hudRevealed = useWorldStore((state) => state.hudRevealed);
   const revealHud = useWorldStore((state) => state.revealHud);
-  const preview = useWorldStore((state) => state.floorPreview);
-  const clearPreview = useWorldStore((state) => state.clearFloorPreview);
   const focused = cameraMode !== "overview";
   const focusedInputMode = useWorldStore((state) => state.focusedInputMode);
   const nightHud = worldTime === "night" || worldTime === "auto" && scheduledWorldTime(new Date().getHours()) === "night";
@@ -55,7 +54,7 @@ export function AppShell() {
         {cameraMode !== "rooftop" && cameraMode !== "districtBuilding" ? <ProfileDrawer /> : null}
         <CrownPanel />
         <DistrictBuildingPanel />
-        {preview ? <aside className="floor-preview-status" aria-label="Floor preview status"><strong>PREVIEW MODE</strong><span>This is how your floor could look. No payment has been made.</span><button type="button" onClick={clearPreview}>Close preview</button></aside> : null}
+        <FloorPreviewBanner />
         <CreateFloorDialog />
         <div className="world-caption"><span>Drag to orbit</span><span>{focused && cameraMode!=="districtBuilding" && focusedInputMode==="floors" ? "Scroll: floors · Shift-scroll: zoom" : "Scroll to zoom"}</span><span>Click a floor to inspect</span></div>
       </section>

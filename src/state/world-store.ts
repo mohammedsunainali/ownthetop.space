@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import type { CheckoutDraft } from "@/domain/checkout-draft";
 import type { Listing } from "@/domain/listing";
 import type { TowerId } from "@/domain/tower";
 import type { FloorMediaContent } from "@/world/tower/floor-signs";
@@ -10,6 +11,7 @@ export type CameraMode = "overview" | "companiesTower" | "productsTower" | "peop
 export type WorldTime = "day" | "sunset" | "night";
 export type WorldTimeMode = "auto" | WorldTime;
 export interface FloorPreview {
+  checkoutDraft?: CheckoutDraft;
   towerId: TowerId;
   category: string;
   url: string;

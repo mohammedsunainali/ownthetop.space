@@ -19,7 +19,7 @@ export function MetricsPanel() {
   ];
 
   return (
-    <aside className="metrics-panel" aria-label="World metrics">
+    <aside className="metrics-panel metrics-rail" aria-label="World metrics">
       {metrics.map((metric) => (
         <div className="metric-chip" key={metric.label}>
           <strong className="metric-chip__value">{metric.value}{metric.unit && <small>{metric.unit}</small>}</strong>

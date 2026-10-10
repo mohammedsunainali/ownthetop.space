@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { softBox } from "./soft-box";
-import { cityForms, cityCanopy, cityTrim } from "./city-forms";
+import { roundedPlanBox, softBox } from "./soft-box";
+import { cityForms, cityCanopy, cityTrim, pitchedCityRoof } from "./city-forms";
 import { advertisementBackplates, advertisementBackingMaterial } from "../tower/advertisement-backplates";
 
 describe("shared premium geometry contracts", () => {
@@ -17,6 +17,20 @@ describe("shared premium geometry contracts", () => {
       expect(body.getAttribute("position").count).toBeLessThanOrEqual(324);
     }
   });
+  it("rounds slab plan corners without consuming thickness or advertisement clearance", () => {
+    for (const [width,height,depth] of [[6.8,1.2,4.4],[7.04,.15,4.64]]) {
+      const geometry = roundedPlanBox(width,height,depth,.24,true);
+      geometry.computeBoundingBox();
+      const bounds = geometry.boundingBox!;
+      expect(bounds.max.x).toBeCloseTo(width/2,5);
+      expect(bounds.max.y).toBeCloseTo(height/2,5);
+      expect(bounds.max.z).toBeCloseTo(depth/2,5);
+      expect(geometry.getAttribute("position").count / 3).toBeLessThan(150);
+      expect(geometry).toBe(roundedPlanBox(width,height,depth,.24,true));
+      const positions = geometry.getAttribute("position");
+      for(let i=0;i<positions.count;i++) expect(Math.abs(positions.getX(i)) > width/2-.01 && Math.abs(positions.getZ(i)) > depth/2-.01).toBe(false);
+    }
+  });
   it("reuses identical geometry and keeps slender trim within its slab", () => {
     expect(softBox(7.04, .15, 4.64, .025)).toBe(softBox(7.04, .15, 4.64, .025));
     const slab = softBox(7.04,.15,4.64,.14);
@@ -24,7 +38,7 @@ describe("shared premium geometry contracts", () => {
     expect(slab.boundingBox!.max.y).toBeCloseTo(.075,5);
   });
   it("keeps every secondary archetype inside the canonical unit collision envelope", () => {
-    for (const geometry of [...cityForms, cityCanopy]) {
+    for (const geometry of [...cityForms, cityCanopy, pitchedCityRoof]) {
       geometry.computeBoundingBox();
       const bounds = geometry.boundingBox!;
       for (const axis of ["x", "y", "z"] as const) {

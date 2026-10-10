@@ -1,6 +1,7 @@
 import { useFrame } from "@react-three/fiber";
 import { useLayoutEffect, useMemo, useRef } from "react";
 import { BoxGeometry, Color, CylinderGeometry, InstancedMesh, Matrix4, MeshStandardMaterial, Sphere, SphereGeometry, Vector3 } from "three";
+import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { tokens } from "@/design/tokens";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { worldMaterials } from "@/world/materials/world-materials";
@@ -9,19 +10,23 @@ import { plazaPerson } from "./plaza-life";
 import { createTraffic, crossingPerson, stepTraffic, vehicleArchetypes, vehicleHeading } from "./traffic-flow";
 import { TrafficCrossings } from "./TrafficCrossings";
 
-import { softBox } from "@/world/geometry/soft-box";
+import { roundedPlanBox, softBox } from "@/world/geometry/soft-box";
 
-const carBody = softBox(1, 1, 1, .12);
-const carRoof = softBox(1, 1, 1, .18);
+const carBody = roundedPlanBox(1, 1, 1, .20);
+const carRoof = softBox(1, 1, 1, .23);
 const roofPanel = softBox(1, 1, 1, .12);
 const lampGeometry = new BoxGeometry(0.07, 0.045, 0.025);
 const wheelGeometry = new CylinderGeometry(0.075, 0.075, 0.035, 12);
 const personGeometry = softBox(.15, .22, .11, .028);
 const limbGeometry = softBox(0.037, 0.18, 0.043, .012).clone();
 limbGeometry.translate(0, -.09, 0);
+const shoe = softBox(.055,.035,.085,.012).clone().translate(0,-.175,.018);
+const legGeometry = mergeGeometries([limbGeometry, shoe])!;
+shoe.dispose();
+const clothingMaterial = new MeshStandardMaterial({ color: "#ffffff", roughness: .9 });
 const skinMaterial = new MeshStandardMaterial({ color: "#ffffff", roughness: 0.85 });
-const headGeometry = new SphereGeometry(0.079, 10, 7);
-const hairGeometry = new SphereGeometry(.081, 10, 5, 0, Math.PI * 2, 0, Math.PI / 2);
+const headGeometry = new SphereGeometry(0.083, 10, 7);
+const hairGeometry = new SphereGeometry(.085, 10, 5, 0, Math.PI * 2, 0, Math.PI / 2);
 const tireMaterial = new MeshStandardMaterial({ color: "#26323e", roughness: .9 });
 const cabinMaterial = new MeshStandardMaterial({ color: "#234858", roughness: .26, metalness: .22 });
 const hairMaterial = new MeshStandardMaterial({ color: "#ffffff", roughness: .92 });
@@ -32,6 +37,7 @@ const waterMaterial = new MeshStandardMaterial({ color: tokens.color.sky.water, 
 const fountainMaterial = new MeshStandardMaterial({ color: tokens.color.brand.lightBlue, roughness: 0.12, transparent: true, opacity: 0.7 });
 const carCount = 14;
 const personCount = 30;
+const clothingPalette = ["#d48a72", "#81ada2", "#7d97c2", "#d7b973", "#aa91b8", "#e0d9ca"];
 const carPalette = ["#FFB844", "#F0805B", tokens.color.brand.blue, "#1DA99A", "#7764C9", tokens.color.brand.softWhite];
 
 /** Decorative traffic and pedestrians share a single animation callback and instanced geometry. */
@@ -45,6 +51,7 @@ export function CityLife({ mobile, night = false }: { mobile: boolean; night?: b
   const heads = useRef<InstancedMesh>(null);
   const wheels = useRef<InstancedMesh>(null);
   const limbs = useRef<InstancedMesh>(null);
+  const arms = useRef<InstancedMesh>(null);
   const headlights = useRef<InstancedMesh>(null), taillights = useRef<InstancedMesh>(null);
   const matrix = useRef(new Matrix4());
   const carPosition = useRef(new Vector3());
@@ -72,7 +79,7 @@ export function CityLife({ mobile, night = false }: { mobile: boolean; night?: b
       limbMatrix.current.makeRotationX(seated && leg ? -Math.PI / 2 : swing);
       limbMatrix.current.setPosition(side * (leg ? 0.04 : 0.1), leg ? (seated ? -0.11 : -0.11) : 0.09, seated && leg ? 0.02 : 0);
       wheelMatrix.current.multiplyMatrices(matrix.current, limbMatrix.current);
-      limbs.current?.setMatrixAt(index * 4 + limb, wheelMatrix.current);
+      (leg ? limbs.current : arms.current)?.setMatrixAt(index * 2 + limb % 2, wheelMatrix.current);
     }
     matrix.current.setPosition(x, y + 0.36, z);
     heads.current?.setMatrixAt(index, matrix.current);
@@ -86,16 +93,17 @@ export function CityLife({ mobile, night = false }: { mobile: boolean; night?: b
       roofPanels.current?.setColorAt(i, color);
     }
     for (let i = 0; i < totalPeople; i++) {
-      people.current?.setColorAt(i, new Color(carPalette[i % carPalette.length]));
+      people.current?.setColorAt(i, new Color(clothingPalette[i % clothingPalette.length]));
+      for (let side = 0; side < 2; side++) arms.current?.setColorAt(i * 2 + side, new Color(clothingPalette[i % clothingPalette.length]));
       heads.current?.setColorAt(i, new Color(skinPalette[i % skinPalette.length]));
       hair.current?.setColorAt(i, new Color(hairPalette[i % hairPalette.length]));
     }
-    for (const mesh of [roofPanels.current, heads.current, hair.current]) if (mesh?.instanceColor) mesh.instanceColor.needsUpdate = true;
+    for (const mesh of [roofPanels.current, heads.current, hair.current, arms.current]) if (mesh?.instanceColor) mesh.instanceColor.needsUpdate = true;
     if (bodies.current?.instanceColor) bodies.current.instanceColor.needsUpdate = true;
     if (people.current?.instanceColor) people.current.instanceColor.needsUpdate = true;
     // Route envelope avoids stale first-frame bounds without rescanning instances per frame.
     const radius = Math.max(districtLayout.road.x, districtLayout.road.z) * 1.04 + 1;
-    for (const mesh of [bodies.current, roofs.current, roofPanels.current, hair.current, wheels.current, people.current, heads.current, limbs.current, headlights.current, taillights.current]) if (mesh) mesh.boundingSphere = new Sphere(new Vector3(), radius);
+    for (const mesh of [bodies.current, roofs.current, roofPanels.current, hair.current, wheels.current, people.current, heads.current, limbs.current, arms.current, headlights.current, taillights.current]) if (mesh) mesh.boundingSphere = new Sphere(new Vector3(), radius);
   }, [activeCars, totalPeople]);
 
   useFrame(({ clock, gl }, delta) => {
@@ -153,6 +161,7 @@ export function CityLife({ mobile, night = false }: { mobile: boolean; night?: b
     if (people.current) people.current.instanceMatrix.needsUpdate = true;
     if (heads.current) heads.current.instanceMatrix.needsUpdate = true;
     if (limbs.current) limbs.current.instanceMatrix.needsUpdate = true;
+    if (arms.current) arms.current.instanceMatrix.needsUpdate = true;
     if (wheels.current) wheels.current.instanceMatrix.needsUpdate = true;
     if (headlights.current) headlights.current.instanceMatrix.needsUpdate = true;
     if (taillights.current) taillights.current.instanceMatrix.needsUpdate = true;
@@ -169,12 +178,13 @@ export function CityLife({ mobile, night = false }: { mobile: boolean; night?: b
     <instancedMesh ref={roofs} args={[carRoof, cabinMaterial, activeCars]} frustumCulled />
     <instancedMesh ref={roofPanels} args={[roofPanel, vehicleMaterial, activeCars]} frustumCulled />
     <instancedMesh ref={wheels} args={[wheelGeometry, tireMaterial, activeCars * 4]} frustumCulled />
-    <instancedMesh ref={headlights} args={[lampGeometry, undefined, activeCars * 2]} visible={night} frustumCulled><meshBasicMaterial color="#ffedc3" toneMapped={false} /></instancedMesh>
-    <instancedMesh ref={taillights} args={[lampGeometry, undefined, activeCars * 2]} visible={night} frustumCulled><meshBasicMaterial color="#ff6658" toneMapped={false} /></instancedMesh>
-    <instancedMesh ref={people} args={[personGeometry, vehicleMaterial, totalPeople]} frustumCulled />
+    <instancedMesh ref={headlights} args={[lampGeometry, undefined, activeCars * 2]} frustumCulled><meshBasicMaterial color={night ? "#ffedc3" : "#c9dfe0"} toneMapped={false} /></instancedMesh>
+    <instancedMesh ref={taillights} args={[lampGeometry, undefined, activeCars * 2]} frustumCulled><meshBasicMaterial color={night ? "#ff6658" : "#bd675b"} toneMapped={false} /></instancedMesh>
+    <instancedMesh ref={people} args={[personGeometry, clothingMaterial, totalPeople]} frustumCulled />
     <instancedMesh ref={heads} args={[headGeometry, skinMaterial, totalPeople]} frustumCulled />
     <instancedMesh ref={hair} args={[hairGeometry, hairMaterial, totalPeople]} frustumCulled />
-    <instancedMesh ref={limbs} args={[limbGeometry, worldMaterials.frame, totalPeople * 4]} frustumCulled />
+    <instancedMesh ref={limbs} args={[legGeometry, worldMaterials.frame, totalPeople * 2]} frustumCulled />
+    <instancedMesh ref={arms} args={[limbGeometry, clothingMaterial, totalPeople * 2]} frustumCulled />
     <group position={districtLayout.park.center}>
       <mesh material={worldMaterials.podium} position={[0, 0.015, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={[4.7, 1.8, 1]}><ringGeometry args={[0.87, 1, 48]} /></mesh>
       <mesh material={waterMaterial} position={[0, 0.016, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={[4.12, 1.56, 1]}><circleGeometry args={[1, 48]} /></mesh>

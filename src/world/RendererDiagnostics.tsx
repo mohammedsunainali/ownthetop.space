@@ -1,4 +1,4 @@
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import { navigationSnapshot, recordNavigationSample } from "./navigation-performance";
 import { frameStatistics } from "./frame-statistics";
@@ -11,11 +11,25 @@ declare global {
 
 /** Explicit diagnostics-only sampling; no visible panel or per-frame React state writes. */
 export function RendererDiagnostics() {
+  const get = useThree(state => state.get);
+  useEffect(() => {
+    const { gl } = get();
+    const original = gl.render;
+    let count = 0;
+    const measured: typeof gl.render = function(scene, camera) {
+      const start = performance.now();
+      try { return original.call(gl, scene, camera); } finally {
+        if (count++ < 30) recordNavigationSample("initialRenderCpuMs", performance.now() - start);
+      }
+    };
+    gl.render = measured;
+    return () => { if (gl.render === measured) gl.render = original; };
+  }, [get]);
   const frame = useRef({ count: 0, seconds: 0, times: [] as number[] });
   useEffect(() => {
     if (typeof PerformanceObserver === "undefined" || !PerformanceObserver.supportedEntryTypes.includes("longtask")) return;
     const observer = new PerformanceObserver(list => list.getEntries().forEach(entry => recordNavigationSample("longTaskMs", entry.duration)));
-    observer.observe({ type: "longtask" });
+    observer.observe({ type: "longtask", buffered: true });
     return () => observer.disconnect();
   }, []);
   useFrame(({ gl }, delta) => {

@@ -1,7 +1,8 @@
+import { meadowMaterial } from "@/world/materials/meadow-material";
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
-import { BoxGeometry, Color, ConeGeometry, CylinderGeometry, IcosahedronGeometry, InstancedMesh, Matrix4, MeshStandardMaterial, SphereGeometry } from "three";
+import { BoxGeometry, BufferGeometry, Float32BufferAttribute, Color, ConeGeometry, CylinderGeometry, IcosahedronGeometry, InstancedMesh, Matrix4, MeshStandardMaterial, SphereGeometry } from "three";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { tokens } from "@/design/tokens";
 import { worldMaterials } from "@/world/materials/world-materials";
@@ -10,19 +11,24 @@ import { districtLayout, routePoint, outsideTowerApproaches } from "@/world/envi
 import { environmentTokens } from "@/world/environment/environment-tokens";
 import { treePlaces, palmPlaces } from "@/world/environment/vegetation-layout";
 
-const canopyLobes = [[0,.09,0,.48],[-.16,-.08,.04,.39],[.17,-.06,-.04,.38]].map(([x,y,z,r]) => new SphereGeometry(r,10,7).translate(x,y,z));
+const canopyLobes = [[0,.08,0,.52],[-.18,-.06,.04,.42],[.20,-.06,-.04,.40]].map(([x,y,z,r]) => new SphereGeometry(r,8,6).translate(x,y,z));
 const treeGeometry = mergeGeometries(canopyLobes)!;
 canopyLobes.forEach(geometry => geometry.dispose());
-const angularTreeGeometry = new IcosahedronGeometry(0.65, 0);
+const angularTreeGeometry = new IcosahedronGeometry(0.61, 1);
 // Radius/height fit inside the existing conservative0.65 canopy sphere.
 const evergreenLayers = [[.38,.65,-.2],[.31,.58,.06],[.22,.50,.275]].map(([radius,height,y]) => new ConeGeometry(radius,height,9).translate(0,y,0));
 const evergreenGeometry = mergeGeometries(evergreenLayers)!;
 evergreenLayers.forEach(geometry => geometry.dispose());
 const trunkGeometry = new CylinderGeometry(0.07, 0.1, 0.9, 6);
-const treeMaterial = worldMaterials.leaf;
+const treeMaterial = new MeshStandardMaterial({ color: "#ffffff", roughness: .92 });
 const trunkMaterial = new MeshStandardMaterial({ color: "#867058", roughness: 0.94 });
 const cloudGeometry = new IcosahedronGeometry(1, 1);
-const shrubGeometry = new IcosahedronGeometry(0.24, 0);
+const shrubGeometry = new SphereGeometry(0.24, 7, 5);
+const shrubMaterial = new MeshStandardMaterial({ color: environmentTokens.shrub, roughness: .96 });
+const grassGeometry = new BufferGeometry();
+grassGeometry.setAttribute("position", new Float32BufferAttribute([-.10,0,0, .02,.23,0, .04,0,0, 0,0,-.08, 0,.18,.02, 0,0,.08, -.07,0,-.05, .07,.15,.07, .06,0,.03], 3));
+grassGeometry.computeVertexNormals();
+const grassMaterial = new MeshStandardMaterial({ color: "#5FA85D", roughness: 1, side: 2 });
 const palmGeometry = new IcosahedronGeometry(0.45, 0);
 const palmTrunkGeometry = new CylinderGeometry(0.045, 0.085, 1.5, 5);
 const lampPoleGeometry = new CylinderGeometry(0.035, 0.055, 2.15, 6);
@@ -49,6 +55,7 @@ export function WorldProps({ mobile, night }: { mobile: boolean; night: boolean 
   const trunks = useRef<InstancedMesh>(null);
   const clouds = useRef<InstancedMesh>(null);
   const shrubs = useRef<InstancedMesh>(null);
+  const grass = useRef<InstancedMesh>(null);
   const palms = useRef<InstancedMesh>(null);
   const palmTrunks = useRef<InstancedMesh>(null);
   const lampPoles = useRef<InstancedMesh>(null);
@@ -79,6 +86,8 @@ export function WorldProps({ mobile, night }: { mobile: boolean; night: boolean 
       }
     });
     shrubPlaces.slice(0, shrubCount).forEach((item, i) => { matrix.makeScale(0.8 + i % 3 * 0.14, 0.65 + i % 4 * 0.08, 0.8); matrix.setPosition(item.x, 0.17, item.z); shrubs.current?.setMatrixAt(i, matrix); });
+    shrubPlaces.slice(0, shrubCount).forEach((item, i) => { matrix.makeRotationY(i * 2.4); matrix.setPosition(item.x + .32, -.035, item.z + .25); grass.current?.setMatrixAt(i, matrix); });
+    if (grass.current) { grass.current.instanceMatrix.needsUpdate = true; grass.current.computeBoundingSphere(); }
     palmPlaces.slice(0, palmCount).forEach((item, i) => {
       matrix.makeScale(1, 1, 1); matrix.setPosition(item.x, 0.75, item.z); palmTrunks.current?.setMatrixAt(i, matrix);
       matrix.makeScale(1, 0.62, 1); matrix.setPosition(item.x, 1.6, item.z); palms.current?.setMatrixAt(i, matrix);
@@ -102,7 +111,7 @@ export function WorldProps({ mobile, night }: { mobile: boolean; night: boolean 
     if (clouds.current && !reducedMotion) clouds.current.position.x = Math.sin(clock.elapsedTime * 0.035) * 0.28;
   });
   return <group>
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.048, 0]} scale={[districtLayout.green.x, districtLayout.green.z, 1]} receiveShadow><circleGeometry args={[1, 96]} /><meshStandardMaterial color={night ? environmentTokens.lawnNight : environmentTokens.lawn} roughness={0.95} /></mesh>
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.048, 0]} scale={[districtLayout.green.x, districtLayout.green.z, 1]} receiveShadow><circleGeometry args={[1, 96]} /><primitive object={meadowMaterial(night)} attach="material" dispose={null}/></mesh>
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.041, 0]} scale={[districtLayout.plaza.x, districtLayout.plaza.z, 1]} receiveShadow><circleGeometry args={[1, 96]} /><meshStandardMaterial color={night ? environmentTokens.plazaNight : environmentTokens.plaza} roughness={0.95} /></mesh>
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.03, 0]} scale={[districtLayout.walkway.x, districtLayout.walkway.z, 1]} receiveShadow><ringGeometry args={[0.93, 1.07, 96]} /><meshStandardMaterial color={night ? environmentTokens.pathNight : environmentTokens.path} roughness={0.92} side={2} /></mesh>
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.027, 0]} scale={[districtLayout.road.x, districtLayout.road.z, 1]} receiveShadow><ringGeometry args={[0.89, 1.11, 96]} /><meshStandardMaterial color={night ? environmentTokens.sidewalkNight : environmentTokens.sidewalk} roughness={0.94} side={2} /></mesh>
@@ -113,8 +122,9 @@ export function WorldProps({ mobile, night }: { mobile: boolean; night: boolean 
     <instancedMesh ref={evergreens} args={[evergreenGeometry, treeMaterial, Math.ceil((treeCount - 2) / 3)]} frustumCulled />
     <instancedMesh ref={trunks} args={[trunkGeometry, trunkMaterial, treeCount]} frustumCulled />
     <instancedMesh ref={clouds} args={[cloudGeometry, cloudMaterial, cloudCount * 3]} frustumCulled />
-    <instancedMesh ref={shrubs} args={[shrubGeometry, worldMaterials.leaf, shrubCount]} frustumCulled />
-    <instancedMesh ref={palms} args={[palmGeometry, worldMaterials.leaf, palmCount]} frustumCulled />
+    <instancedMesh ref={shrubs} args={[shrubGeometry, shrubMaterial, shrubCount]} frustumCulled />
+    <instancedMesh ref={grass} args={[grassGeometry, grassMaterial, shrubCount]} frustumCulled />
+    <instancedMesh ref={palms} args={[palmGeometry, shrubMaterial, palmCount]} frustumCulled />
     <instancedMesh ref={palmTrunks} args={[palmTrunkGeometry, trunkMaterial, palmCount]} frustumCulled />
     <instancedMesh ref={lampPoles} args={[lampPoleGeometry, lampPoleMaterial, lampPlaces.length]} frustumCulled />
     <instancedMesh ref={lampHeads} args={[lampHeadGeometry, lampHeadMaterial, lampPlaces.length]} frustumCulled />
